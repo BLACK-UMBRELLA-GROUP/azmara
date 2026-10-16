@@ -1929,4 +1929,13 @@ unselected.
   Chrome; manual live-browser acceptance remains with the Owner. Preserve
   web27 as rollback.
 
-Next unused decision identifier: `DEC-098`.
+## DEC-098 — A new town starts with only the Town Hall
+
+- Date: 16 October 2026 (Europe/London).
+- Source: the Owner supplies this as a locked decision for the approved register.
+- Locked wording: “A new town starts with only the Town Hall at Level 1. The
+  Town Wall starts unbuilt and has to be built by the player.”
+- This entry records the starting-state rule only. It changes no game code,
+  artwork, saves, live-site behaviour, hosting or deployment configuration.
+
+Next unused decision identifier: `DEC-099`.
