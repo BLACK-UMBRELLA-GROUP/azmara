@@ -1,0 +1,204 @@
+{
+  "source": "Independent browser QA native mask/CTM footprint recovery on 11 October 2026, desktop1280x720 Grid Hall50 +22 actual mixed buildings50; supplied at two-decimal corner precision. These centers include the responsive Hall, wall and freight fixes, not source layout arithmetic.",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "capturedLevel": 50,
+  "layout": "grid",
+  "profiles": [
+    {
+      "name": "desktop-1280x720-grid-live-recovered",
+      "desktop": true,
+      "plots": [
+        {
+          "id": "general-01",
+          "x": 835.995,
+          "y": 450.89,
+          "width": 127.39,
+          "height": 83.64,
+          "level": 50
+        },
+        {
+          "id": "general-02",
+          "x": 477.71,
+          "y": 290.145,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-03",
+          "x": 656.86,
+          "y": 290.145,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-04",
+          "x": 836,
+          "y": 372.485,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-05",
+          "x": 1015.14,
+          "y": 290.145,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-06",
+          "x": 1194.29,
+          "y": 290.145,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-07",
+          "x": 477.71,
+          "y": 396.005,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-08",
+          "x": 656.86,
+          "y": 396.005,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-09",
+          "x": 1015.14,
+          "y": 396.005,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-10",
+          "x": 1194.29,
+          "y": 396.005,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-11",
+          "x": 477.71,
+          "y": 505.785,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-12",
+          "x": 656.86,
+          "y": 505.785,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-13",
+          "x": 1015.14,
+          "y": 505.785,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-14",
+          "x": 1194.29,
+          "y": 505.785,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-15",
+          "x": 477.71,
+          "y": 615.575,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-16",
+          "x": 656.86,
+          "y": 615.575,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-17",
+          "x": 836,
+          "y": 615.575,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-18",
+          "x": 1015.14,
+          "y": 615.575,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "general-19",
+          "x": 1194.29,
+          "y": 615.575,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50
+        },
+        {
+          "id": "wall-01",
+          "x": 835.995,
+          "y": 257.665,
+          "width": 135.35,
+          "height": 56.85,
+          "level": 50
+        },
+        {
+          "id": "harbour-01",
+          "x": 489.66,
+          "y": 690.065,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50,
+          "buildingId": "trading-port"
+        },
+        {
+          "id": "harbour-02",
+          "x": 1098.74,
+          "y": 713.595,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50,
+          "buildingId": "trading-port"
+        },
+        {
+          "id": "freighter-01",
+          "x": 1445.09,
+          "y": 799.855,
+          "width": 87.58,
+          "height": 57.51,
+          "level": 50,
+          "buildingId": "dockyard"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+/* Bounded Dev controls: keep the centre of the town clear. */
+.desktop-tools [data-dev-action="reset"],
+.desktop-tools [data-action="reset-plots"],
+.dev-reset-control,
+.desktop-header .dev-reset-control {
+  background: linear-gradient(#eac8a0, #d7a474);
+  color: #653823;
+}
+/* Historical compact paths are not registered to the live plot footprints.
+   The scenery overlay now owns all roads, at every responsive level stage. */
+.dirt-lanes { display: none; }
+#town-terrain-overlay { pointer-events: none; }
+#town-scenery-decor { pointer-events: none; }
+#appearance-level {
+  min-height: 44px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border, #b59b69);
+  border-radius: 4px;
+  background: #fff4d5;
+  color: #4d3c28;
+  font: inherit;
+}
+#appearance-hall-preview {
+  display: block;
+  width: min(100%, 300px);
+  height: 200px;
+  object-fit: contain;
+  margin: 16px auto;
+}
+.cancel-window, .refund-summary {
+  padding: 10px 12px;
+  border-left: 3px solid #b5904e;
+  background: #eedcb04d;
+}
+.appearance-preview-note {
+  color: #685132;
+  font-size: .9rem;
+}

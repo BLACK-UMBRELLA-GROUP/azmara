@@ -1,0 +1,20 @@
+{
+  "method": "Built-in ImageGen edit, proposal only",
+  "attempt": 2,
+  "attemptLimit": 2,
+  "prompt": "Use case: precise-object-edit. Final targeted scenery correction of original AZMARA Level25 PROPOSAL paint-over.\nImage1 is edit target, the first Level25 paint-over. Image2 is original actual Level25 game capture for unchanged building/wall/HUD registration. Image3 is accepted own-AZMARA Level50 ground/reference ONLY.\nPreserve the successful restrained central patch of buff paving plus dusty outer work yards of Image1. This is middle stage, not a finished metropolis. Change the SCENERY ONLY to make it less cluttered and conform to the two intended reserved pockets. Remove ALL scattered formal garden/planter/palm/bench groups currently around the outer town, including the old raised planted tile near the northern wall and isolated lower-left palm planter. Instead put EXACTLY TWO modest natural shade groups in these gaps: western at normalized canvas(.404,.535), maximum full silhouette .049canvaswide×.051canvashigh; eastern at(.632,.496), maximum full silhouette .038wide×.053high. Coordinates include entire1440x900-equivalent canvas; retain originalframing. West a pair of young-to-medium dusty date palms with sparse low scrub and tiny timber resting seat; east one modest young palm/scrub on bare maintained soil. All full crowns, soil contact/shadow and seat inside those small limits; do NOT cover any building. No stone planter boxes, raised podiums, rectangular turf, large trees or extra stalls. Small enough to read less formal than Level50.\nExactly ONE small CLOSED ornamental fountain north of Town Hall at normalized(.543,.386); REMOVE the second fountain left-below the Hall. No streams/rills/river or other water anywhere. Preserve existing architecture and every one of the23site roles at original positions, particularly Hall25—not new houses/people/units.\nThe low rear mountain band should follow Image3's quiet orthographic warm sandstone outcrops: no sky/horizon/photo-like distant canyon recession. Existing wall ends still meet terrain at their unchanged locations. No extra outer filler details.\nINVARIANTS: NO wall redesign: keep current adobe wall, gate, towers, shape, material, locations and strength as in Image1/Image2. Keep existing building silhouettes, same source-stageappearance, centers/count/sizes. Keep HUD, advisers/faces, right rail and bottom AZMARA/Dev/Gameplay/camera toolbar, all text/numbers unchanged. Do not alter floor design except deleting the unwanted decor's tiny contact pads. Same elevated orthographic2.5D camera, warm upper-left sunlight and lower-right brown shadows. No roads crossing another building; no thick ribbon/perimeter-grid roads; no animals, people, animation marks, labels, annotations, gods or naval features. Final one overview, not runtime art; do not beautify whole town into Level50.",
+  "transparent_background": false,
+  "editTarget": "exec-73b69a29-0812-4dc5-a683-56c670be4c4f.png",
+  "references": [
+    "AZMARA actual Level25 capture",
+    "AZMARA accepted Level50 Fit screenshot"
+  ],
+  "generatedOriginal": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-417e74be-902a-4928-a338-3f7d5bbeffc5.png",
+  "runtimeAsset": false,
+  "localPixelEdits": false,
+  "limitations": [
+    "Generative approximation, not exact reused source sprite/HUD/wall pixels",
+    "Shade groups are not snapped to the proposed world reserves",
+    "No third generation or runtime use"
+  ]
+}

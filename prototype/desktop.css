@@ -1,0 +1,125 @@
+/* One parchment sidebar owns town information on every map profile.
+   The camera's actual viewport begins at --sidebar-inset; this is not
+   a painted overlay reservation or a second responsive copy of the HUD. */
+:root {
+  --desktop-paper: #f3e3bb;
+  --desktop-paper-light: #fff3d4;
+  --desktop-ink: #573a22;
+  --desktop-copper: #a15a32;
+  --desktop-bronze: #ae7a3f;
+  --desktop-shadow: #332a1f59;
+  --sidebar-width: 228px;
+  --sidebar-rail-width: 56px;
+  --sidebar-inset: var(--sidebar-rail-width);
+  --desktop-toolbar-height: 0px;
+}
+
+.scene { left: var(--sidebar-inset); }
+.desktop-hud { position: fixed; inset: 0; z-index: 5; display: block; pointer-events: none; color: var(--desktop-ink); }
+.desktop-hud button, .desktop-hud nav, .desktop-resource-panel { pointer-events: auto; }
+.desktop-hud button:focus-visible { outline: 3px solid #2d807c; outline-offset: 2px; position: relative; z-index: 2; }
+.desktop-hud button:hover { filter: brightness(1.04); }
+.desktop-hud button:disabled { opacity: .45; filter: none; }
+.desktop-hud svg { flex: 0 0 auto; }
+.desktop-paper { background-color: var(--desktop-paper); background-image: radial-gradient(ellipse at 28% 0, #fff7e7b0, transparent 68%), repeating-linear-gradient(5deg, #76592808 0, #76592808 1px, transparent 1px, transparent 4px); border: 1px solid #81582e; box-shadow: inset 0 0 0 2px #fff3d4, inset 0 0 0 4px #c498574d, 0 4px 12px var(--desktop-shadow); }
+
+.desktop-resource-panel { position: fixed; z-index: 3; top: 0; left: 0; bottom: 0; width: min(320px, calc(100vw - 20px)); display: flex; flex-direction: column; padding: calc(8px + var(--safe-top)) 9px calc(7px + var(--safe-bottom)); transform: translateX(-110%); visibility: hidden; border-top: 0; border-bottom: 0; transition: transform 180ms ease, visibility 180ms; }
+body[data-sidebar-open="true"] .desktop-resource-panel { visibility: visible; transform: translateX(0); }
+.sidebar-heading { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 42px; padding: 0 2px 7px; border-bottom: 1px solid #b5925f80; }
+.desktop-wordmark { font: 600 16px/1 Georgia, "Times New Roman", serif; letter-spacing: .16em; color: #5a3922; white-space: nowrap; }
+.desktop-wordmark > span { color: #996330; font-size: 22px; vertical-align: -2px; margin-right: 5px; }
+.sidebar-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #b58d54 transparent; padding: 9px 2px 8px; }
+.desktop-town-row { display: flex; flex-direction: column; gap: 6px; }
+.desktop-town-selector { display: flex; align-items: center; gap: 7px; width: 100%; min-height: 44px; padding: 6px 7px; color: #54381f; background: linear-gradient(180deg, #fff6db8c, #e5cd9a70); border: 1px solid #b9945c; box-shadow: inset 0 1px #fff8e9; text-align: left; }
+.desktop-town-selector > svg:first-child { color: #9b613a; width: 23px; height: 23px; }
+.desktop-town-selector > span { min-width: 0; flex: 1; }
+.desktop-town-selector strong { display: block; font: 600 17px/1.2 Georgia, "Times New Roman", serif; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.desktop-town-selector .desktop-town-edit { width: 17px; height: 17px; color: #966e3f; }
+.desktop-map-navigation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.desktop-map-navigation button { min-width: 44px; min-height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 4px 2px; color: #85603a; border: 1px solid #c2a2708c; background: #f6e9cb70; font-size: 12px; }
+.desktop-map-navigation svg { width: 19px; height: 19px; }
+.desktop-map-navigation [aria-current="page"] { color: #366656; border-color: #7f8d65; background: #dfe1b859; }
+.sidebar-section { margin-top: 12px; padding-top: 9px; border-top: 1px solid #b5925f68; }
+.sidebar-section-title { margin: 0 0 6px; color: #7a5b36; font: 650 8px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.desktop-status-counters { display: grid; grid-template-columns: repeat(4, minmax(44px, 1fr)); gap: 4px; }
+.desktop-status-button { color: #53381f; border: 1px solid #bc9a644d; background: #fff0cf40; }
+.sidebar-metric-button { position: relative; display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 44px; min-height: 44px; padding: 5px 3px; color: #53381f; font-size: 13px; line-height: 1.2; font-weight: 650; font-variant-numeric: tabular-nums; }
+.sidebar-metric-button > svg { width: 18px; height: 18px; color: #8e6239; stroke-width: 1.7; }
+.sidebar-metric-button strong { font-size: 14px; line-height: 1; }
+.sidebar-metric-label { position: absolute; z-index: 6; top: calc(100% - 2px); left: 50%; transform: translateX(-50%); visibility: hidden; opacity: 0; width: max-content; max-width: 140px; padding: 5px 7px; color: #54381f; background: #fff2d6; border: 1px solid #a78147; border-radius: 3px; box-shadow: 0 2px 5px #543b2530; font-size: 12px; line-height: 1.3; font-weight: 500; white-space: normal; pointer-events: none; }
+.sidebar-metric-button:hover .sidebar-metric-label, .sidebar-metric-button:focus .sidebar-metric-label, .sidebar-metric-button:active .sidebar-metric-label { visibility: visible; opacity: 1; }
+.desktop-status-button:first-child .sidebar-metric-label { left: 0; transform: none; }
+.desktop-status-button:last-child .sidebar-metric-label { left: auto; right: 0; transform: none; }
+.desktop-account-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-top: 5px; }
+.desktop-account-tools button, .desktop-adviser, .sidebar-support button, .desktop-header button { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 44px; min-height: 44px; padding: 6px 4px; color: #6a4629; border: 1px solid #ba975f78; border-radius: 3px; background: linear-gradient(180deg, #fff0cc9c, #e7c88c60); font-size: 12px; }
+.desktop-account-tools svg, .desktop-adviser svg, .sidebar-support svg { width: 18px; height: 18px; color: #895931; }
+.desktop-resource-list { display: grid; grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: 4px; margin: 0; }
+.desktop-resource { min-width: 0; }
+.desktop-resource dd { margin: 0; }
+.desktop-resource .sidebar-metric-button { width: 100%; flex-wrap: wrap; column-gap: 3px; row-gap: 2px; font-size: 12px; border: 1px solid #bf9d6659; border-radius: 3px; background: #fff0cf40; }
+.desktop-resource:nth-child(3n + 1) .sidebar-metric-label { left: 0; transform: none; }
+.desktop-resource:nth-child(3n) .sidebar-metric-label { left: auto; right: 0; transform: none; }
+.desktop-timber svg { color: #99642e; }
+.desktop-clay svg { color: #a26243; }
+.desktop-silver svg { color: #6a858a; }
+.desktop-grain svg { color: #a68a27; }
+.desktop-iron svg { color: #777e72; }
+.desktop-coins svg { color: #ad7c20; }
+.queue-chip { margin-top: 6px; padding-top: 6px; font-size: 10px; line-height: 1.4; }
+.desktop-advisers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.desktop-adviser.active { background: #dfe1b85c; border-color: #8c9864; color: #426652; }
+.desktop-adviser.active svg { color: #426652; }
+.desktop-adviser-name { font: 600 12px/1.2 Georgia, "Times New Roman", serif; }
+.desktop-header nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.desktop-header button { justify-content: center; background: #e1d7b54f; color: #516c59; border-color: #92a07e91; }
+.desktop-header .dev-reset-control { color: #916041; background: #dbb4892b; border-color: #bd99776b; }
+.sidebar-footer { flex: 0 0 auto; padding: 8px 2px 0; border-top: 1px solid #b5925f80; }
+.sidebar-support { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.sidebar-support button { justify-content: center; background: #f6e9cb70; }
+.sidebar-footer .preview-mode-controls { margin: 5px 0 0; gap: 4px; }
+.sidebar-footer .preview-mode-button { min-height: 44px; padding: 6px; font-size: 12px; }
+
+.sidebar-strip { position: fixed; top: 0; bottom: 0; left: 0; z-index: 1; width: var(--sidebar-rail-width); display: flex; flex-direction: column; align-items: center; gap: 17px; padding: calc(13px + var(--safe-top)) 5px calc(12px + var(--safe-bottom)); }
+.sidebar-strip-mark { color: #996330; font: 28px/1 Georgia, "Times New Roman", serif; }
+.sidebar-strip-toggle { min-width: 44px; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 5px; color: #3d6c5c; background: #e1dfb966; border: 1px solid #8e9a736e; border-radius: 3px; }
+.sidebar-strip-toggle svg { width: 22px; height: 22px; }
+.sidebar-strip-toggle span { font-size: 9px; }
+.sidebar-strip-wordmark { margin-top: 5px; color: #7d5a34; font: 600 11px/1 Georgia, "Times New Roman", serif; letter-spacing: .15em; writing-mode: vertical-rl; }
+.sidebar-backdrop { position: fixed; inset: 0; z-index: 2; border: 0; background: #28271e70; pointer-events: auto; cursor: default; }
+
+/* Camera controls stay inside the game half, independent of drawer width. */
+.desktop-compass { display: none !important; }
+.desktop-camera-button { display: grid; place-items: center; min-width: 44px; min-height: 44px; border: 1px solid #b4915b8c; color: #805a2f; background: linear-gradient(180deg, #fceccc, #e2c792); padding: 8px; box-shadow: inset 0 1px #ffefd4; }
+.desktop-camera-button svg { width: 19px; height: 19px; }
+.desktop-camera-word { font: 600 12px/1 Georgia, "Times New Roman", serif; }
+.desktop-compass-center { display: grid; place-items: center; flex: 0 0 50px; width: 50px; min-height: 50px; padding: 9px; border: 3px double #997038; border-radius: 50%; color: #487a71; background: radial-gradient(circle, #fcecca 0 48%, #dbc08b 50% 66%, #f8e5b8 68%); box-shadow: 0 2px 6px #43382752, inset 0 0 0 3px #ffedc463; }
+.desktop-compass-center svg { width: 24px; height: 24px; }
+#desktop-map-zoom-level { min-width: 33px; color: #82603a; font-size: 10px; line-height: 1.2; font-variant-numeric: tabular-nums; text-align: center; }
+.toast { left: calc(var(--sidebar-inset) + (100vw - var(--sidebar-inset)) / 2); bottom: calc(16px + var(--safe-bottom)); max-width: min(460px, calc(100vw - var(--sidebar-inset) - 20px)); }
+body[data-map-view="world"] .toast { bottom: calc(82px + var(--safe-bottom)); }
+
+/* Native dialogs replace the left panel, never become a second right HUD. */
+.actions-menu, .detail-panel { top: 0; left: 0; right: auto; bottom: 0; width: min(320px, calc(100vw - 20px)); max-width: none; max-height: 100dvh; border-radius: 0; padding-bottom: var(--safe-bottom); }
+.actions-heading { padding: calc(14px + var(--safe-top)) 15px 10px; }
+.actions-content { padding: 15px; }
+.actions-heading h2, .detail-panel h2 { font-size: 25px; }
+.panel-top { padding: calc(10px + var(--safe-top)) 12px 0; }
+#panel-content { padding: 4px 18px 22px; }
+.panel-heading { gap: 10px; }
+.panel-emblem { width: 42px; height: 42px; }
+.costs { flex-wrap: wrap; gap: 10px; }
+.menu-action { min-height: 44px; }
+
+@media (max-width: 660px) {
+  #desktop-map-zoom-level { display: none; }
+  .desktop-compass { gap: 2px; padding: 4px; }
+  .desktop-compass-center { flex-basis: 44px; width: 44px; min-height: 44px; padding: 7px; }
+}
+
+@media (min-width: 1024px) and (min-height: 600px) {
+  :root { --sidebar-inset: var(--sidebar-width); }
+  .desktop-resource-panel { width: var(--sidebar-width); transform: none; visibility: visible; transition: none; }
+  .sidebar-strip, #sidebar-close, .sidebar-backdrop { display: none !important; }
+  .sidebar-heading { min-height: 39px; }
+  .actions-menu, .detail-panel { width: var(--sidebar-width); }
+}

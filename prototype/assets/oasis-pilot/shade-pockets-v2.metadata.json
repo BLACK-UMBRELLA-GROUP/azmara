@@ -1,0 +1,214 @@
+{
+  "src": "assets/oasis-pilot/shade-pockets-v2.png",
+  "width": 1254,
+  "height": 1254,
+  "rects": {
+    "founding": [
+      21,
+      150,
+      502,
+      441
+    ],
+    "west": [
+      556,
+      49,
+      698,
+      570
+    ],
+    "east": [
+      47,
+      630,
+      693,
+      583
+    ]
+  },
+  "alphaBodyBounds": {
+    "founding": [
+      29,
+      158,
+      486,
+      425
+    ],
+    "west": [
+      564,
+      57,
+      682,
+      554
+    ],
+    "east": [
+      55,
+      638,
+      677,
+      567
+    ]
+  },
+  "fullMotifOwnership": true,
+  "fullAtlasAlphaOwnership": false,
+  "excludedDetachedNoise": {
+    "pixels": 2126,
+    "maxAlpha": 1,
+    "sourcePixelsUnchanged": true
+  },
+  "componentAudit": {
+    "version": 2,
+    "components": 1360,
+    "largest": [
+      {
+        "pixels": 286919,
+        "rect": [
+          564,
+          57,
+          682,
+          554
+        ],
+        "maxAlpha": 255
+      },
+      {
+        "pixels": 213180,
+        "rect": [
+          55,
+          638,
+          677,
+          567
+        ],
+        "maxAlpha": 255
+      },
+      {
+        "pixels": 114594,
+        "rect": [
+          29,
+          158,
+          486,
+          425
+        ],
+        "maxAlpha": 255
+      },
+      {
+        "pixels": 611,
+        "rect": [
+          702,
+          777,
+          26,
+          49
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 295,
+        "rect": [
+          234,
+          60,
+          23,
+          20
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 288,
+        "rect": [
+          15,
+          1008,
+          15,
+          37
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 255,
+        "rect": [
+          731,
+          807,
+          27,
+          18
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 174,
+        "rect": [
+          562,
+          771,
+          19,
+          20
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 144,
+        "rect": [
+          566,
+          808,
+          23,
+          18
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 141,
+        "rect": [
+          518,
+          722,
+          17,
+          19
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 138,
+        "rect": [
+          616,
+          851,
+          19,
+          19
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 135,
+        "rect": [
+          638,
+          777,
+          19,
+          17
+        ],
+        "maxAlpha": 1
+      }
+    ],
+    "isolatedMaxAlpha": 4
+  },
+  "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-aeb9ea2d-b2ef-4188-bf94-c391ac37e75c.png",
+  "sourceSha256": "b9754e7bf8fe745f402de183de2b43e09c5937ce437f44921fcc134d56d821fd",
+  "runtimeSha256": "c10e6e055792312ba35df9c644695b27ec881f97cec3334128dd3f0a9e7742f2",
+  "bytes": 1711825,
+  "rgbaPixelBytes": 6290064,
+  "cleanup": {
+    "typeId": "shade-pockets",
+    "source": "exec-aeb9ea2d-b2ef-4188-bf94-c391ac37e75c.png",
+    "runtime": "shade-pockets-v2.png",
+    "width": 1254,
+    "height": 1254,
+    "sourceSha256": "b9754e7bf8fe745f402de183de2b43e09c5937ce437f44921fcc134d56d821fd",
+    "runtimeSha256": "c10e6e055792312ba35df9c644695b27ec881f97cec3334128dd3f0a9e7742f2",
+    "mattePixels": {
+      "red": {
+        "candidates": 9338,
+        "cleared": 8420,
+        "protected": 918
+      },
+      "yellow": {
+        "candidates": 11276,
+        "cleared": 10669,
+        "protected": 607
+      }
+    },
+    "changedPixels": 19089,
+    "originalPreserved": true,
+    "noncandidateRgbaUnchanged": true,
+    "allRgbUnchanged": true,
+    "alphaAbove8Unchanged": true,
+    "idempotent": true
+  },
+  "cropMethod": "Eight-pixel padding around measured complete nonzero-alpha motif components, including connected feather/shadow alpha1. Detached background noise outside crops remains unchanged in source. Exact crop clips at runtime, uniform meet; no output pixel crop/resample.",
+  "generationAttempts": 2,
+  "attemptLimit": 2
+}

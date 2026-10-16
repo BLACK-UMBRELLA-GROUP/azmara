@@ -1,0 +1,1682 @@
+{
+  "startedAt": "2026-10-11T18:56:31.801Z",
+  "scope": "Proposal only; runtime/art, Step 5 evidence, staged Site and native source/bundle remain unchanged",
+  "before": [
+    {
+      "path": "prototype/app.js",
+      "bytes": 124675,
+      "sha256": "b789e8d2ec8a07c01f979ffb942592af5a2b5c25d7c7b217466d6811e2f87b15",
+      "mtimeMs": 1791740463387.338
+    },
+    {
+      "path": "prototype/atlas.css",
+      "bytes": 13701,
+      "sha256": "628912fd5c498235a24383cbaa53120ad964dc350835bc3f2dcfd9e0f94dbb05",
+      "mtimeMs": 1791719424071.1133
+    },
+    {
+      "path": "prototype/atlas.js",
+      "bytes": 32307,
+      "sha256": "04462bf705238c1a35f7ae40002e9556786eb3a9f1ff8a8b09e6558b59b04838",
+      "mtimeMs": 1791719424070.671
+    },
+    {
+      "path": "prototype/building-art.css",
+      "bytes": 1198,
+      "sha256": "cfc0e45522c1e2941a8354c5eb91b7c380d5d7ee3548b90ff92fd97da7a7a0ce",
+      "mtimeMs": 1791646243745.0315
+    },
+    {
+      "path": "prototype/building-art.js",
+      "bytes": 45995,
+      "sha256": "df1ebfc9014257ea673f1f9c437002ba607d3226e77edbad456b2deba7a81b13",
+      "mtimeMs": 1791721173025.6382
+    },
+    {
+      "path": "prototype/catalogue.css",
+      "bytes": 5015,
+      "sha256": "569008d8fa63c33cfda2bd954db38145e626a4917102831d4d2966d15d1a6875",
+      "mtimeMs": 1791645024498.2515
+    },
+    {
+      "path": "prototype/catalogue.js",
+      "bytes": 10830,
+      "sha256": "2100ce162c3672cad47173fb319a9b6ad1e95798f02265f2cfa79ad8fdeba2e0",
+      "mtimeMs": 1791727206039.9814
+    },
+    {
+      "path": "prototype/debug-overlay.js",
+      "bytes": 9490,
+      "sha256": "be4b268ad7fe186567d6e31f2b45e88c5a67e75f8b2c2e900d5fb07cc0e0ca51",
+      "mtimeMs": 1791734093756.4927
+    },
+    {
+      "path": "prototype/desktop.css",
+      "bytes": 13686,
+      "sha256": "2298467958336ed07b3d52e9b7404c2d331ef8f62ea6825a25c80019d48ca02a",
+      "mtimeMs": 1791689935115.19
+    },
+    {
+      "path": "prototype/index.html",
+      "bytes": 25779,
+      "sha256": "8b575d0c8f9dc88592f18ad8cda656c204d22a9fdcff8e504691c550bdb8bb04",
+      "mtimeMs": 1791743477382.4033
+    },
+    {
+      "path": "prototype/preview.html",
+      "bytes": 3922,
+      "sha256": "183fca0ec3bdc1bbe093fa5fba92224bcdb27d913f51fbaec337f4f19565a7c6",
+      "mtimeMs": 1791719952290.09
+    },
+    {
+      "path": "prototype/progression.css",
+      "bytes": 1076,
+      "sha256": "1010608812f79db1def27d8c56a56981b0654bfdf14b107ba55897e058e64be7",
+      "mtimeMs": 1791719336442.0132
+    },
+    {
+      "path": "prototype/progression.js",
+      "bytes": 1936,
+      "sha256": "ef545b127493ed5993dcad76dd8b6314eb95333c58c6ea108fafd6c75748a1b0",
+      "mtimeMs": 1791720446267.86
+    },
+    {
+      "path": "prototype/styles.css",
+      "bytes": 22139,
+      "sha256": "bc871cf2fa2d31a1c833b3444f432cff593dad4f55e5a8ca8f1c00d0be24ff84",
+      "mtimeMs": 1791740463314.003
+    },
+    {
+      "path": "prototype/town-layouts.js",
+      "bytes": 4398,
+      "sha256": "03a0883dffd46ae430e50252f7d9c89bde3deb0c0ab91ce1eb2c5165bf4d7a01",
+      "mtimeMs": 1791690823560.9695
+    },
+    {
+      "path": "prototype/town-wall.js",
+      "bytes": 12777,
+      "sha256": "b3a712fcfc8c417eb1c13e495a65e66a7f49fbb7c926ea144bf0640a3b69a8a8",
+      "mtimeMs": 1791743270889.6946
+    },
+    {
+      "path": "prototype/assets/azmara-advisors-v1.png",
+      "bytes": 2185523,
+      "sha256": "923ca955cd424c3e7b47618c53be44580dabd453b5680876def23398e29fccbe",
+      "mtimeMs": 1791575860931.7922
+    },
+    {
+      "path": "prototype/assets/azmara-buildings-civic-v1.png",
+      "bytes": 2502883,
+      "sha256": "9fac6d6ed9a0a2a998a1c58707c34ea643e0c8d740cfdc105823ea6e4784da21",
+      "mtimeMs": 1791629196691.528
+    },
+    {
+      "path": "prototype/assets/azmara-buildings-industry-v1.png",
+      "bytes": 2536224,
+      "sha256": "7809bb2868a0fe4c02e4ea1666a7ec03cbc41168482364f279599b1b5d5894c4",
+      "mtimeMs": 1791629196834.7576
+    },
+    {
+      "path": "prototype/assets/azmara-buildings-trade-v1.png",
+      "bytes": 2253440,
+      "sha256": "091fb60aa4b25a07a4f024e55fffef6354b8eba8e1433b06d79c9932abc73ef2",
+      "mtimeMs": 1791629196744.3184
+    },
+    {
+      "path": "prototype/assets/azmara-buildings-war-v1.png",
+      "bytes": 2150992,
+      "sha256": "9fb04fccc3074b8f2c04951f520a8e0a4f9656ac4a21f5cc2e6e17f69372a0fa",
+      "mtimeMs": 1791629196789.3152
+    },
+    {
+      "path": "prototype/assets/azmara-desktop-terrain-v1.png",
+      "bytes": 3478311,
+      "sha256": "c68e62fa85a4e898c3d368134729af638646797de705b224db0daab1d12101de",
+      "mtimeMs": 1791575860926.2666
+    },
+    {
+      "path": "prototype/assets/azmara-desktop-terrain-v2.png",
+      "bytes": 3242418,
+      "sha256": "7462282f4fa1c78a662aa4b9b86b2a1773ceae0821237a580497fcb74afcaf92",
+      "mtimeMs": 1791583859980.6006
+    },
+    {
+      "path": "prototype/assets/azmara-empty-plot-v1.png",
+      "bytes": 1616996,
+      "sha256": "967242773cc7b784702adac2ead30e6569b64808dcd62d15ebebdfc8a080db2b",
+      "mtimeMs": 1791459803174.4336
+    },
+    {
+      "path": "prototype/assets/azmara-empty-plot-v2.png",
+      "bytes": 1967055,
+      "sha256": "c11c71aa45f5c92887e06023e239634164c33acf52bd75123dd9bde7d92ecbca",
+      "mtimeMs": 1791483726857.6772
+    },
+    {
+      "path": "prototype/assets/azmara-empty-plot-v3.png",
+      "bytes": 2329993,
+      "sha256": "67668bf206a5f5677cee6177cfa1f93bd95b6bf489af1de71fb33b10d73bc4ee",
+      "mtimeMs": 1791541126632.612
+    },
+    {
+      "path": "prototype/assets/azmara-empty-plot-v4.png",
+      "bytes": 2502586,
+      "sha256": "b7f8e21ded5fb7fa1699de5771e4a6f888a5054fba6bfba2f3b38d2ebbbdd861",
+      "mtimeMs": 1791627324284.3245
+    },
+    {
+      "path": "prototype/assets/azmara-front-wall-stages-v18.png",
+      "bytes": 2552796,
+      "sha256": "2f753b9853e059a75ae7c7ad7bda26658a1cb9715fd89d8d18bfa3f903921689",
+      "mtimeMs": 1791726885075.2793
+    },
+    {
+      "path": "prototype/assets/azmara-island-terrain-v1.png",
+      "bytes": 3386679,
+      "sha256": "7a23c0a1f7b59d0d32435343ff50da613a6a353432a2e25303986721880e9627",
+      "mtimeMs": 1791627324291.7905
+    },
+    {
+      "path": "prototype/assets/azmara-island-terrain-v2.png",
+      "bytes": 3011141,
+      "sha256": "4175d90207dd94b3450ae94367a13f87c64dcf9b77b5cc78cff5b89c1c40d870",
+      "mtimeMs": 1791634267254.4163
+    },
+    {
+      "path": "prototype/assets/azmara-mountain-town-v18.png",
+      "bytes": 2819528,
+      "sha256": "8647023b8d3f64b25386c30623cc6cddc114dd0d6353d1b56dc62bb7faa4bc0e",
+      "mtimeMs": 1791726885051.7104
+    },
+    {
+      "path": "prototype/assets/azmara-region-terrain-v1.png",
+      "bytes": 3118056,
+      "sha256": "13b85a385e356bd69adc2c793d61f225fdb906ea3c0590022e16770b605ae3b4",
+      "mtimeMs": 1791650239117.264
+    },
+    {
+      "path": "prototype/assets/azmara-region-terrain-v2.png",
+      "bytes": 2900996,
+      "sha256": "ed1e0730d3f2b1c886874f735b6a86170c9ccf100338f744b15234fb679b452b",
+      "mtimeMs": 1791690920880.0981
+    },
+    {
+      "path": "prototype/assets/azmara-scenery-atlas-v1.png",
+      "bytes": 2279592,
+      "sha256": "e01e84474e8776e0deba378d5f44bfabf833397115cb2ff849caf83925ebf916",
+      "mtimeMs": 1791718999642.7026
+    },
+    {
+      "path": "prototype/assets/azmara-starting-terrain-v1.png",
+      "bytes": 3780147,
+      "sha256": "6b88122eba787a2ef0dccc596b1ae00a4e4fe6340f32fb40a70d5aa838e20881",
+      "mtimeMs": 1791459803121.8108
+    },
+    {
+      "path": "prototype/assets/azmara-starting-terrain-v2.png",
+      "bytes": 3146235,
+      "sha256": "db7930f97539d4da93e1c6359893e93b2f3a151d3cc9c424d4ed663dc33cdfc2",
+      "mtimeMs": 1791483726782.0847
+    },
+    {
+      "path": "prototype/assets/azmara-starting-terrain-v3.png",
+      "bytes": 3226256,
+      "sha256": "cbdf46f174af69593a12ba5cfb29ed79397b555066a1c2f29b832a42ab5f68d1",
+      "mtimeMs": 1791541126613.2566
+    },
+    {
+      "path": "prototype/assets/azmara-town-hall-v1.png",
+      "bytes": 1943331,
+      "sha256": "339f5912cab84a8e8ed3f62c5e928ade96978d0d9afabfdf45916d6720b34aa5",
+      "mtimeMs": 1791457086973.4546
+    },
+    {
+      "path": "prototype/assets/azmara-town-hall-v2.png",
+      "bytes": 2066341,
+      "sha256": "7d36d9fed74dbae85195299026bd0f6d58c7f29776743a95cced5c23637a1476",
+      "mtimeMs": 1791483726908.1575
+    },
+    {
+      "path": "prototype/assets/azmara-town-hall-v3.png",
+      "bytes": 2331795,
+      "sha256": "611469e9a08f1c812583e4d82558d9a8bcd11885b484b0123156073abe5c83b3",
+      "mtimeMs": 1791541126623.3655
+    },
+    {
+      "path": "prototype/assets/azmara-town-v1.png",
+      "bytes": 4060030,
+      "sha256": "36df7601a3b709686c17289574003159ac5532f9f759f754097a2c49702bb8fb",
+      "mtimeMs": 1791326112454.2166
+    },
+    {
+      "path": "prototype/assets/azmara-world-relief-v1.png",
+      "bytes": 3544091,
+      "sha256": "bf6e3483f161b60f16d70eb7abb9a1f96ec6690f987807053f8c4c406c1e1f64",
+      "mtimeMs": 1791718999649.8176
+    },
+    {
+      "path": "prototype/assets/building-catalogue-v1-brief.md",
+      "bytes": 12405,
+      "sha256": "3c24f039312ebbb463a48de78b257c9531abdf44805e8c18c7bde188bb2640e9",
+      "mtimeMs": 1791629196866.643
+    },
+    {
+      "path": "prototype/assets/desktop-art-v1-brief.md",
+      "bytes": 3850,
+      "sha256": "a976695c83571e58786cce2a9d0d5bc370c0b723736a48fa57edec54a894fdfe",
+      "mtimeMs": 1791576139389.1438
+    },
+    {
+      "path": "prototype/assets/desktop-art-v2-brief.md",
+      "bytes": 5215,
+      "sha256": "17cdff19a61b85bff8bcdc184a58d1f39f2a42a494d708d759dea1b356f2af8e",
+      "mtimeMs": 1791584629536.5923
+    },
+    {
+      "path": "prototype/assets/freight-yard-reserve-v2.svg",
+      "bytes": 877,
+      "sha256": "a73d9b71c151505ee0e47959b4d054fa186f69e358e93da8de29b1355b9faeae",
+      "mtimeMs": 1791691203860.1165
+    },
+    {
+      "path": "prototype/assets/freighter-dock-reserve-v1.svg",
+      "bytes": 1241,
+      "sha256": "106688dad0f7140a636191514cb727724c3bf5980aa6211eec5dc421653463e0",
+      "mtimeMs": 1791627819552.7234
+    },
+    {
+      "path": "prototype/assets/isometric-redesign-v16-brief.md",
+      "bytes": 9408,
+      "sha256": "c1223ab08fd683b03a96dd49350f69ed6d3a3a96e3d2ecd949fc15540ad91cb3",
+      "mtimeMs": 1791720639793.4539
+    },
+    {
+      "path": "prototype/assets/land-only-terrain-v2-brief.md",
+      "bytes": 4345,
+      "sha256": "ec7039491e3007b5353a266834f2351ccbded0f78faf903cb46c92e17ebe170a",
+      "mtimeMs": 1791691681793.7893
+    },
+    {
+      "path": "prototype/assets/mountain-front-wall-v18-brief.md",
+      "bytes": 7911,
+      "sha256": "eed0379efebc5f4485cfb6c07a806cc8a56dda16df955a0a77ab584b0d10be20",
+      "mtimeMs": 1791727018515.634
+    },
+    {
+      "path": "prototype/assets/palette-refinement-art-brief.txt",
+      "bytes": 5437,
+      "sha256": "0c814f8fded513f7fe8fb7aca6d695140895857c6b03b92e41699628464826fb",
+      "mtimeMs": 1791541250537.1777
+    },
+    {
+      "path": "prototype/assets/progression/academy-brief.md",
+      "bytes": 8104,
+      "sha256": "de44edc89739ef52a4169bb5a3903ed1a1d39f67cde3bae39e08b7d6888e60e7",
+      "mtimeMs": 1791649201974.051
+    },
+    {
+      "path": "prototype/assets/progression/azmara-academy-stages-v1.png",
+      "bytes": 896138,
+      "sha256": "06bd6255c9def2e534e9a670b205da561f5161324faf5c70c19d9eed8b64079b",
+      "mtimeMs": 1791646918172.9106
+    },
+    {
+      "path": "prototype/assets/progression/azmara-academy-stages-v2.png",
+      "bytes": 830139,
+      "sha256": "0e11fe5934c2e37046dcb6811f81cabf31a4e88ff416b81f9425c06727e9dbb9",
+      "mtimeMs": 1791649111053.363
+    },
+    {
+      "path": "prototype/assets/progression/azmara-architects-office-stages-v1.png",
+      "bytes": 1747919,
+      "sha256": "17e82d2f00bb169a1873d6b7e81fb4276a2d1236e9e0b2a2e7aa188ee48ed9e6",
+      "mtimeMs": 1791648163872.771
+    },
+    {
+      "path": "prototype/assets/progression/azmara-architects-office-stages-v2.png",
+      "bytes": 1661323,
+      "sha256": "5abe0a32e201eb3b01a6c7c4f7d4edadc3106ce3a9adbea5d295e1b44fbaefe7",
+      "mtimeMs": 1791649141262.827
+    },
+    {
+      "path": "prototype/assets/progression/azmara-barracks-stages-v1.png",
+      "bytes": 1583639,
+      "sha256": "5a7707f0569966a638740207badebdf8bf95f2ce7cf0896518e44bea0b1c351d",
+      "mtimeMs": 1791647376840.8855
+    },
+    {
+      "path": "prototype/assets/progression/azmara-barracks-stages-v2.png",
+      "bytes": 1512725,
+      "sha256": "05fca9a24b04ac91a4647a1767d9c8826a1502198758a5abc96b2e7cc55c8864",
+      "mtimeMs": 1791649128981.6255
+    },
+    {
+      "path": "prototype/assets/progression/azmara-carpenters-workshop-stages-v1.png",
+      "bytes": 1534890,
+      "sha256": "f45758fd48b655ead51d6ca18847227177b0e68bd4cc8a159ab69e2710b87fd8",
+      "mtimeMs": 1791647969038.399
+    },
+    {
+      "path": "prototype/assets/progression/azmara-carpenters-workshop-stages-v2.png",
+      "bytes": 1448454,
+      "sha256": "9c655195078e32ab3aa0849fdede349a9fa56ddaef7bfc8c79a23d75a5e98970",
+      "mtimeMs": 1791649136396.62
+    },
+    {
+      "path": "prototype/assets/progression/azmara-chronos-forge-stages-v1.png",
+      "bytes": 1749445,
+      "sha256": "01bec7f1d6da77cf4872cc1af9dc6bd0d0ff96f4d6c1c8b07a1120af5b6bb23a",
+      "mtimeMs": 1791648163947.3633
+    },
+    {
+      "path": "prototype/assets/progression/azmara-chronos-forge-stages-v2.png",
+      "bytes": 1642768,
+      "sha256": "41054e818a8a1bd9ba83f61802b9df631b68820c01ef07829995bdf8ef14215b",
+      "mtimeMs": 1791649142461.4883
+    },
+    {
+      "path": "prototype/assets/progression/azmara-clayworks-stages-v1.png",
+      "bytes": 1699701,
+      "sha256": "77fa7791e8e5b4860e536e13b45f5ea9e2baa6a53323d9e2c6765975ec833856",
+      "mtimeMs": 1791647632963.804
+    },
+    {
+      "path": "prototype/assets/progression/azmara-clayworks-stages-v2.png",
+      "bytes": 1606283,
+      "sha256": "d66d0fc219801aac1362fa033fcb2561067661a515aeac6041cd8c3696405d91",
+      "mtimeMs": 1791649135134.071
+    },
+    {
+      "path": "prototype/assets/progression/azmara-compact-level-1.png",
+      "bytes": 3109157,
+      "sha256": "b53415fbe0d198c1943cce224a41bbfb862cfdcf6c39ae46fd5a33d32749c1f1",
+      "mtimeMs": 1791638889517.1973
+    },
+    {
+      "path": "prototype/assets/progression/azmara-compact-level-10.png",
+      "bytes": 3226256,
+      "sha256": "cbdf46f174af69593a12ba5cfb29ed79397b555066a1c2f29b832a42ab5f68d1",
+      "mtimeMs": 1791638769458.3943
+    },
+    {
+      "path": "prototype/assets/progression/azmara-compact-level-15.png",
+      "bytes": 3178304,
+      "sha256": "79ddc4b0fa5d8d09db515275df171c260cec46e43bc5ac0514e3a15b9cfb94f2",
+      "mtimeMs": 1791639349976.9526
+    },
+    {
+      "path": "prototype/assets/progression/azmara-compact-level-20.png",
+      "bytes": 3370424,
+      "sha256": "413d35a6013a185c08bcdf049c50542667f7238a874fd9714afaf9bf3c057d2a",
+      "mtimeMs": 1791639350116.7188
+    },
+    {
+      "path": "prototype/assets/progression/azmara-compact-level-5.png",
+      "bytes": 3243749,
+      "sha256": "cc0bc020284c7c9fffa3921acded65ba1b8b68a8812a6e16e34ceb9d5dd2a792",
+      "mtimeMs": 1791639349838.2634
+    },
+    {
+      "path": "prototype/assets/progression/azmara-depot-stages-v1.png",
+      "bytes": 1429694,
+      "sha256": "053f0cc2b40e5092031009bd4b7d47811ad5fdbb61d2031a5f13ddac42dd752d",
+      "mtimeMs": 1791648301757.5684
+    },
+    {
+      "path": "prototype/assets/progression/azmara-depot-stages-v2.png",
+      "bytes": 1358485,
+      "sha256": "1c602126acbc86580c2478fe56d3b9a5539e03a1d2416c1175a754717641b181",
+      "mtimeMs": 1791649124042.3567
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-compact-level-1-v1.png",
+      "bytes": 3215939,
+      "sha256": "103117ef19e4d21ec6f07f452a7552753b4dc48f787d5c4a5b58f76919a1c2a9",
+      "mtimeMs": 1791650239070.9639
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-compact-level-1-v2.png",
+      "bytes": 3181922,
+      "sha256": "efe13dceac81c3becca650ae7057fcf1f574c48db956972a67616c9d9aceb913",
+      "mtimeMs": 1791690920821.2144
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-compact-level-1-v3.png",
+      "bytes": 2993460,
+      "sha256": "6de5e0859095ab2bd5547c159b383014307ecfe1bce7d34f1113dbf961aada85",
+      "mtimeMs": 1791719275637.638
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-compact-level-20-v1.png",
+      "bytes": 3340112,
+      "sha256": "175c974c4a23dad9c30de4c44fce75bf15fc140bef30ca57a5c09e4bbede1c66",
+      "mtimeMs": 1791650810659.2595
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-desktop-level-1-v1.png",
+      "bytes": 3276855,
+      "sha256": "3db0cbc5a94db2b2530d2c57019b67ee0c82d33ba5ba13b22b2208c57e4c05df",
+      "mtimeMs": 1791650239019.6462
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-desktop-level-1-v2.png",
+      "bytes": 3298205,
+      "sha256": "1ccdb47b8edfd5f8eeeccf1dfbd4b3793dfbb281f46c1f07aeba33e8e811a122",
+      "mtimeMs": 1791690920764.906
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-desktop-level-1-v3.png",
+      "bytes": 3063728,
+      "sha256": "a28b5299fca1ccd79e2249875a8909a5029bb037b8dacf32bc517b5fea07cbef",
+      "mtimeMs": 1791719275631.6116
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desert-desktop-level-20-v1.png",
+      "bytes": 3379471,
+      "sha256": "4e52d69257465f57c7dc6b92d1318291d939efe044c545d0b8dffa8431c1767e",
+      "mtimeMs": 1791650810597.3696
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desktop-level-1.png",
+      "bytes": 3106025,
+      "sha256": "90f623ed58b0179bbba20e60dbcb243ddfc2217b5fd9a2104a87f47ad31fd9db",
+      "mtimeMs": 1791638889509.9841
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desktop-level-10.png",
+      "bytes": 3242418,
+      "sha256": "7462282f4fa1c78a662aa4b9b86b2a1773ceae0821237a580497fcb74afcaf92",
+      "mtimeMs": 1791638769449.0107
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desktop-level-15.png",
+      "bytes": 3202114,
+      "sha256": "e11bc7d1e4a7b51531ead883ac6482e9f0aa4ede9bfc378d8e3671ff875479a3",
+      "mtimeMs": 1791639349929.8992
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desktop-level-20.png",
+      "bytes": 3256346,
+      "sha256": "3caa973961b29abc5db2625bc512438e69ecce941c065e28b489600fb0021a8c",
+      "mtimeMs": 1791639350036.185
+    },
+    {
+      "path": "prototype/assets/progression/azmara-desktop-level-5.png",
+      "bytes": 3268524,
+      "sha256": "0d0224db5177d12882e7503270420fda79d5b019b006b078fb7551165ea3dad6",
+      "mtimeMs": 1791639349884.5667
+    },
+    {
+      "path": "prototype/assets/progression/azmara-dockyard-stages-land-v3-original.png",
+      "bytes": 2041968,
+      "sha256": "8775ede690ca3ffa29a9413a6b2f0dfb05a8343efa12b4c572008d52aaa57bfd",
+      "mtimeMs": 1791690902471.151
+    },
+    {
+      "path": "prototype/assets/progression/azmara-dockyard-stages-land-v3.png",
+      "bytes": 1910785,
+      "sha256": "04b0fdb120365deb8c8f47995fe6d686226b464d4cb6ab7e246dbc68dd2691ff",
+      "mtimeMs": 1791691233914.1626
+    },
+    {
+      "path": "prototype/assets/progression/azmara-dockyard-stages-v1.png",
+      "bytes": 2056713,
+      "sha256": "462e885b57570bdaf1daf5de2d075d5351881c2d562302fb80b1265bd766c54e",
+      "mtimeMs": 1791648798909.8762
+    },
+    {
+      "path": "prototype/assets/progression/azmara-dockyard-stages-v2.png",
+      "bytes": 1893358,
+      "sha256": "502c7256ab6e922ab452987b4f2b01ed8d10f260d455a1f42d93f3a92ee80131",
+      "mtimeMs": 1791649126506.2458
+    },
+    {
+      "path": "prototype/assets/progression/azmara-embassy-stages-v1.png",
+      "bytes": 1216076,
+      "sha256": "011b45d4591da9b10593405977bccfbdd59c0a47727827d25bbfa2fc2c8e2b3c",
+      "mtimeMs": 1791647925404.869
+    },
+    {
+      "path": "prototype/assets/progression/azmara-embassy-stages-v2.png",
+      "bytes": 1168796,
+      "sha256": "9cd98ffdc646bb2a0be04be01b422333ac2f7e21e4b631623d26dd8b41f72bd7",
+      "mtimeMs": 1791649118748.201
+    },
+    {
+      "path": "prototype/assets/progression/azmara-foresters-house-stages-v1.png",
+      "bytes": 2035229,
+      "sha256": "4c89469e8fb2107cb68fd9334904abb5128a120dc5c2084eb28eb14a947d1839",
+      "mtimeMs": 1791648798984.9414
+    },
+    {
+      "path": "prototype/assets/progression/azmara-foresters-house-stages-v2.png",
+      "bytes": 1879909,
+      "sha256": "77c9338d21b3889636695aa482ad56ccae8d3b5bc25e9f227da45b356c664015",
+      "mtimeMs": 1791649132666.7764
+    },
+    {
+      "path": "prototype/assets/progression/azmara-governors-residence-stages-v1.png",
+      "bytes": 1376221,
+      "sha256": "72a656ca75e3c44a122c3ca98a8198f1b00b14797e88f8ea5b388ec93673a180",
+      "mtimeMs": 1791647925362.5593
+    },
+    {
+      "path": "prototype/assets/progression/azmara-governors-residence-stages-v2.png",
+      "bytes": 1328481,
+      "sha256": "f0213052353ed1fb400120e72a1195b13e194f113555f5bd016318c7979f9347",
+      "mtimeMs": 1791649116069.2974
+    },
+    {
+      "path": "prototype/assets/progression/azmara-grain-estate-stages-v1.png",
+      "bytes": 1640343,
+      "sha256": "ad3be6789ec7445572d1b48ac01bc24141c4f74a3d6303ec6b11bba546a464a3",
+      "mtimeMs": 1791647968964.5925
+    },
+    {
+      "path": "prototype/assets/progression/azmara-grain-estate-stages-v2.png",
+      "bytes": 1565422,
+      "sha256": "59b017372e54a800448998d6e00bd21ee1b3592ade67d5f976204a6c89e4e925",
+      "mtimeMs": 1791649133876.6484
+    },
+    {
+      "path": "prototype/assets/progression/azmara-grain-store-stages-v1.png",
+      "bytes": 1600325,
+      "sha256": "b6210ffcb0ff920e009a243e879b99116ab1e34e59452aa1eaf5b7109ea5f037",
+      "mtimeMs": 1791648163817.9717
+    },
+    {
+      "path": "prototype/assets/progression/azmara-grain-store-stages-v2.png",
+      "bytes": 1511007,
+      "sha256": "2ed167c324a8b987bac1cf8c3c4f83a613938995339f596f7905426dc66d1af1",
+      "mtimeMs": 1791649140066.6587
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-1.png",
+      "bytes": 2082013,
+      "sha256": "385f8f1215f1061b6f3c468699702f86b840ce78b579d9df78fac3ffa4a4b9e4",
+      "mtimeMs": 1791639336743.0972
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-10.png",
+      "bytes": 2331795,
+      "sha256": "611469e9a08f1c812583e4d82558d9a8bcd11885b484b0123156073abe5c83b3",
+      "mtimeMs": 1791638700366.7852
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-15.png",
+      "bytes": 2389733,
+      "sha256": "31871fc0bf06f6db9bb8d80dd25ea13f4d5b6d77028e0ecf31959007ca0bd554",
+      "mtimeMs": 1791639456135.9492
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-20.png",
+      "bytes": 2614517,
+      "sha256": "f3bae53adf398897d8c54e372e04ef7a309a7ba7b28930639fad0cbddad33413",
+      "mtimeMs": 1791639456141.8325
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-25.png",
+      "bytes": 2683366,
+      "sha256": "0b6100f47d63671bef34c7556555d5193f8c86fce938b7298d649a95900a64ff",
+      "mtimeMs": 1791646285130.2097
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-30.png",
+      "bytes": 2779722,
+      "sha256": "267c6bf5883080fbed940e692233cac6cfe2974f26c52585bd3b917e8c844e10",
+      "mtimeMs": 1791646285268.6946
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-35.png",
+      "bytes": 2739641,
+      "sha256": "1a80417b6b2a1c5e5d0516d241e0a08a0340091596f5dd88763ec3bfc010f66d",
+      "mtimeMs": 1791646285416.199
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-40.png",
+      "bytes": 2777853,
+      "sha256": "26d165b12e076af24af97764e87bebe61d90597d66855c33da57524354b01164",
+      "mtimeMs": 1791646285964.0872
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-45.png",
+      "bytes": 2982492,
+      "sha256": "3ac5e01fc802df920338c545e77c2c8597260ce773f23fdc55497214b2d86fa9",
+      "mtimeMs": 1791646286047.7341
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-5.png",
+      "bytes": 1990308,
+      "sha256": "a1e7a119a0a556beea05e4087a491d0dc2056e21c0e3fb6b74132d9ae24ee54f",
+      "mtimeMs": 1791639336750.1245
+    },
+    {
+      "path": "prototype/assets/progression/azmara-hall-level-50.png",
+      "bytes": 2957466,
+      "sha256": "a368006a239e0f888b4f7a4ba3655fe23748367a80075341862064298cfd5977",
+      "mtimeMs": 1791646286112.318
+    },
+    {
+      "path": "prototype/assets/progression/azmara-intelligence-house-stages-layout-v1.png",
+      "bytes": 1249935,
+      "sha256": "5167a9ba44691be8cfb077a1b9e33e2b0086235bc70cf049751963944ddff25b",
+      "mtimeMs": 1791649619265.8105
+    },
+    {
+      "path": "prototype/assets/progression/azmara-intelligence-house-stages-v1.png",
+      "bytes": 2049632,
+      "sha256": "23ed67501cc077fb3bd8b31801956804359afc07a3e232692a13573fb8e9fe3b",
+      "mtimeMs": 1791648798945.3987
+    },
+    {
+      "path": "prototype/assets/progression/azmara-intelligence-house-stages-v2.png",
+      "bytes": 1210669,
+      "sha256": "7b28cce30a06e82e7af0cc1893b356830ce85068c6206b5db317b0fde2d0d8da",
+      "mtimeMs": 1791649725577.2883
+    },
+    {
+      "path": "prototype/assets/progression/azmara-iron-foundry-stages-v1.png",
+      "bytes": 1468432,
+      "sha256": "82b3c834ab78cd8f917d6f28f339e6250629f6dc5bf5bdf035d552eea948c0c6",
+      "mtimeMs": 1791649619232.3037
+    },
+    {
+      "path": "prototype/assets/progression/azmara-iron-foundry-stages-v2.png",
+      "bytes": 1383109,
+      "sha256": "4eaec756032d9f247aa31d27b7f5e02f4ef02d198ecaab1ed0997340860f5111",
+      "mtimeMs": 1791649728062.4456
+    },
+    {
+      "path": "prototype/assets/progression/azmara-materials-workshop-stages-v1.png",
+      "bytes": 1648146,
+      "sha256": "b0b1d3c2e483034253bff5e470e37030bd63b55db3b990e04612d27901d29955",
+      "mtimeMs": 1791647969182.641
+    },
+    {
+      "path": "prototype/assets/progression/azmara-materials-workshop-stages-v2.png",
+      "bytes": 1528537,
+      "sha256": "274e1ad67909d8e6bb1982049a0a661da0b115a6ef632e70c406fa712149b482",
+      "mtimeMs": 1791649138835.6597
+    },
+    {
+      "path": "prototype/assets/progression/azmara-military-exchange-stages-v1.png",
+      "bytes": 1440142,
+      "sha256": "a02898e23a91f9459ad0a956de7df72201cb81bfea096e56f237494fe9db0651",
+      "mtimeMs": 1791648301796.5989
+    },
+    {
+      "path": "prototype/assets/progression/azmara-military-exchange-stages-v2.png",
+      "bytes": 1367841,
+      "sha256": "5aed57003c52d9941d4527cd852bd45a4581326f0849b655f75b1a98cbc16439",
+      "mtimeMs": 1791649125347.935
+    },
+    {
+      "path": "prototype/assets/progression/azmara-museum-stages-v1.png",
+      "bytes": 1496358,
+      "sha256": "bdbda35b197dd3fb78f0d718a550bb22c53207785506825e207a0a095f2a0e8c",
+      "mtimeMs": 1791648301834.7534
+    },
+    {
+      "path": "prototype/assets/progression/azmara-museum-stages-v2.png",
+      "bytes": 1447423,
+      "sha256": "2b9e65034d35d23a7eef6664a4824500c50ff59fe58347d47a5960727ea29076",
+      "mtimeMs": 1791649117345.7876
+    },
+    {
+      "path": "prototype/assets/progression/azmara-palace-stages-v1.png",
+      "bytes": 1413262,
+      "sha256": "49f0e1ccf0937a074b990f054f876b386acd23ced3f0d0e98601cfef5651f211",
+      "mtimeMs": 1791647925320.4788
+    },
+    {
+      "path": "prototype/assets/progression/azmara-palace-stages-v2.png",
+      "bytes": 1351475,
+      "sha256": "560695e5ed162e7e5615d0800b08f2f1f70752a8a7fcd4250cd222dc5307d4a1",
+      "mtimeMs": 1791649114808.4817
+    },
+    {
+      "path": "prototype/assets/progression/azmara-prayer-area-stages-v1.png",
+      "bytes": 1437761,
+      "sha256": "dbd535d93176ff33426d0a2a377242a02f1a8f22a3fe5e287160171a13abdaee",
+      "mtimeMs": 1791647571419.1626
+    },
+    {
+      "path": "prototype/assets/progression/azmara-prayer-area-stages-v2.png",
+      "bytes": 1339267,
+      "sha256": "a244f8f56000ef7660819dff37252ae3e75241d3cb398b868fd13885eefc7fb4",
+      "mtimeMs": 1791649120130.92
+    },
+    {
+      "path": "prototype/assets/progression/azmara-precision-workshop-stages-v1.png",
+      "bytes": 1717024,
+      "sha256": "9f6419e27f4460185a1052928715c008953eeb72fcf1a760dd19532db1910b97",
+      "mtimeMs": 1791647969117.7297
+    },
+    {
+      "path": "prototype/assets/progression/azmara-precision-workshop-stages-v2.png",
+      "bytes": 1665892,
+      "sha256": "dcc8f7e52035a5f925ad5edb7e0ccba832a2796aa13772ed5148af130097d96e",
+      "mtimeMs": 1791649137572.0762
+    },
+    {
+      "path": "prototype/assets/progression/azmara-provision-house-stages-v1.png",
+      "bytes": 1541677,
+      "sha256": "b78d7cadf5a57136e3af0cb1875783f4f61645f7df7c7c4a87c3d568d4b8b0af",
+      "mtimeMs": 1791647571289.1992
+    },
+    {
+      "path": "prototype/assets/progression/azmara-provision-house-stages-v2.png",
+      "bytes": 1455568,
+      "sha256": "5fb3bbedc8a96cf7051c6b3f618dc70b6c5c455f31949ddd38c9a3b07a3e1d78",
+      "mtimeMs": 1791649113566.501
+    },
+    {
+      "path": "prototype/assets/progression/azmara-sea-chart-archive-stages-layout-v1.png",
+      "bytes": 1311881,
+      "sha256": "a35680716926d0b7c5852e82c0691a298f2183896aafdbd3e66faf1b786a196e",
+      "mtimeMs": 1791649619255.6555
+    },
+    {
+      "path": "prototype/assets/progression/azmara-sea-chart-archive-stages-v1.png",
+      "bytes": 2202729,
+      "sha256": "dbf97c98edb15f94648feb998d16562bec526ecb274b7995a9936ef0f32431d4",
+      "mtimeMs": 1791648798872.9326
+    },
+    {
+      "path": "prototype/assets/progression/azmara-sea-chart-archive-stages-v2.png",
+      "bytes": 1260906,
+      "sha256": "269911c91fb8d40a7c4beb05f3286508188383b086b2d2353e3a8db998b78dcc",
+      "mtimeMs": 1791649724301.2861
+    },
+    {
+      "path": "prototype/assets/progression/azmara-shipyard-stages-v1.png",
+      "bytes": 1641613,
+      "sha256": "7332183a2ab9c2d57bed14b48b4ceea5cffb9402e44801b53e6851e53a8b0735",
+      "mtimeMs": 1791647376788.0454
+    },
+    {
+      "path": "prototype/assets/progression/azmara-shipyard-stages-v2.png",
+      "bytes": 1541427,
+      "sha256": "4237e4df21f737c16c61549eaf53e17c10a1870eb87cd33754176b16c5e24c29",
+      "mtimeMs": 1791649127766.5513
+    },
+    {
+      "path": "prototype/assets/progression/azmara-silver-refinery-stages-v1.png",
+      "bytes": 1620647,
+      "sha256": "97d2ef503935bdd552b54fcf1a445a0dfc0bb174f5da775294c9f2d4f9955e7d",
+      "mtimeMs": 1791649619227.7827
+    },
+    {
+      "path": "prototype/assets/progression/azmara-silver-refinery-stages-v2.png",
+      "bytes": 1546878,
+      "sha256": "4030351ec7fceed591469c3a1344d7e00c4e7e4cdf96d4302c68462094a6c2e7",
+      "mtimeMs": 1791649726786.747
+    },
+    {
+      "path": "prototype/assets/progression/azmara-town-wall-stages-v1.png",
+      "bytes": 1384634,
+      "sha256": "f73de42dc88b204b5c015b8db1e71c3a60a5d82b36aa2dfdb43c1fb3c4fa3b3d",
+      "mtimeMs": 1791647376889.0747
+    },
+    {
+      "path": "prototype/assets/progression/azmara-town-wall-stages-v2.png",
+      "bytes": 1321002,
+      "sha256": "a42d076931ac1d41b8e76779ac1be58139816e635a27e3b05f040fe5ad104d31",
+      "mtimeMs": 1791649130286.0142
+    },
+    {
+      "path": "prototype/assets/progression/azmara-trading-port-stages-land-v3-original.png",
+      "bytes": 2114893,
+      "sha256": "fa8c59239153dea98c7552bab5aaada18a87bf39f2f52ecc5659f8d0a51a8480",
+      "mtimeMs": 1791690902466.1453
+    },
+    {
+      "path": "prototype/assets/progression/azmara-trading-port-stages-land-v3.png",
+      "bytes": 1969973,
+      "sha256": "1ad9874a199e74ebeff29e7f3364eaea421bc31d977660204c7d2cda65a081e1",
+      "mtimeMs": 1791691232721.332
+    },
+    {
+      "path": "prototype/assets/progression/azmara-trading-port-stages-v1.png",
+      "bytes": 1380511,
+      "sha256": "3c808c7cb474572eab91f443594f1abe2ebcf904a3a7336f4504027358bd14f4",
+      "mtimeMs": 1791647571378.6028
+    },
+    {
+      "path": "prototype/assets/progression/azmara-trading-port-stages-v2.png",
+      "bytes": 1302695,
+      "sha256": "866dc8a558cccfa797600abad925e243143727c38b18d2bc9436c23ae3be089e",
+      "mtimeMs": 1791649121447.3384
+    },
+    {
+      "path": "prototype/assets/progression/azmara-trading-post-stages-v1.png",
+      "bytes": 1521676,
+      "sha256": "bba1b00caf020b1ce696483cc46b7185330e6f23dda2c7e2420cebc2f5f601cb",
+      "mtimeMs": 1791648301716.6074
+    },
+    {
+      "path": "prototype/assets/progression/azmara-trading-post-stages-v2.png",
+      "bytes": 1430913,
+      "sha256": "b4beeef2174a8bee897dcf8ac908c5a418955664ffe9f46f6a6be3bd9817d11b",
+      "mtimeMs": 1791649122734.4453
+    },
+    {
+      "path": "prototype/assets/progression/azmara-warehouse-stages-v1.png",
+      "bytes": 1634527,
+      "sha256": "09be8e8a68004b22bd7d575949304b7672c8424d0ddfd42e63bab0fd3f37ebf4",
+      "mtimeMs": 1791647571337.9353
+    },
+    {
+      "path": "prototype/assets/progression/azmara-warehouse-stages-v2.png",
+      "bytes": 1526725,
+      "sha256": "6d6caec0b0cf53196f6c09d9baf11fd5928e9d8de2b7f977acbf4a2a28e11d95",
+      "mtimeMs": 1791649112294.391
+    },
+    {
+      "path": "prototype/assets/progression/azmara-workshop-stages-v1.png",
+      "bytes": 1701933,
+      "sha256": "8baf75dc209d816fdd2bb6211bf68f5c911cf14f171c533a92b4b7d9fc7686c6",
+      "mtimeMs": 1791647632897.9043
+    },
+    {
+      "path": "prototype/assets/progression/azmara-workshop-stages-v2.png",
+      "bytes": 1604003,
+      "sha256": "f10e341c69c0ec3614866a6164432098c31d90b7ee6819e501d02c74d5100a72",
+      "mtimeMs": 1791649131495.9666
+    },
+    {
+      "path": "prototype/assets/progression/building-designs.md",
+      "bytes": 67800,
+      "sha256": "56877c8916bee4725addf9e1253f0a0bac1ca054174e88e65d23627592a20523",
+      "mtimeMs": 1791650338923.8264
+    },
+    {
+      "path": "prototype/assets/progression/edge-cleanup-report.json",
+      "bytes": 25310,
+      "sha256": "ea823f28e18ef04c3740c829387f98bb59246d9dc6af6f2bd0cc0eda9d160841",
+      "mtimeMs": 1791649906347.6816
+    },
+    {
+      "path": "prototype/assets/progression/hall-brief.md",
+      "bytes": 16921,
+      "sha256": "2447a2e8ae4212b413d24e63331613a198793eb75f0f5249004c079e5859b644",
+      "mtimeMs": 1791646286192.1033
+    },
+    {
+      "path": "prototype/assets/progression/land-trade-v3-brief.md",
+      "bytes": 8926,
+      "sha256": "a75c5f33fe8638d2419e75ea35d044bb0959290be217add2a08d5a9959b6d424",
+      "mtimeMs": 1791691810169.0918
+    },
+    {
+      "path": "prototype/assets/progression/land-trade-v3-report.json",
+      "bytes": 8204,
+      "sha256": "49b8d660f032768fba4ff9597e3a9376278749ef2d1af4d112b0a7583ce74f2d",
+      "mtimeMs": 1791691362444.2976
+    },
+    {
+      "path": "prototype/assets/progression/terrain-brief.md",
+      "bytes": 42279,
+      "sha256": "3b3f6665fd6f1e27b83aabb78fbc3807a472c281cc471f41593ea5e570543cad",
+      "mtimeMs": 1791651909329.0713
+    },
+    {
+      "path": "prototype/assets/settlement-composition-art-brief.txt",
+      "bytes": 6561,
+      "sha256": "b5309459c8f02d689a135879aafe9b7e24024774bb394640a6c1bb374a895b90",
+      "mtimeMs": 1791483889178.851
+    },
+    {
+      "path": "prototype/assets/starting-town-art-brief.txt",
+      "bytes": 4625,
+      "sha256": "b5b0f2369906e733a3bc5e75eb827ba7f30f1aa78d027858c9841f81b3309dc0",
+      "mtimeMs": 1791460326525.0906
+    },
+    {
+      "path": "prototype/assets/town-art-brief.txt",
+      "bytes": 2403,
+      "sha256": "16bb108daf2c36092d02c17777ebc2b288218c3fd1c55afb2ac70267ab862cb1",
+      "mtimeMs": 1791326093654.088
+    },
+    {
+      "path": "prototype/assets/town-atlas-art-v1-brief.md",
+      "bytes": 5265,
+      "sha256": "b8af6bda95dbff2afb513acc124151c3dd0220575f977a33d421f305648e17d5",
+      "mtimeMs": 1791634483099.738
+    },
+    {
+      "path": "prototype/assets/town-hall-art-brief.txt",
+      "bytes": 1693,
+      "sha256": "a5bb58cf5736d4f7222c7b033684c1e54c894d535166fa92f81c7497e2ca2121",
+      "mtimeMs": 1791457141772.8687
+    },
+    {
+      "path": "prototype/assets/town-wall-compact-adobe-v19.png",
+      "bytes": 1380742,
+      "sha256": "7e924695347b6968312252bd07c98dd620cff8254989be0216c2fcd88be9caa9",
+      "mtimeMs": 1791743270860.1326
+    },
+    {
+      "path": "prototype/assets/town-wall-compact-sandstone-v19.png",
+      "bytes": 1437034,
+      "sha256": "77d74f4e8f61090c12cf80accd7e4dce3929870a8a9d99d71656989e06583863",
+      "mtimeMs": 1791740618791.8013
+    },
+    {
+      "path": "prototype/assets/town-wall-compact-timber-v19.png",
+      "bytes": 1318759,
+      "sha256": "43b0511709e4a13623f885f37fc69def669a4ad65f67dee73dc18d2379082eec",
+      "mtimeMs": 1791743270853.2031
+    },
+    {
+      "path": "prototype/assets/town-wall-desktop-adobe-v19.png",
+      "bytes": 1434201,
+      "sha256": "2640ee6a457d672ef1e1a7156f2eac43f7ce38aaa1ab4c8d13d4adacdacb9af3",
+      "mtimeMs": 1791743270846.5056
+    },
+    {
+      "path": "prototype/assets/town-wall-desktop-sandstone-v19.png",
+      "bytes": 1480761,
+      "sha256": "f55c13f11b352905ce6ecf14c90ad0a2c32f0a126a49609715b9b78fa504dab7",
+      "mtimeMs": 1791740618786.8733
+    },
+    {
+      "path": "prototype/assets/town-wall-desktop-timber-v19.png",
+      "bytes": 1387912,
+      "sha256": "f8d4f3e715f8354bae1dfcea9beb6efd43ee45c6d8584c3ae8340755e540d11b",
+      "mtimeMs": 1791743270838.054
+    },
+    {
+      "path": "prototype/assets/town-wall-v19-draft-brief.md",
+      "bytes": 2673,
+      "sha256": "d48a43977aff27cecb44bba75caa082541210c95e052b95bdd70e28e0254c02c",
+      "mtimeMs": 1791743575705.42
+    },
+    {
+      "path": "prototype/assets/wall-earth-reserve-v2.svg",
+      "bytes": 1082,
+      "sha256": "59dfe80a3c2a61deae83e9fe7e49340d3b8fafe65bd607b967141d67167a7f6a",
+      "mtimeMs": 1791689977631.4949
+    },
+    {
+      "path": "prototype/assets/wall-reserve-v1.svg",
+      "bytes": 1164,
+      "sha256": "44039b1b7be0372a99d3c684f60b10b433c7ecfeaa7fc8822f4cb57c62b199b7",
+      "mtimeMs": 1791627252854.9924
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/before-source/app.js",
+      "bytes": 120914,
+      "sha256": "f460d4cc5a8038770847f990c4fc8a60f5c49f91657598af3368b3c76bfbfb18",
+      "mtimeMs": 1791739665629.536
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/before-source/building-art.js",
+      "bytes": 45995,
+      "sha256": "df1ebfc9014257ea673f1f9c437002ba607d3226e77edbad456b2deba7a81b13",
+      "mtimeMs": 1791739665630.9253
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/before-source/styles.css",
+      "bytes": 21883,
+      "sha256": "099c1b67be79bd157442918b0bdf2657391d6aa1bd8f800f30ee443fcd21d5cc",
+      "mtimeMs": 1791739665630.049
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/before-source/town-wall.js",
+      "bytes": 4886,
+      "sha256": "1da7dbc30fb5fae4fac78e1f6aac48bfd3e272b2bb7217a647fe66780a17919a",
+      "mtimeMs": 1791739665630.425
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/compact-guide.png",
+      "bytes": 88067,
+      "sha256": "318a496b478f34421c80e82115d4466ef5bc284cdc23800775175283b71c6ccd",
+      "mtimeMs": 1791739994308.2153
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/compact-guide.svg",
+      "bytes": 4315,
+      "sha256": "51b9c694b810187e5067f76ddfa9b7a2131e0e8459458b9be975e505880ad14d",
+      "mtimeMs": 1791739994248.826
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/create-art-guides.cjs",
+      "bytes": 3531,
+      "sha256": "6624da3f363f43905d19d7e108f3a44b4111553137410cfa166248719282da39",
+      "mtimeMs": 1791739993048.4263
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/desktop-before.png",
+      "bytes": 1786109,
+      "sha256": "a73ae161fe24cd5dca6d0859e512cc8fb6104deca344e502a8f29c44db5b3988",
+      "mtimeMs": 1791739665685.1426
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/desktop-guide.png",
+      "bytes": 100853,
+      "sha256": "dc68fb99da812923b2cccd8b9d787f8bf9b3cdc73a5fff19194f16dde85aeabd",
+      "mtimeMs": 1791739994238.9802
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/desktop-guide.svg",
+      "bytes": 4232,
+      "sha256": "6d2c089b9c194be8058aa6a6677e5dd0853f68c82b13d96a45671c8f210795b6",
+      "mtimeMs": 1791739993966.9446
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/phone-before.png",
+      "bytes": 594672,
+      "sha256": "495d06c3701aff6e7d08b01942eeb03a3f75bbe9235c94dd699f2fd568579cf9",
+      "mtimeMs": 1791739665742.6348
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/publication-archive-receipt.json",
+      "bytes": 471,
+      "sha256": "05e2e69f6a7a883f2235c80c55f8f484184e22d23077538962a8da4d5184f676",
+      "mtimeMs": 1791743798983.6758
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/publication-source-receipt.json",
+      "bytes": 9313,
+      "sha256": "0171a9172118b085357f84f82fa0576f0ecad3783ad8a0339e241734aa0981f4",
+      "mtimeMs": 1791743478243.6733
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/publish-runtime-audit.cjs",
+      "bytes": 4412,
+      "sha256": "6f63be2ac28f2d0e9656f53b51c4ddc07570ff786462b9eb26586b0848a40b9c",
+      "mtimeMs": 1791743485324.1099
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/publish-runtime-audit.json",
+      "bytes": 30292,
+      "sha256": "b38c51d90c1d8ff695b78dac7f27e0674f9c3dc206c3ae38744687c19870f333",
+      "mtimeMs": 1791743485639.3425
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/step5-2026-10-11T17-44-35-606Z-desktop-staggered-50-fit-FAILED.png",
+      "bytes": 1857912,
+      "sha256": "3f093c074fe0f058de71e03e9364309a9d2ef6cb0cc6140b57a373341fb7828e",
+      "mtimeMs": 1791740698285.5994
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/step5-2026-10-11T17-44-35-606Z-phone-staggered-50-fit-FAILED.png",
+      "bytes": 628218,
+      "sha256": "dea8d7e3ed93f0eb83ecaa6816092da95705ed9d75f5f0f93aff389218f4c963",
+      "mtimeMs": 1791740700145.07
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/step5-2026-10-11T17-44-35-606Z-receipt.json",
+      "bytes": 5816,
+      "sha256": "2b96ae8e7f16475e964598c8daf88f5b6ea6efba99ff41f9e2688088bb163e39",
+      "mtimeMs": 1791740700180.312
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/step5-2026-10-11T17-46-15-624Z-desktop-staggered-50-fit.png",
+      "bytes": 1857912,
+      "sha256": "3f093c074fe0f058de71e03e9364309a9d2ef6cb0cc6140b57a373341fb7828e",
+      "mtimeMs": 1791740780160.85
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/step5-2026-10-11T17-46-15-624Z-phone-staggered-50-fit-FAILED.png",
+      "bytes": 628218,
+      "sha256": "dea8d7e3ed93f0eb83ecaa6816092da95705ed9d75f5f0f93aff389218f4c963",
+      "mtimeMs": 1791740782055.8914
+    },
+    {
+      "path": "evidence/2026-10-11-wall-build/step5-2026-10-11T17-46-15-624Z-receipt.json",
+      "bytes": 96336,
+      "sha256": "27cdb1ff3d16a97ffaad0c148fb6795caa266666cd4ef3903871890f814bbefd",
+      "mtimeMs": 1791740782102.3308
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/app.js",
+      "bytes": 124675,
+      "sha256": "b789e8d2ec8a07c01f979ffb942592af5a2b5c25d7c7b217466d6811e2f87b15",
+      "mtimeMs": 1791743477579.0796
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-advisors-v1.png",
+      "bytes": 2185523,
+      "sha256": "923ca955cd424c3e7b47618c53be44580dabd453b5680876def23398e29fccbe",
+      "mtimeMs": 1791743477584.0664
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-buildings-civic-v1.png",
+      "bytes": 2502883,
+      "sha256": "9fac6d6ed9a0a2a998a1c58707c34ea643e0c8d740cfdc105823ea6e4784da21",
+      "mtimeMs": 1791743477595.3718
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-buildings-industry-v1.png",
+      "bytes": 2536224,
+      "sha256": "7809bb2868a0fe4c02e4ea1666a7ec03cbc41168482364f279599b1b5d5894c4",
+      "mtimeMs": 1791743477606.7173
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-buildings-trade-v1.png",
+      "bytes": 2253440,
+      "sha256": "091fb60aa4b25a07a4f024e55fffef6354b8eba8e1433b06d79c9932abc73ef2",
+      "mtimeMs": 1791743477619.5771
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-buildings-war-v1.png",
+      "bytes": 2150992,
+      "sha256": "9fb04fccc3074b8f2c04951f520a8e0a4f9656ac4a21f5cc2e6e17f69372a0fa",
+      "mtimeMs": 1791743477629.3694
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-empty-plot-v4.png",
+      "bytes": 2502586,
+      "sha256": "b7f8e21ded5fb7fa1699de5771e4a6f888a5054fba6bfba2f3b38d2ebbbdd861",
+      "mtimeMs": 1791743477644.963
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-front-wall-stages-v18.png",
+      "bytes": 2552796,
+      "sha256": "2f753b9853e059a75ae7c7ad7bda26658a1cb9715fd89d8d18bfa3f903921689",
+      "mtimeMs": 1791743477655.096
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-mountain-town-v18.png",
+      "bytes": 2819528,
+      "sha256": "8647023b8d3f64b25386c30623cc6cddc114dd0d6353d1b56dc62bb7faa4bc0e",
+      "mtimeMs": 1791743477666.8308
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-region-terrain-v2.png",
+      "bytes": 2900996,
+      "sha256": "ed1e0730d3f2b1c886874f735b6a86170c9ccf100338f744b15234fb679b452b",
+      "mtimeMs": 1791743477682.1626
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-scenery-atlas-v1.png",
+      "bytes": 2279592,
+      "sha256": "e01e84474e8776e0deba378d5f44bfabf833397115cb2ff849caf83925ebf916",
+      "mtimeMs": 1791743477696.6318
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-town-hall-v3.png",
+      "bytes": 2331795,
+      "sha256": "611469e9a08f1c812583e4d82558d9a8bcd11885b484b0123156073abe5c83b3",
+      "mtimeMs": 1791743477707.817
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/azmara-world-relief-v1.png",
+      "bytes": 3544091,
+      "sha256": "bf6e3483f161b60f16d70eb7abb9a1f96ec6690f987807053f8c4c406c1e1f64",
+      "mtimeMs": 1791743477718.403
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/freight-yard-reserve-v2.svg",
+      "bytes": 877,
+      "sha256": "a73d9b71c151505ee0e47959b4d054fa186f69e358e93da8de29b1355b9faeae",
+      "mtimeMs": 1791743477731.0425
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-academy-stages-v2.png",
+      "bytes": 830139,
+      "sha256": "0e11fe5934c2e37046dcb6811f81cabf31a4e88ff416b81f9425c06727e9dbb9",
+      "mtimeMs": 1791743477733.5945
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-architects-office-stages-v2.png",
+      "bytes": 1661323,
+      "sha256": "5abe0a32e201eb3b01a6c7c4f7d4edadc3106ce3a9adbea5d295e1b44fbaefe7",
+      "mtimeMs": 1791743477738.385
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-barracks-stages-v2.png",
+      "bytes": 1512725,
+      "sha256": "05fca9a24b04ac91a4647a1767d9c8826a1502198758a5abc96b2e7cc55c8864",
+      "mtimeMs": 1791743477755.661
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-carpenters-workshop-stages-v2.png",
+      "bytes": 1448454,
+      "sha256": "9c655195078e32ab3aa0849fdede349a9fa56ddaef7bfc8c79a23d75a5e98970",
+      "mtimeMs": 1791743477766.8982
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-chronos-forge-stages-v2.png",
+      "bytes": 1642768,
+      "sha256": "41054e818a8a1bd9ba83f61802b9df631b68820c01ef07829995bdf8ef14215b",
+      "mtimeMs": 1791743477776.2107
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-clayworks-stages-v2.png",
+      "bytes": 1606283,
+      "sha256": "d66d0fc219801aac1362fa033fcb2561067661a515aeac6041cd8c3696405d91",
+      "mtimeMs": 1791743477783.4824
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-depot-stages-v2.png",
+      "bytes": 1358485,
+      "sha256": "1c602126acbc86580c2478fe56d3b9a5539e03a1d2416c1175a754717641b181",
+      "mtimeMs": 1791743477793.1575
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-desert-compact-level-1-v3.png",
+      "bytes": 2993460,
+      "sha256": "6de5e0859095ab2bd5547c159b383014307ecfe1bce7d34f1113dbf961aada85",
+      "mtimeMs": 1791743477803.745
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-desert-desktop-level-1-v3.png",
+      "bytes": 3063728,
+      "sha256": "a28b5299fca1ccd79e2249875a8909a5029bb037b8dacf32bc517b5fea07cbef",
+      "mtimeMs": 1791743477820.5356
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-dockyard-stages-land-v3.png",
+      "bytes": 1910785,
+      "sha256": "04b0fdb120365deb8c8f47995fe6d686226b464d4cb6ab7e246dbc68dd2691ff",
+      "mtimeMs": 1791743477831.6067
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-embassy-stages-v2.png",
+      "bytes": 1168796,
+      "sha256": "9cd98ffdc646bb2a0be04be01b422333ac2f7e21e4b631623d26dd8b41f72bd7",
+      "mtimeMs": 1791743477841.7979
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-foresters-house-stages-v2.png",
+      "bytes": 1879909,
+      "sha256": "77c9338d21b3889636695aa482ad56ccae8d3b5bc25e9f227da45b356c664015",
+      "mtimeMs": 1791743477849.0015
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-governors-residence-stages-v2.png",
+      "bytes": 1328481,
+      "sha256": "f0213052353ed1fb400120e72a1195b13e194f113555f5bd016318c7979f9347",
+      "mtimeMs": 1791743477857.5608
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-grain-estate-stages-v2.png",
+      "bytes": 1565422,
+      "sha256": "59b017372e54a800448998d6e00bd21ee1b3592ade67d5f976204a6c89e4e925",
+      "mtimeMs": 1791743477867.9678
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-grain-store-stages-v2.png",
+      "bytes": 1511007,
+      "sha256": "2ed167c324a8b987bac1cf8c3c4f83a613938995339f596f7905426dc66d1af1",
+      "mtimeMs": 1791743477875.731
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-1.png",
+      "bytes": 2082013,
+      "sha256": "385f8f1215f1061b6f3c468699702f86b840ce78b579d9df78fac3ffa4a4b9e4",
+      "mtimeMs": 1791743477884.6858
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-10.png",
+      "bytes": 2331795,
+      "sha256": "611469e9a08f1c812583e4d82558d9a8bcd11885b484b0123156073abe5c83b3",
+      "mtimeMs": 1791743477896.3193
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-15.png",
+      "bytes": 2389733,
+      "sha256": "31871fc0bf06f6db9bb8d80dd25ea13f4d5b6d77028e0ecf31959007ca0bd554",
+      "mtimeMs": 1791743477909.8225
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-20.png",
+      "bytes": 2614517,
+      "sha256": "f3bae53adf398897d8c54e372e04ef7a309a7ba7b28930639fad0cbddad33413",
+      "mtimeMs": 1791743477923.2268
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-25.png",
+      "bytes": 2683366,
+      "sha256": "0b6100f47d63671bef34c7556555d5193f8c86fce938b7298d649a95900a64ff",
+      "mtimeMs": 1791743477933.9282
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-30.png",
+      "bytes": 2779722,
+      "sha256": "267c6bf5883080fbed940e692233cac6cfe2974f26c52585bd3b917e8c844e10",
+      "mtimeMs": 1791743477946.2554
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-35.png",
+      "bytes": 2739641,
+      "sha256": "1a80417b6b2a1c5e5d0516d241e0a08a0340091596f5dd88763ec3bfc010f66d",
+      "mtimeMs": 1791743477960.7388
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-40.png",
+      "bytes": 2777853,
+      "sha256": "26d165b12e076af24af97764e87bebe61d90597d66855c33da57524354b01164",
+      "mtimeMs": 1791743477973.6047
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-45.png",
+      "bytes": 2982492,
+      "sha256": "3ac5e01fc802df920338c545e77c2c8597260ce773f23fdc55497214b2d86fa9",
+      "mtimeMs": 1791743477986.878
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-5.png",
+      "bytes": 1990308,
+      "sha256": "a1e7a119a0a556beea05e4087a491d0dc2056e21c0e3fb6b74132d9ae24ee54f",
+      "mtimeMs": 1791743478002.98
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-hall-level-50.png",
+      "bytes": 2957466,
+      "sha256": "a368006a239e0f888b4f7a4ba3655fe23748367a80075341862064298cfd5977",
+      "mtimeMs": 1791743478015.7712
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-intelligence-house-stages-v2.png",
+      "bytes": 1210669,
+      "sha256": "7b28cce30a06e82e7af0cc1893b356830ce85068c6206b5db317b0fde2d0d8da",
+      "mtimeMs": 1791743478030.46
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-iron-foundry-stages-v2.png",
+      "bytes": 1383109,
+      "sha256": "4eaec756032d9f247aa31d27b7f5e02f4ef02d198ecaab1ed0997340860f5111",
+      "mtimeMs": 1791743478035.3564
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-materials-workshop-stages-v2.png",
+      "bytes": 1528537,
+      "sha256": "274e1ad67909d8e6bb1982049a0a661da0b115a6ef632e70c406fa712149b482",
+      "mtimeMs": 1791743478044.3306
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-military-exchange-stages-v2.png",
+      "bytes": 1367841,
+      "sha256": "5aed57003c52d9941d4527cd852bd45a4581326f0849b655f75b1a98cbc16439",
+      "mtimeMs": 1791743478052.2087
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-museum-stages-v2.png",
+      "bytes": 1447423,
+      "sha256": "2b9e65034d35d23a7eef6664a4824500c50ff59fe58347d47a5960727ea29076",
+      "mtimeMs": 1791743478061.053
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-palace-stages-v2.png",
+      "bytes": 1351475,
+      "sha256": "560695e5ed162e7e5615d0800b08f2f1f70752a8a7fcd4250cd222dc5307d4a1",
+      "mtimeMs": 1791743478075.9429
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-prayer-area-stages-v2.png",
+      "bytes": 1339267,
+      "sha256": "a244f8f56000ef7660819dff37252ae3e75241d3cb398b868fd13885eefc7fb4",
+      "mtimeMs": 1791743478085.3208
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-precision-workshop-stages-v2.png",
+      "bytes": 1665892,
+      "sha256": "dcc8f7e52035a5f925ad5edb7e0ccba832a2796aa13772ed5148af130097d96e",
+      "mtimeMs": 1791743478093.8486
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-provision-house-stages-v2.png",
+      "bytes": 1455568,
+      "sha256": "5fb3bbedc8a96cf7051c6b3f618dc70b6c5c455f31949ddd38c9a3b07a3e1d78",
+      "mtimeMs": 1791743478106.807
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-sea-chart-archive-stages-v2.png",
+      "bytes": 1260906,
+      "sha256": "269911c91fb8d40a7c4beb05f3286508188383b086b2d2353e3a8db998b78dcc",
+      "mtimeMs": 1791743478116.4265
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-silver-refinery-stages-v2.png",
+      "bytes": 1546878,
+      "sha256": "4030351ec7fceed591469c3a1344d7e00c4e7e4cdf96d4302c68462094a6c2e7",
+      "mtimeMs": 1791743478122.692
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-town-wall-stages-v2.png",
+      "bytes": 1321002,
+      "sha256": "a42d076931ac1d41b8e76779ac1be58139816e635a27e3b05f040fe5ad104d31",
+      "mtimeMs": 1791743478132.9517
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-trading-port-stages-land-v3.png",
+      "bytes": 1969973,
+      "sha256": "1ad9874a199e74ebeff29e7f3364eaea421bc31d977660204c7d2cda65a081e1",
+      "mtimeMs": 1791743478142.0312
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-trading-post-stages-v2.png",
+      "bytes": 1430913,
+      "sha256": "b4beeef2174a8bee897dcf8ac908c5a418955664ffe9f46f6a6be3bd9817d11b",
+      "mtimeMs": 1791743478149.9976
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-warehouse-stages-v2.png",
+      "bytes": 1526725,
+      "sha256": "6d6caec0b0cf53196f6c09d9baf11fd5928e9d8de2b7f977acbf4a2a28e11d95",
+      "mtimeMs": 1791743478159.8066
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/progression/azmara-workshop-stages-v2.png",
+      "bytes": 1604003,
+      "sha256": "f10e341c69c0ec3614866a6164432098c31d90b7ee6819e501d02c74d5100a72",
+      "mtimeMs": 1791743478167.7473
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/town-wall-compact-adobe-v19.png",
+      "bytes": 1380742,
+      "sha256": "7e924695347b6968312252bd07c98dd620cff8254989be0216c2fcd88be9caa9",
+      "mtimeMs": 1791743478176.3699
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/town-wall-compact-sandstone-v19.png",
+      "bytes": 1437034,
+      "sha256": "77d74f4e8f61090c12cf80accd7e4dce3929870a8a9d99d71656989e06583863",
+      "mtimeMs": 1791743478193.873
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/town-wall-compact-timber-v19.png",
+      "bytes": 1318759,
+      "sha256": "43b0511709e4a13623f885f37fc69def669a4ad65f67dee73dc18d2379082eec",
+      "mtimeMs": 1791743478200.8118
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/town-wall-desktop-adobe-v19.png",
+      "bytes": 1434201,
+      "sha256": "2640ee6a457d672ef1e1a7156f2eac43f7ce38aaa1ab4c8d13d4adacdacb9af3",
+      "mtimeMs": 1791743478210.7915
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/town-wall-desktop-sandstone-v19.png",
+      "bytes": 1480761,
+      "sha256": "f55c13f11b352905ce6ecf14c90ad0a2c32f0a126a49609715b9b78fa504dab7",
+      "mtimeMs": 1791743478217.2158
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/town-wall-desktop-timber-v19.png",
+      "bytes": 1387912,
+      "sha256": "f8d4f3e715f8354bae1dfcea9beb6efd43ee45c6d8584c3ae8340755e540d11b",
+      "mtimeMs": 1791743478225.1973
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/assets/wall-earth-reserve-v2.svg",
+      "bytes": 1082,
+      "sha256": "59dfe80a3c2a61deae83e9fe7e49340d3b8fafe65bd607b967141d67167a7f6a",
+      "mtimeMs": 1791743478229.9585
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/atlas.css",
+      "bytes": 13701,
+      "sha256": "628912fd5c498235a24383cbaa53120ad964dc350835bc3f2dcfd9e0f94dbb05",
+      "mtimeMs": 1791743478230.6194
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/atlas.js",
+      "bytes": 32307,
+      "sha256": "04462bf705238c1a35f7ae40002e9556786eb3a9f1ff8a8b09e6558b59b04838",
+      "mtimeMs": 1791743478231.553
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/building-art.css",
+      "bytes": 1198,
+      "sha256": "cfc0e45522c1e2941a8354c5eb91b7c380d5d7ee3548b90ff92fd97da7a7a0ce",
+      "mtimeMs": 1791743478232.0217
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/building-art.js",
+      "bytes": 45995,
+      "sha256": "df1ebfc9014257ea673f1f9c437002ba607d3226e77edbad456b2deba7a81b13",
+      "mtimeMs": 1791743478232.9766
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/catalogue.css",
+      "bytes": 5015,
+      "sha256": "569008d8fa63c33cfda2bd954db38145e626a4917102831d4d2966d15d1a6875",
+      "mtimeMs": 1791743478233.7068
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/catalogue.js",
+      "bytes": 10830,
+      "sha256": "2100ce162c3672cad47173fb319a9b6ad1e95798f02265f2cfa79ad8fdeba2e0",
+      "mtimeMs": 1791743478234.34
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/debug-overlay.js",
+      "bytes": 9490,
+      "sha256": "be4b268ad7fe186567d6e31f2b45e88c5a67e75f8b2c2e900d5fb07cc0e0ca51",
+      "mtimeMs": 1791743478235.0093
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/desktop.css",
+      "bytes": 13686,
+      "sha256": "2298467958336ed07b3d52e9b7404c2d331ef8f62ea6825a25c80019d48ca02a",
+      "mtimeMs": 1791743478235.5999
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/index.html",
+      "bytes": 25779,
+      "sha256": "8b575d0c8f9dc88592f18ad8cda656c204d22a9fdcff8e504691c550bdb8bb04",
+      "mtimeMs": 1791743478235.9753
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/preview.html",
+      "bytes": 3922,
+      "sha256": "183fca0ec3bdc1bbe093fa5fba92224bcdb27d913f51fbaec337f4f19565a7c6",
+      "mtimeMs": 1791743478236.3713
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/progression.css",
+      "bytes": 1076,
+      "sha256": "1010608812f79db1def27d8c56a56981b0654bfdf14b107ba55897e058e64be7",
+      "mtimeMs": 1791743478236.7524
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/progression.js",
+      "bytes": 1936,
+      "sha256": "ef545b127493ed5993dcad76dd8b6314eb95333c58c6ea108fafd6c75748a1b0",
+      "mtimeMs": 1791743478237.188
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/styles.css",
+      "bytes": 22139,
+      "sha256": "bc871cf2fa2d31a1c833b3444f432cff593dad4f55e5a8ca8f1c00d0be24ff84",
+      "mtimeMs": 1791743478237.8088
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/town-layouts.js",
+      "bytes": 4398,
+      "sha256": "03a0883dffd46ae430e50252f7d9c89bde3deb0c0ab91ce1eb2c5165bf4d7a01",
+      "mtimeMs": 1791743478239.5298
+    },
+    {
+      "path": "sites/azmara-private-preview/dist/town-wall.js",
+      "bytes": 12777,
+      "sha256": "b3a712fcfc8c417eb1c13e495a65e66a7f49fbb7c926ea144bf0640a3b69a8a8",
+      "mtimeMs": 1791743478240.007
+    },
+    {
+      "path": "mobile/assets/game/app.js",
+      "bytes": 35947,
+      "sha256": "668c81fc7b9a40bf7962f22936dc1d982d7ae391c576d98aeb4b9a932848dab5",
+      "mtimeMs": 1791541126659.7014
+    },
+    {
+      "path": "mobile/assets/game/assets/azmara-empty-plot-v3.png",
+      "bytes": 2329993,
+      "sha256": "67668bf206a5f5677cee6177cfa1f93bd95b6bf489af1de71fb33b10d73bc4ee",
+      "mtimeMs": 1791541126632.612
+    },
+    {
+      "path": "mobile/assets/game/assets/azmara-starting-terrain-v3.png",
+      "bytes": 3226256,
+      "sha256": "cbdf46f174af69593a12ba5cfb29ed79397b555066a1c2f29b832a42ab5f68d1",
+      "mtimeMs": 1791541126613.2566
+    },
+    {
+      "path": "mobile/assets/game/assets/azmara-town-hall-v3.png",
+      "bytes": 2331795,
+      "sha256": "611469e9a08f1c812583e4d82558d9a8bcd11885b484b0123156073abe5c83b3",
+      "mtimeMs": 1791541126623.3655
+    },
+    {
+      "path": "mobile/assets/game/index.html",
+      "bytes": 11617,
+      "sha256": "2fc07e36d450d71d9f591660958164cd1e8638701f0f1394ff7c59e53fe96225",
+      "mtimeMs": 1791552704538.548
+    },
+    {
+      "path": "mobile/assets/game/native-bootstrap.js",
+      "bytes": 7391,
+      "sha256": "a2ff7b9357cb0eeb67237d7db34f90cd94ce8a5028c238c1f71e260a790a68b8",
+      "mtimeMs": 1791552704129.976
+    },
+    {
+      "path": "mobile/assets/game/styles.css",
+      "bytes": 18735,
+      "sha256": "aea03dde085302d753f1255365cfcb9008821bf4f51eba3e412838b45019a995",
+      "mtimeMs": 1791502778177.6377
+    },
+    {
+      "path": "mobile/lib/main.dart",
+      "bytes": 11784,
+      "sha256": "ac01141f01b737f7fc41b5ca15371b7a4124fa1d75bb946d05ad3c0d5f18d8e4",
+      "mtimeMs": 1791555200898.2012
+    },
+    {
+      "path": "mobile/lib/native_frame.dart",
+      "bytes": 895,
+      "sha256": "3ea1be46c6f23e0e98c7ac06bf7a0b54c7e6288810ca0fececeacab217214362",
+      "mtimeMs": 1791555379704.8337
+    },
+    {
+      "path": "mobile/lib/save_contract.dart",
+      "bytes": 3615,
+      "sha256": "265a789f756a0553ca08ac880728a8d6d63fb488bc8197785a11f3d18ee3f606",
+      "mtimeMs": 1791553323990.4802
+    },
+    {
+      "path": "mobile/tool/render_icon.swift",
+      "bytes": 2692,
+      "sha256": "592530d91b3f1a435b32082312ea034b8a3ae5ca0340e102d49fd27b6f5db343",
+      "mtimeMs": 1791547593714.4595
+    },
+    {
+      "path": "mobile/tool/sync_game.dart",
+      "bytes": 1751,
+      "sha256": "ce2d61330cb7223ab926cdd6b4f62090d0207562f5820c27af7c366dadca9739",
+      "mtimeMs": 1791547289609.4055
+    },
+    {
+      "path": "mobile/tool/verify_ios.dart",
+      "bytes": 3561,
+      "sha256": "7b19fc41a885435aac84c986f499fdf0ff7c14763c051ad23876a33b1f3282fe",
+      "mtimeMs": 1791553437092.5645
+    }
+  ],
+  "verifiedAt": "2026-10-11T19:17:31.934Z",
+  "unchanged": true
+}

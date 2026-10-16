@@ -1,0 +1,407 @@
+{
+  "created": "2026-10-11",
+  "authority": "Founder explicitly approved edge-only local pixel cleanup, 10 October 2026; land-only artwork update, 11 October 2026",
+  "method": "Existing clean-atlas-edges.py exact gate: RGB255,0,0 or255,255,0; alpha1–8 only; exterior-adjacent or isolated from alpha>8 painted bodies. Sets only selected alpha to0, preserving all RGB, all alpha>8 paint, every other RGBA pixel and original files.",
+  "files": [
+    {
+      "typeId": "trading-port",
+      "source": "azmara-trading-port-stages-land-v3-original.png",
+      "runtime": "azmara-trading-port-stages-land-v3.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "fa8c59239153dea98c7552bab5aaada18a87bf39f2f52ecc5659f8d0a51a8480",
+      "runtimeSha256": "1ad9874a199e74ebeff29e7f3364eaea421bc31d977660204c7d2cda65a081e1",
+      "mattePixels": {
+        "red": {
+          "candidates": 25319,
+          "cleared": 25317,
+          "protected": 2
+        },
+        "yellow": {
+          "candidates": 8163,
+          "cleared": 8158,
+          "protected": 5
+        }
+      },
+      "changedPixels": 33475,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "dockyard",
+      "source": "azmara-dockyard-stages-land-v3-original.png",
+      "runtime": "azmara-dockyard-stages-land-v3.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "8775ede690ca3ffa29a9413a6b2f0dfb05a8343efa12b4c572008d52aaa57bfd",
+      "runtimeSha256": "04b0fdb120365deb8c8f47995fe6d686226b464d4cb6ab7e246dbc68dd2691ff",
+      "mattePixels": {
+        "red": {
+          "candidates": 26250,
+          "cleared": 26216,
+          "protected": 34
+        },
+        "yellow": {
+          "candidates": 7739,
+          "cleared": 7727,
+          "protected": 12
+        }
+      },
+      "changedPixels": 33943,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    }
+  ],
+  "crops": [
+    {
+      "source": "prototype/assets/progression/azmara-trading-port-stages-land-v3.png",
+      "width": 1254,
+      "height": 1254,
+      "rects": [
+        [
+          19,
+          209,
+          276,
+          197
+        ],
+        [
+          316,
+          177,
+          309,
+          232
+        ],
+        [
+          630,
+          155,
+          303,
+          256
+        ],
+        [
+          955,
+          147,
+          290,
+          263
+        ],
+        [
+          7,
+          479,
+          309,
+          277
+        ],
+        [
+          316,
+          485,
+          307,
+          268
+        ],
+        [
+          628,
+          450,
+          304,
+          317
+        ],
+        [
+          937,
+          470,
+          313,
+          310
+        ],
+        [
+          2,
+          817,
+          315,
+          289
+        ],
+        [
+          315,
+          790,
+          313,
+          316
+        ],
+        [
+          625,
+          797,
+          316,
+          311
+        ]
+      ],
+      "diagnostics": [
+        {
+          "cell": 0,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 1,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 2,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 3,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 4,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 5,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 6,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 7,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 8,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 9,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 10,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        }
+      ],
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "majorBodies": [
+        30557,
+        43675,
+        44662,
+        47793,
+        51648,
+        49116,
+        58735,
+        61583,
+        60227,
+        64083,
+        70015,
+        69957
+      ]
+    },
+    {
+      "source": "prototype/assets/progression/azmara-dockyard-stages-land-v3.png",
+      "width": 1254,
+      "height": 1254,
+      "rects": [
+        [
+          8,
+          204,
+          292,
+          214
+        ],
+        [
+          314,
+          169,
+          305,
+          245
+        ],
+        [
+          623,
+          155,
+          303,
+          260
+        ],
+        [
+          944,
+          139,
+          307,
+          277
+        ],
+        [
+          0,
+          511,
+          308,
+          243
+        ],
+        [
+          317,
+          488,
+          306,
+          263
+        ],
+        [
+          626,
+          493,
+          307,
+          262
+        ],
+        [
+          934,
+          482,
+          320,
+          272
+        ],
+        [
+          5,
+          850,
+          309,
+          273
+        ],
+        [
+          313,
+          849,
+          309,
+          278
+        ],
+        [
+          621,
+          836,
+          318,
+          293
+        ]
+      ],
+      "diagnostics": [
+        {
+          "cell": 0,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 1,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 2,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 3,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 4,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 5,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 6,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 7,
+          "padding": 5,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 8,
+          "padding": 1,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 9,
+          "padding": 1,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        },
+        {
+          "cell": 10,
+          "padding": 3,
+          "fullBody": true,
+          "fullProps": true,
+          "foreignPixels": 0
+        }
+      ],
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "majorBodies": [
+        35317,
+        43694,
+        48344,
+        55410,
+        45881,
+        52087,
+        55622,
+        59008,
+        56992,
+        62698,
+        66050,
+        65987
+      ]
+    }
+  ]
+}

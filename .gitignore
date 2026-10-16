@@ -1,0 +1,71 @@
+# Machine-local secrets; .env.example may contain placeholders only.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.secret
+*.p12
+*.pfx
+*.cer
+*.jks
+*.keystore
+*.mobileprovision
+*.provisionprofile
+credentials/
+secrets/
+PRIVATE — API KEYS — DO NOT SYNC/
+.npmrc
+.pypirc
+.netrc
+auth-state*.json
+storage-state*.json
+cookies*.json
+
+# Operating-system clutter and temporary files.
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+*.tmp
+*.log
+.cache/
+.codex/
+.claude/
+.idea/
+.vscode/
+*.iml
+*.xcuserstate
+**/xcuserdata/
+DerivedData/
+
+# Generated output; these patterns do not select a technology stack.
+build/
+dist/
+coverage/
+__pycache__/
+*.pyc
+node_modules/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+ios/Flutter/ephemeral/
+ios/Pods/
+ios/.symlinks/
+
+# Generated visual QA output is kept locally. Several captures are larger than
+# GitHub's per-file limit and none is a source/master asset.
+/evidence/
+
+# Unapproved embedded-raster street-study draft (68.35 MiB). Keep the smaller
+# concept renders and source notes; add a revised master only after approval.
+/docs/ideas/street-study/manual-level50-v1.svg
+
+# Separate local Sites deployment checkout. It has independent Git history and
+# hosting metadata, and must never couple this source repository to deployment.
+/sites/azmara-private-preview/
+
+# Disposable visual-check screenshots and receipts (source runner is tracked).
+prototype/debug/

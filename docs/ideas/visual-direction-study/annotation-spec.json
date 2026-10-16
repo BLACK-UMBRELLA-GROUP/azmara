@@ -1,0 +1,32 @@
+[
+  {
+    "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T18-56-31-757Z-town-start-staggered-1440x900-8b2eb271.png",
+    "base": "current-start-desktop.png",
+    "output": "diagnosis-start-desktop.png",
+    "title": "Starting town: what feels flat",
+    "notes": [
+      {"point": [1060, 650], "heading": "Undifferentiated ground", "text": "Open ground is right for a poor start, but no shared compacted court, dusty approach or settlement edge joins the Hall to it."},
+      {"point": [488, 580], "heading": "Repeated board-like reserves", "text": "Identical green-rimmed diamonds read as objects laid on sand. Transport and wall reserves have a different abstract marker language."},
+      {"point": [716, 463], "heading": "Weak contact, not no shadow", "text": "The wooden Hall has a base and contact shading. Its patch does not become a lived-in doorstep or forecourt; shadow alone will not solve this."},
+      {"point": [921, 96], "heading": "Mixed projection and detail", "text": "Distant canyon relief looks photographic/perspective, while the Hall uses an oblique game view. Sand grain also feels large beside the shack."},
+      {"point": [276, 553], "heading": "No spatial hierarchy", "text": "The bare gaps dwarf the small Hall. Keep the same anchors; use a restrained lane and localized palm shade to organize space, not add owned buildings."},
+      {"point": [492, 87], "heading": "HUD dominates the first read", "text": "The town is small beside the upper panels. Art needs better interior emphasis before a separate HUD or camera redesign is considered."}
+    ],
+    "footer": "Actual isolated start: Hall level 1, 22 empty sites, no completed wall. A still image cannot prove lack of movement; code inspection supplies that finding."
+  },
+  {
+    "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T18-56-34-633Z-town-all-built-50-staggered-1440x900-a0021b2e.png",
+    "base": "current-level-50-desktop.png",
+    "output": "diagnosis-level-50-desktop.png",
+    "title": "Level 50: what stays flat",
+    "notes": [
+      {"point": [957, 644], "heading": "Town floor barely develops", "text": "Strong buildings and stone wall still sit on almost the same sandy canvas as the start. No neighborhood ground/court system carries prosperity."},
+      {"point": [793, 506], "heading": "Streets read as linework", "text": "Textured surfaces exist, but Fit makes them narrow and uniform. They dodge rectangular controls rather than connect through believable doorstep aprons."},
+      {"point": [929, 675], "heading": "Isolated building plinths", "text": "Sprites already have foundations and shading. Independent bases and weak generic contact beds remain disconnected from the surrounding town floor."},
+      {"point": [1090, 338], "heading": "Perspective wall / oblique town", "text": "Returns taper into distance while buildings stay similar-sized. The near gate and foreground wall become visually outsized; art alignment is still draft."},
+      {"point": [880, 312], "heading": "Decoration is punctuation", "text": "A few isolated palms, lamps and pots decorate gaps, but do not form shaded courts, planted groups or a connected public-space hierarchy."},
+      {"point": [716, 443], "heading": "No whole-town focal rhythm", "text": "Roof details are bright and busy while civic ground stays quiet. The wall reads as one object enclosing many separate pictures, not a metropolis."}
+    ],
+    "footer": "Synthetic ideal fixture: all 23 compatible sites level 50. Not owner progress, not a production population. No motion inferred from a still capture."
+  }
+]

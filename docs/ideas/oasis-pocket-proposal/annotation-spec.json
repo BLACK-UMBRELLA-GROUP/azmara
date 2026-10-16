@@ -1,0 +1,35 @@
+[
+  {
+    "level": 1,
+    "title": "Founding shade + entrance",
+    "output": "level-1-proposal.png",
+    "pockets": [{"id":"S0","x":1580,"y":1297,"width":176,"height":152}],
+    "routes": [{"id":"H1","points":[[2159.8,1238.93],[2177,1280]],"paintedWidth":24}],
+    "notes": [
+      {"point":[1580,1297],"colour":"garden","heading":"S0 · modest founding shade","text":"One young palm and dry scrub. No stone planter, flower court or paving. Full art/shadow envelope: 176 x 152 world units."},
+      {"point":[2159.8,1238.93],"colour":"entry","heading":"H1 · visible shack threshold","text":"A short worn-earth landing meets the right-hand doorway, not the centre of the plot. Marker is provisional; validate at Close."},
+      {"point":[2370,1490],"colour":"neutral","heading":"Keep the founding town bare","text":"Hall 1 + 22 empty plots. No completed garden buildings, fountains, moving actors or new gameplay. Existing anchors and hit targets stay."}
+    ],
+    "footer":"PROPOSAL ONLY. Green dashed boxes reserve full art including shadows; they are NOT rectangular garden designs. Amber lines are connection guides, NOT final road art. Wall unchanged."
+  },
+  {
+    "level": 50,
+    "title": "Mature courts + entrances",
+    "output": "level-50-proposal.png",
+    "pockets": [{"id":"S1","x":1580,"y":1297,"width":288,"height":184},{"id":"S2","x":2910,"y":1156,"width":220,"height":192}],
+    "routes": [
+      {"id":"H50","points":[[2127.6,1288],[2230,1288],[2320,1290],[2370,1340]],"paintedWidth":28},
+      {"id":"W50","points":[[1339.6,1401.025],[1370,1450],[1440,1450]],"paintedWidth":40},
+      {"id":"C50","points":[[1175.132,1808],[1163,1820],[1060,1820],[1030,1870]],"paintedWidth":32}
+    ],
+    "notes": [
+      {"point":[1580,1297],"colour":"garden","heading":"S1 · western community court","text":"Grouped palm shade + low planting on shared stone. Replace scattered accents, do not add a green belt. Full envelope: 288 x 184 world units."},
+      {"point":[2910,1156],"colour":"garden","heading":"S2 · eastern market refuge","text":"A smaller shade/flower pocket beside the trade quarter. Crown + cast shadow fit 220 x 192 world units. Keep both existing closed fountains."},
+      {"point":[2127.6,1288],"colour":"entry","heading":"H50 · stair-to-court landing","text":"Only 18.56 units separate Hall and Depot targets. No wide road squeezed between them. A shallow landing joins the civic floor laterally."},
+      {"point":[1339.6,1401.025],"colour":"entry","heading":"W50 · loading threshold","text":"Connect to the off-centre Warehouse entrance, not its crop centre. Short forecourt, bounded painted width, no neighbour crossing."},
+      {"point":[1175.132,1808],"colour":"entry","heading":"C50 · caravan front gate","text":"A short side connection, avoiding the Forester plot below. Normalized socket estimates need Close-view calibration before being trusted."},
+      {"point":[2100,1820],"colour":"neutral","heading":"Freight yard · unresolved socket","text":"Several bays/stairs make one exact door uncertain. Keep the shared floor; do not invent an entrance. No wall/gate/phone fixes in this pass."}
+    ],
+    "footer":"PROPOSAL ONLY. Green = full-art reserve, not garden shape; amber = provisional entrance guides, not final roads. No game code or final art changed. Same desktop/Staggered endpoints."
+  }
+]

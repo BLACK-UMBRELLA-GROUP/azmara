@@ -1,0 +1,41 @@
+{
+  "mode": "Built-in ImageGen",
+  "date": "2026-10-14",
+  "decision": "DEC-093",
+  "approvedTarget": "evidence/2026-10-14-scale55-wall-options/revised-b2-wide-caravan-road.png",
+  "attemptsPerAsset": 1,
+  "referenceInputs": [
+    "prototype/assets/valley-wall/rear-valley-cliffs-v1.png",
+    "evidence/2026-10-14-scale55-wall-options/revised-b2-wide-caravan-road.png"
+  ],
+  "assets": [
+    {
+      "stage": "sandstone",
+      "generatedSource": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-f9f2d285-4ba2-4ca8-9478-e6f43dde19d0.png",
+      "runtime": "prototype/assets/valley-wall/azmara-valley-defence-sandstone-v3.png",
+      "sha256": "43249d0c39bb5d6e9a6fd498b986dc36e4b2cdf817692fb65d50361372e15491",
+      "prompt": "Use case: precise-object-edit / background-extraction. Create a GAME-READY transparent rear-valley defence layer for AZMARA, matching the approved B2 concept. INPUT 1 is the exact existing AZMARA transparent canyon/cliff asset and must remain the base composition, 1536x1024 landscape. Preserve its two broad orange sandstone shoulders, open central valley, warm upper-left lighting, dimetric 2.5D painted miniature style, vegetation, rock ledges, silhouette, placement, transparent padding, and clean alpha. INPUT 2 is AZMARA's approved B2 full-town concept and is STYLE/COMPOSITION REFERENCE ONLY for how the finished fortification is embedded into the canyon and how the central road opening reads. Do not copy any town buildings, roads, ground, or UI from Input 2. Edit Input 1 by constructing ONE mature sandstone canyon defence INTO and ALONG the natural front ledges of both cliff shoulders. The wall must feel architecturally embedded in the rock, not a separate flat wall pasted across sand. It should trace the existing ledge line with a gently stepped oblique/dimetric route and visible top surfaces. Both outer wall ends disappear naturally into rock ledges. One broad centered arched caravan gate opens through the middle valley pass; make the opening about 1.45 times the old/reference opening so a wide ceremonial caravan boulevard can pass through clearly. Exactly TWO principal gate towers flank the arch, plus up to two much smaller integrated lookout turrets at far cliff ledges as part of the same defence line—no repeated copy-paste modules, no ring, no foreground wall, no side returns around a city. The main two towers should sit on rock outcrops with rubble foundations and soft lower-right contact shadows. Warm dressed sandstone/adobe trim, restrained teal awnings/banners, no red flags. Keep the lower/southern half almost entirely transparent so independent roads and buildings can render below. No broad sand slab. No buildings, people, empty plots, roads, palms outside those already on the cliffs, UI, text, labels, water, boats, gods, religious symbols, logo, or watermark. No black/white/checkerboard background. Output genuine RGBA transparency, same 1536x1024 canvas if supported, complete uncropped silhouette and clean natural edges with no red/yellow speckle fringe."
+    },
+    {
+      "stage": "adobe",
+      "generatedSource": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-4b5315d1-513c-4cf6-bb2f-605130e89ed7.png",
+      "runtime": "prototype/assets/valley-wall/azmara-valley-defence-adobe-v3.png",
+      "sha256": "b5722b30f950d986ad6f2623302980edeb346cad25a1f2f6a60ed72f511ae5b3",
+      "prompt": "Use case: precise-object-edit. Asset type: GAME-READY transparent rear-valley defence progression asset for AZMARA. Edit the attached approved mature canyon-defence asset. Preserve EXACTLY the 1536x1024 composition, the two sandstone cliff masses, central broad gate opening, wall route, silhouette, all tower/outcrop positions, plants, rubble, lighting, shadows, scale, transparent padding, and clean alpha. Do not move, crop, widen, narrow, add, or remove geometry. The same wider caravan opening must remain unmistakably clear. Change ONLY the constructed fortification to the MID-LEVEL ADOBE stage: warm ochre mudbrick and limewashed adobe curtain faces, weathered timber lintels and parapets, modest square adobe gate towers built into the same rock ledges, restrained terracotta coping, a few small teal fabric accents. It must look stronger and more permanent than timber but less finished than dressed sandstone. Keep the rock cliffs themselves as natural orange sandstone, not adobe. Exactly the same single integrated defence line and broad central gateway; no closed doors, no extra ring, no foreground wall, no repeated copy-paste modules. No buildings, town ground, streets, plots, UI, text, labels, people, water, boats, gods, symbols, logos, watermark, broad sand slab, or baked background. Genuine RGBA transparency, same complete uncropped silhouette, clean natural edges with no red/yellow fringe."
+    },
+    {
+      "stage": "timber",
+      "generatedSource": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-8004f9dd-28de-424d-87e2-b34bed289a99.png",
+      "runtime": "prototype/assets/valley-wall/azmara-valley-defence-timber-v3.png",
+      "sha256": "870f61aa1c48bc18e5a03b894baf8002940e3b9e344109764a81f21c8b859904",
+      "prompt": "Use case: precise-object-edit. Asset type: GAME-READY transparent rear-valley defence progression asset for AZMARA. Edit the attached approved mature canyon-defence asset. Preserve EXACTLY the 1536x1024 composition, the two sandstone cliff masses, central broad gate opening, defence route, silhouette, all tower/outcrop positions, plants, rubble, lighting, shadows, scale, transparent padding, and clean alpha. Do not move, crop, widen, narrow, add, or remove geometry. The same wider caravan opening must remain unmistakably clear. Change ONLY the constructed fortification to the LEVEL-1 TIMBER stage: an early weak frontier palisade built into the same cliff ledges, with uneven upright timber stakes and rough horizontal bracing, rope lashings, simple timber watch platforms at the same two principal gate-tower positions, very small rough lookout platforms at the far ledges, and a broad OPEN central caravan gateway with a modest timber lintel. Keep foundations visibly seated among the rocks; use soft lower-right contact shadows. It should feel newly built, practical and fragile, but still follow the exact integrated canyon route. Keep the rock cliffs themselves unchanged natural orange sandstone. No closed doors, no masonry curtain, no extra ring, no foreground wall, no repeated copy-paste modules. No buildings, town ground, streets, plots, UI, text, labels, people, water, boats, gods, symbols, logos, watermark, broad sand slab, or baked background. Genuine RGBA transparency, same complete uncropped silhouette, clean natural edges with no red/yellow fringe."
+    }
+  ],
+  "pixelEdits": "None. v3 runtime files are byte-exact copies of the generated outputs. A read-only exact-matte audit found zero pure-red/pure-yellow alpha1–8 candidates, so no cleanup sibling was retained.",
+  "registration": {
+    "desktop": { "x": -204, "y": -890, "scale": 3, "gate": [2100, 400] },
+    "compact": { "x": 1883, "y": 910, "scale": 1.65, "gate": [3150, 1620] },
+    "levels": { "1-10": "timber", "11-32": "adobe", "33-50": "sandstone" },
+    "mainStreetWidths": { "desktop": 150, "compact": 104 }
+  }
+}

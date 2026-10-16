@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-13",
+  "status": "Proposal only; not runtime art or browser verification",
+  "mode": "Built-in image_gen; original AZMARA inputs only",
+  "attemptLimit": 2,
+  "selected": [
+    "phone-level50-v2.png",
+    "phone-start-v1.png",
+    "desktop-level50-v1.png",
+    "desktop-start-v1.png"
+  ],
+  "originals": [
+    {
+      "file": "phone-level50-v1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-c7db1f6d-678d-4ef9-b5a4-e25dc43b009a.png"
+    },
+    {
+      "file": "phone-level50-v2.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-522eb90a-b44c-4538-9e10-8cd35eb9f5ce.png"
+    },
+    {
+      "file": "phone-start-v1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-bb2f1f5c-b3fd-4b8d-b927-caee205d59b9.png"
+    },
+    {
+      "file": "desktop-level50-v1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-6ae21859-7967-46b8-8c79-bee020a6f99a.png"
+    },
+    {
+      "file": "desktop-start-v1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-c1e030b6-36e7-4921-bc3e-aec9ac3691f4.png"
+    }
+  ],
+  "limitations": [
+    "Generative paint-overs are approximate, not pixel-exact placement or collision proof.",
+    "Desktop50 source is explicitly offline; other targets come from the single closed browser pass.",
+    "Early wall is a hypothetical built timber1 art test; real default wall0 remains unbuilt.",
+    "Phone50 v1 closed gate corrected once; v2 selected, no third attempt."
+  ],
+  "prompts": [
+    {
+      "name": "phone-level50-v1",
+      "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-13-ui-scale-study/headless-2026-10-12T23-35-39-162Z/source-80-phone-ideal50.png",
+      "prompt": "Use-case: stylized-concept edit, AZMARA canyon defence proposal only.\nEdit target: attached ORIGINAL AZMARA phone screenshot at ideal level 50 and 80% building scale. This is NOT an Ikariam image.\nPreserve the 390x844 portrait composition, narrow parchment sidebar on left, all existing town building sprites, their exact positions, size, camera, identity and ground streets. No extra buildings, no rearranged plots. Keep AZMARA's original warm desert oasis palette and 2.5D illustrated building style.\nChange only the upper canyon defence area: close the open LEFT boundary with an asymmetrical orange sandstone cliff shoulder entering from the left game-area edge and joining the existing north cliff ridge; it must not cover any existing town building. No mirror copy of the right cliff. Leave the lower town usable and open.\nReplace the pasted-on face-on gate with one convincing mature sandstone fortified gate spanning the narrow north pass CLIFF TO CLIFF. Exactly TWO square towers, each founded on a natural rock outcrop. Both curtain ends visibly disappear into the cliffs, with no exposed sandy end gaps. Show the SAME oblique isometric camera angle as the town buildings (visible top surfaces, side faces and depth), warm light from upper-left, soft short shadows to lower-right. Low stepped foundations follow the rocky ground, stone rubble/contact shadows anchor it. Wall footprint short and compact, not a ring. No wall anywhere around the lower town. Main paved route runs visibly through the gateway into the existing town.\nMake the wall look like canyon fortifications, not a face-on decorative postcard, not separate pasted pieces. Tower scale should be restrained relative to 80% buildings. Do not enlarge town buildings or reduce the town to make room.\nRemove only the transient pale Appearance tool header/buttons at the top of the game area for this proposal image; do not restyle or enlarge the permanent parchment rail. No new labels, no added text, no rulers.\nNo sea, boats, river, modern objects, religious figures, or copied game assets. Oasis water only in existing fountain. This is a conceptual paint-over; preserve the existing scene beyond the explicitly edited upper defence area."
+    },
+    {
+      "name": "phone-level50-v2",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-c7db1f6d-678d-4ef9-b5a4-e25dc43b009a.png",
+      "prompt": "Use-case: stylized-concept targeted edit, attempt 2 of 2 for AZMARA Level50 phone canyon defence.\nInput1 EDIT TARGET: the previous generated original AZMARA phone paint-over. Input2 REGISTRATION REFERENCE: the actual original AZMARA 80% screenshot. Never use external game art.\nKeep the first paint-over's asymmetrical left cliff joining the north ridge, exactly TWO sandstone towers founded on rock, cliff-embedded wall ends, the parchment left rail, and all existing town sprites at their present screen positions/scale. Keep composition unchanged.\nOnly correct the gate: the existing face-on closed brown gate must become an OPEN arched or rectangular central passage, with daylight visible through it and the paved approach visibly running FROM the outside pass THROUGH the passage into the town. Rotate/shape the gatehouse and connecting wall slightly on the same oblique isometric axes as the Town Hall (top planes and depth-facing side surfaces visible); avoid a completely frontal horizontal pasted facade. Exactly two towers, no third gate tower. Retain low stepped sandstone foundations, warm upper-left sunlight, short lower-right contact shadows and wall ends disappearing into rock. Do not cover any existing town sprites/pins or add buildings. No changes to the lower town, no ring wall, no sea, no copied art, no added labels/text. Preserve existing output framing and calm sand around it."
+    },
+    {
+      "name": "phone-start-v1",
+      "sources": [
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-13-ui-scale-study/headless-2026-10-12T23-35-39-162Z/source-80-phone-start1.png",
+        "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-522eb90a-b44c-4538-9e10-8cd35eb9f5ce.png"
+      ],
+      "prompt": "Use-case: stylized-concept edit, AZMARA phone START canyon defence proposal.\nInput1 is EDIT TARGET: original AZMARA phone first-game screenshot, only a wooden Town Hall and small teal stake pins. Preserve those exact building/pin positions and 80% size, portrait camera/composition and permanent narrow parchment rail. Input2 is DESIGN REFERENCE ONLY for the canyon shoulder geometry, embedded gate route and TWO-tower footprint; do NOT import its mature town buildings/ground.\nShow a counterfactual built level1 TIMBER wall for material art review only. This is not a game screenshot or new starting gameplay rule.\nAt the top of the scene add the same asymmetric left orange sandstone shoulder entering from the left game-area edge and connecting to the north ridge as reference2. Close the exposed left gap without covering/repositioning any existing plot stake. Keep the right ridge not a mirror copy. Span the narrow pass with ONE simple timber palisade gate, exactly TWO humble timber watchtowers grounded on the same two rocky outcrops as mature reference2. Same short wall footprint/central passage width as the sandstone reference. Timber posts curtain ends disappear into rock. Hand-built rough wooden braces, low stone/dirt footings; restrained early-game quality, no stone battlements. OPEN central gateway with dirt approach visibly running THROUGH into the settlement. Oblique 2.5D building camera, tops/side faces visible, warm upper-left light with soft short lower-right contact shadows. Bare rough sandy town remains, no garden/extra houses/paved metropolis. Do not add any buildings, pin outlines, sea/river/boats, modern objects, religion or copied game art.\nRemove only the pale transient Appearance tool header/buttons from the upper game area for clean proposal viewing. Preserve AZMARA parchment rail and its existing text/style. No added annotations. No front/ring wall. This is an original concept paint-over, not final art."
+    },
+    {
+      "name": "desktop-level50-v1",
+      "sources": [
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-13-ui-scale-study/offline-captured-desktop-2026-10-12T23-56-58-357Z/offline-desktop-ideal50-size80.png",
+        "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-522eb90a-b44c-4538-9e10-8cd35eb9f5ce.png"
+      ],
+      "prompt": "Use-case: stylized-concept edit, ORIGINAL AZMARA desktop Level50 canyon defence proposal.\nInput1 EDIT TARGET: a labelled OFFLINE desktop placement render of our own game at 80% building scale, 1440x900 landscape. Input2 CANYON DESIGN REFERENCE ONLY: our own original phone Level50 paint-over. This is a concept not browser evidence.\nKeep the 228px parchment sidebar LEFT exactly as given, all original town building sprites, fountain, paved Oasis streets and ground at the same positions and sizes/camera, preserving the whole 1212px wide game area to its right. Do not move/repaint/enlarge the town buildings. No extra buildings. Remove only the black OFFLINE evidence caption strip along the top of the game area for this clean proposal image; the report will label this mock-up.\nEdit ONLY the upper canyon/defence reserve: build a continuous asymmetrical orange sandstone left cliff shoulder that visibly comes in from the LEFT EDGE OF THE GAME AREA x228, not the page edge under the sidebar, and joins the rear/top mountain barrier. Keep left/right unequal and natural, not mirrored. Bring both rocky shoulders in to meet the wall at the narrowest upper pass, without covering the existing buildings or reducing the town/camera.\nOne short mature sandstone defence across that pass, exactly TWO square towers on rocky outcrops, same gate footprint and embedded ends as reference2; visible top surfaces and side-depth faces match the town sprites' oblique/isometric view. Warm upper-left sunlight, soft short shadows toward lower-right. Towers around ordinary large-house height, lower than the Town Hall grand roof. Stepped masonry foundations follow the rocky ground, grounded contact shadow and rubble; both wall ends disappear into cliff rock with no open sandy gap. Open central portal, no third gatehouse tower: the main paved road runs FROM the outside pass THROUGH the gateway into town toward the existing central road. Do not draw a flat face-on horizontal sticker; show depth and natural rock integration. No front wall, no ring wall, no additional towers elsewhere.\nNo sea/river/boats, modern props, religious figures, added lettering, copied game art. Reuse the existing building art and ground unmodified; only the upper canyon/wall and tiny gate approach can change."
+    },
+    {
+      "name": "desktop-start-v1",
+      "sources": [
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-13-ui-scale-study/headless-2026-10-12T23-35-39-162Z/source-80-desktop-start1.png",
+        "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-bb2f1f5c-b3fd-4b8d-b927-caee205d59b9.png"
+      ],
+      "prompt": "Use-case: stylized-concept edit, original AZMARA DESKTOP START canyon defence proposal.\nInput1 EDIT TARGET: actual1440x900 AZMARA desktop screenshot,228px parchment sidebar left, Town Hall wooden shack and22 empty original tiny teal stake pins at80% test size. Preserve all those sprites/pins exact camera, anchor positions, sizes, identities and sidebar. Input2 DESIGN REFERENCE ONLY: original AZMARA phone early timber canyon mock-up. Do not copy its portrait camera or reposition the desktop town.\nEdit only upper canyon/defence: close the exposed left gap with an asymmetrical orange sandstone shoulder entering from x228 LEFT EDGE OF THE GAME AREA and joining the north ridge, same naturally protective composition as phone reference. No mirrored duplicate. Keep cliff below reserve away from town stakes/buildings; do not change Fit or shrink usable town.\nAcross narrow northern pass place a simple early timber palisade, exactly TWO wooden watchtowers on natural rocky outcrops, low stepped foundation/contact shadows. Same short route/central opening/tower footprint that will upgrade to adobe then sandstone. Timber curtains end embedded in cliff faces rather than stopping on open sand. Open central gateway with rough dirt approach visibly running THROUGH into town. Wooden posts/braces, modest tower height relative to town Shack; oblique2.5D camera tops/side faces, warm upper-left light soft short shadows lower-right. This is a hypothetical built level1 wall ART TEST; actual default game starts with wall unbuilt and that rule is unchanged.\nFounding town remains spare sand, woodshack, small stakes. No extra houses, mature paving/gardens, dense metropolis, front/ring wall, sea/river/boats, modern/religious/copied imagery. Do not add letters to flags.\nRemove only the transient full-width pale Appearance top toolbar/header from game area for clean conceptual viewing. Keep the permanent left parchment sidebar exactly. No new text or annotations; a caption outside image identifies proposal-only. Preserve all non-defence elements."
+    }
+  ]
+}

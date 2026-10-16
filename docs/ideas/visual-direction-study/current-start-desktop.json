@@ -1,0 +1,44 @@
+{
+  "startedAt": "2026-10-11T18:56:31.757Z",
+  "options": {
+    "width": 1440,
+    "height": 900,
+    "level": null,
+    "layout": "staggered",
+    "view": "town",
+    "debug": false
+  },
+  "screenshot": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T18-56-31-757Z-town-start-staggered-1440x900-8b2eb271.png",
+  "receipt": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T18-56-31-757Z-town-start-staggered-1440x900-8b2eb271.json",
+  "sourceHashes": {
+    "app.js": "b789e8d2ec8a07c01f979ffb942592af5a2b5c25d7c7b217466d6811e2f87b15",
+    "atlas.css": "628912fd5c498235a24383cbaa53120ad964dc350835bc3f2dcfd9e0f94dbb05",
+    "atlas.js": "04462bf705238c1a35f7ae40002e9556786eb3a9f1ff8a8b09e6558b59b04838",
+    "building-art.css": "cfc0e45522c1e2941a8354c5eb91b7c380d5d7ee3548b90ff92fd97da7a7a0ce",
+    "building-art.js": "df1ebfc9014257ea673f1f9c437002ba607d3226e77edbad456b2deba7a81b13",
+    "catalogue.css": "569008d8fa63c33cfda2bd954db38145e626a4917102831d4d2966d15d1a6875",
+    "catalogue.js": "2100ce162c3672cad47173fb319a9b6ad1e95798f02265f2cfa79ad8fdeba2e0",
+    "debug-overlay.js": "be4b268ad7fe186567d6e31f2b45e88c5a67e75f8b2c2e900d5fb07cc0e0ca51",
+    "desktop.css": "2298467958336ed07b3d52e9b7404c2d331ef8f62ea6825a25c80019d48ca02a",
+    "index.html": "8b575d0c8f9dc88592f18ad8cda656c204d22a9fdcff8e504691c550bdb8bb04",
+    "preview.html": "183fca0ec3bdc1bbe093fa5fba92224bcdb27d913f51fbaec337f4f19565a7c6",
+    "progression.css": "1010608812f79db1def27d8c56a56981b0654bfdf14b107ba55897e058e64be7",
+    "progression.js": "ef545b127493ed5993dcad76dd8b6314eb95333c58c6ea108fafd6c75748a1b0",
+    "styles.css": "bc871cf2fa2d31a1c833b3444f432cff593dad4f55e5a8ca8f1c00d0be24ff84",
+    "town-layouts.js": "03a0883dffd46ae430e50252f7d9c89bde3deb0c0ab91ce1eb2c5165bf4d7a01",
+    "town-wall.js": "b3a712fcfc8c417eb1c13e495a65e66a7f49fbb7c926ea144bf0640a3b69a8a8"
+  },
+  "scenario": "Fresh isolated starting town",
+  "browserClosed": true,
+  "serverClosed": true,
+  "passed": true,
+  "url": "http://127.0.0.1:60741",
+  "readiness": {
+    "decodedImages": 6,
+    "presentation": "desktop",
+    "plots": 23
+  },
+  "screenshotSha256": "5bdca21214366d30b8be5882f4823c53c03e2e23dfefd7db5810ce7a84ac878a",
+  "errors": [],
+  "finishedAt": "2026-10-11T18:56:34.377Z"
+}

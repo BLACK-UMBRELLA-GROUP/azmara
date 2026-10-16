@@ -1,0 +1,15 @@
+{
+  "authority": "DEC-078",
+  "mode": "Built-in ImageGen",
+  "asset": "One original two-motif middle-stage shade atlas",
+  "attemptLimit": 2,
+  "attempts": [
+    {
+      "attempt": 1,
+      "prompt": "Use case: stylized-concept.\nAsset: ONE original transparent production shade-pocket sprite atlas for AZMARA, a desert oasis strategy game. Exactly TWO independently isolated compact motifs, side by side with generous transparent gutters and outer padding, on a square1536x1536 maximum canvas. Full crowns, ground contacts and soft shadows wholly visible; no other motifs/text/dividers/frames/logos. Background actual alpha0, not black/white/checkerboard.\nLEFT motif: developing western community refuge. Two modest young-to-medium date palms, low dry sage-green scrub between them, one tiny simple low TIMBER resting bench integrated in the same small bare-earth group. Entire crown+body+earth+shadow approximately250wide×160high game proportion: low and wide, not tall palm spires. Only tiny natural worn earth footprint, no stone paving, planter box, raised podium, lawn, flower bed, buildings, stall or tent.\nRIGHT motif: smaller eastern refuge. One young-to-medium date palm with sparse dry scrub, a tiny natural maintained-earth contact and owned soft shadow. Whole motif approximately174wide×152high game proportion. No bench, cloth canopy, stone base, formal planter, finished paving, building, fountain or watered lawn. Must be visually simpler than a mature garden.\nStyle: original fine dimensional painterly2.5D game illustration, elevated orthographic/dimetric about35degrees with ground diagonals approximately+/-30degrees, upright verticals, no horizon/sky/vanishingpoint/photo recession. Warm upper-left sunlight; soft translucent warm-brown cast shadows lower-right, exactly one shadow owner. Quiet ochre earth, warm brown timber, dusty date green/sage. Intricate natural small leaves and textured trunks consistent with warm sandstone/timber AZMARA game sprites; not photorealism, vector icon, plastic lowpoly or glowing outline. Both motifs samecamera/material/light/relative human scale.\nTransparency/ownership: clear separation, at least40px transparent gutter and outer padding; no crown/soil/shadow crosses another motif or canvas edge. Clean natural anti-aliased edges and brown shadow feather. NO red/yellow/magenta/green fringe, speckles or detached background fragments. No people/animals/water/walls/religion/naval elements. Middle-stage restrained refuges, not Level50 landscaped courts. Exactly2motifs only, not a screenshot, map or animation.",
+      "transparent_background": true,
+      "imageInputs": []
+    }
+  ],
+  "scope": "Only exact25 desktop/Staggered; not other-game artwork, animation, wall or terrain replacement."
+}

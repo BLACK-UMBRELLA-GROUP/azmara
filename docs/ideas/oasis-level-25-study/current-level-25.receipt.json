@@ -1,0 +1,148 @@
+{
+  "startedAt": "2026-10-11T23:38:38.355Z",
+  "options": {
+    "width": 1440,
+    "height": 900,
+    "level": 25,
+    "layout": "staggered",
+    "view": "town",
+    "debug": false
+  },
+  "screenshot": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T23-38-38-355Z-town-all-built-25-staggered-1440x900-e92d9abc.png",
+  "receipt": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T23-38-38-355Z-town-all-built-25-staggered-1440x900-e92d9abc.json",
+  "sourceHashes": {
+    "app.js": "f7e285f602f1871878a89d7bd21495cc5567f5449124008b7c404dcb3114c008",
+    "atlas.css": "628912fd5c498235a24383cbaa53120ad964dc350835bc3f2dcfd9e0f94dbb05",
+    "atlas.js": "04462bf705238c1a35f7ae40002e9556786eb3a9f1ff8a8b09e6558b59b04838",
+    "building-art.css": "cfc0e45522c1e2941a8354c5eb91b7c380d5d7ee3548b90ff92fd97da7a7a0ce",
+    "building-art.js": "df1ebfc9014257ea673f1f9c437002ba607d3226e77edbad456b2deba7a81b13",
+    "catalogue.css": "569008d8fa63c33cfda2bd954db38145e626a4917102831d4d2966d15d1a6875",
+    "catalogue.js": "2100ce162c3672cad47173fb319a9b6ad1e95798f02265f2cfa79ad8fdeba2e0",
+    "debug-overlay.js": "be4b268ad7fe186567d6e31f2b45e88c5a67e75f8b2c2e900d5fb07cc0e0ca51",
+    "desktop.css": "2298467958336ed07b3d52e9b7404c2d331ef8f62ea6825a25c80019d48ca02a",
+    "index.html": "aeb86169cf80b4d2eb09e7d4cc9a13e11b9b3f9c81ca5b4ba4421801d86d2be0",
+    "oasis-town.js": "e0a20c6106863749f49b48ee17382c64379a85eab36aae83061fbc0967f63e9b",
+    "preview.html": "183fca0ec3bdc1bbe093fa5fba92224bcdb27d913f51fbaec337f4f19565a7c6",
+    "progression.css": "1010608812f79db1def27d8c56a56981b0654bfdf14b107ba55897e058e64be7",
+    "progression.js": "9d486b14bde9ae9dbdfc83facf500836dd8e3cad62f37e3be6477c4627762685",
+    "styles.css": "11ea6d91361791f7be0630fd06ebdad73b71d15ab28a95a851cc2720adc3a2b1",
+    "town-layouts.js": "03a0883dffd46ae430e50252f7d9c89bde3deb0c0ab91ce1eb2c5165bf4d7a01",
+    "town-wall.js": "b3a712fcfc8c417eb1c13e495a65e66a7f49fbb7c926ea144bf0640a3b69a8a8"
+  },
+  "scenario": "Synthetic all-built town; not player progress",
+  "browserClosed": true,
+  "serverClosed": true,
+  "passed": true,
+  "url": "http://127.0.0.1:54057",
+  "fixture": {
+    "version": 3,
+    "layoutId": "town-23-v1",
+    "townName": "Visual test",
+    "hallLevel": 25,
+    "plotLayout": "staggered",
+    "resources": {
+      "coins": 2400,
+      "timber": 760,
+      "stone": 540
+    },
+    "construction": null,
+    "buildings": {
+      "general-02": {
+        "typeId": "academy",
+        "level": 25
+      },
+      "general-03": {
+        "typeId": "warehouse",
+        "level": 25
+      },
+      "general-04": {
+        "typeId": "provision-house",
+        "level": 25
+      },
+      "general-05": {
+        "typeId": "palace",
+        "level": 25
+      },
+      "general-06": {
+        "typeId": "governors-residence",
+        "level": 25
+      },
+      "general-07": {
+        "typeId": "museum",
+        "level": 25
+      },
+      "general-08": {
+        "typeId": "embassy",
+        "level": 25
+      },
+      "general-09": {
+        "typeId": "prayer-area",
+        "level": 25
+      },
+      "general-10": {
+        "typeId": "trading-post",
+        "level": 25
+      },
+      "general-11": {
+        "typeId": "depot",
+        "level": 25
+      },
+      "general-12": {
+        "typeId": "military-exchange",
+        "level": 25
+      },
+      "general-13": {
+        "typeId": "sea-chart-archive",
+        "level": 25
+      },
+      "general-14": {
+        "typeId": "intelligence-house",
+        "level": 25
+      },
+      "general-15": {
+        "typeId": "barracks",
+        "level": 25
+      },
+      "general-16": {
+        "typeId": "workshop",
+        "level": 25
+      },
+      "general-17": {
+        "typeId": "foresters-house",
+        "level": 25
+      },
+      "general-18": {
+        "typeId": "silver-refinery",
+        "level": 25
+      },
+      "general-19": {
+        "typeId": "iron-foundry",
+        "level": 25
+      },
+      "wall-01": {
+        "typeId": "town-wall",
+        "level": 25
+      },
+      "harbour-01": {
+        "typeId": "trading-port",
+        "level": 25
+      },
+      "harbour-02": {
+        "typeId": "trading-port",
+        "level": 25
+      },
+      "freighter-01": {
+        "typeId": "dockyard",
+        "level": 25
+      }
+    }
+  },
+  "readiness": {
+    "decodedImages": 27,
+    "presentation": "desktop",
+    "plots": 23
+  },
+  "screenshotSha256": "00799bde211d951bfcf5f12a712d2a2b0784689bba8d4c38dc9ecb4292e86832",
+  "errors": [],
+  "finishedAt": "2026-10-11T23:38:41.012Z"
+}

@@ -1,0 +1,29 @@
+AZMARA starting-town dimensional artwork
+Authority: DEC-033, 8 October 2026.
+Method: built-in image-generation tool. Brand-new original assets; no third-party game image supplied as a generation reference.
+
+Final project assets:
+- azmara-starting-terrain-v1.png — 1254 x 1254, opaque square environment illustration.
+- azmara-empty-plot-v1.png — 1515 x 1038, RGBA transparent empty-site sprite.
+Both copied from Codex generated_images into prototype/assets; originals retained.
+Terrain-only background contains no buildings, marked plots or UI. The app places exactly 22 empty sprites and the separately retained Town Hall sprite.
+Native world placement is determined by source and verification, not by the prompt's approximate shoreline target. The delivered terrain's shoreline begins earlier than the requested80%; use the reviewed square placement rather than stretching the image.
+No image editing, pixel recolouring, cropping or file conversion was performed after generation.
+Fictional Islamic Golden Age-inspired AZMARA environment, not an authenticated historical reconstruction.
+
+FINAL TERRAIN PROMPT
+Use case: stylized-concept.
+Asset type: square illustrated isometric terrain background for an original strategy game, AZMARA.
+Primary request: a richly detailed, dimensional 2.5D game landscape for a brand-new fictional settlement inspired by the Islamic Golden Age. It must feel like a hand-painted miniature world, not a flat board, vector diagram, cartoon grid or UI.
+Composition: square image, high elevated isometric strategy-game view, no horizon or sky. The central land from x15% to85%, y15% to78% is broad open buildable ground, gently mottled grass and dusty earth with small realistic irregularities, kept free of trees or structures for interactive plots layered by the app. Do not draw any buildings, building foundations, flags, fenced plots, roads or UI in that clearing. A river spans the bottom20% of the picture, shoreline approximately at y80%, so future waterfront plot overlays at y76% rest on the riverbank.
+Surrounding terrain: leafy trees and palms at the outer edges and top margin, raised grassy banks with visibly layered earth faces, a few rocks, wild grasses and small natural elevations. Keep these edge elements out of the central clearing. River has turquoise-blue water with dimensional reflections, ripples and shallow sandy edges, no ships or docks.
+Style: detailed richly textured illustrated strategy-game environment with believable dimensional forms, atmospheric hand-painted finish, crisp natural detail, subtle irregularity. Warm sunlight from upper left, coherent cast and contact shadows from trees and banks; saturated natural green vegetation, warm sandy earth and blue water. Not glossy toy blocks, not vector shapes, not low-poly. No modern objects.
+Constraints: exactly terrain only; no occupied buildings, no town walls, no figures, no sacred buildings/text, statues, deities or supernatural effects; no labels, numbers, map frame, logos, watermark or UI. Original fictional geography, not a reproduction of any existing game map. Opaque image, square composition.
+
+FINAL EMPTY-PLOT PROMPT
+Use case: stylized-concept.
+Asset type: single transparent-background isometric empty building-site sprite for the original strategy game AZMARA.
+Primary request: one visibly empty bare-earth plot identified by one blue cloth flag on a simple slender timber pole. A few short weathered wooden corner stakes outline the vacant site. Nothing is built on it.
+Composition: one complete sprite centred in a landscape canvas with a3:2 feel; shallow isometric diamond ground footprint, about220wide×150high in game proportions. Keep the pole and blue flag entirely inside the sprite bounding box, flag rising above the back-left/central part of the clearing. Generous transparent margin, full stakes and flag visible.
+Style: detailed hand-painted2.5D miniature strategy-game art, textured sandy soil, grass fringe at the edges, small exposed earth lip to give depth, weathered wooden stakes, softly folded blue fabric. Light from upper left and coherent contact/cast shadows falling down-right, shadow contained with the sprite. Rich natural texture, not a flat vector symbol, not a numbered board token, not low-poly blocks.
+Constraints: exactly one empty site and one blue flag, genuinely transparent background around the small ground patch. No building, walls, dock, scaffolding, finished foundation, surrounding road, other plots, people, text, numbers, circular badge, UI, logos, watermark, sacred text, statues, deity or supernatural effects. Original AZMARA artwork.

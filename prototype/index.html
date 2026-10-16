@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#80633c">
+    <title>AZMARA — Your town</title>
+    <meta name="description" content="An original, local desert-oasis town, Region and World design preview for AZMARA.">
+    <link rel="stylesheet" href="styles.css?v=20261014-appearance-modal-web26">
+    <link rel="stylesheet" href="desktop.css?v=20261013-ui-web22">
+    <link rel="stylesheet" href="atlas.css?v=20261013-ui-web22">
+    <link rel="stylesheet" href="catalogue.css?v=20261011-wall-draft-v19">
+    <link rel="stylesheet" href="progression.css?v=20261011-wall-draft-v19">
+    <link rel="stylesheet" href="building-art.css?v=20261013-ui-web22">
+    <link rel="stylesheet" href="design-shell.css?v=20261015-final-design-v1">
+    <script src="atlas.js?v=20261013-ui-web22" defer></script>
+    <script src="building-art.js?v=20261011-wall-draft-v19" defer></script>
+    <script src="progression.js?v=20261011-oasis-pilot" defer></script>
+    <script src="town-wall.js?v=20261014-b2-valley-v25" defer></script>
+    <script src="catalogue.js?v=20261012-rear-valley" defer></script>
+    <script src="town-layouts.js?v=20261011-wall-draft-v19" defer></script>
+    <script src="street-ground.js?v=20261014-b2-valley-v25" defer></script>
+    <script src="oasis-town.js?v=20261013-streets-v1" defer></script>
+    <script src="app.js?v=20261015-fit-bounds-web29" defer></script>
+    <script src="design-shell.js?v=20261015-final-design-v1" defer></script>
+  </head>
+  <body data-preview-mode="dev">
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <symbol id="icon-town" viewBox="0 0 24 24"><path d="M3 21h18M5 21V10h14v11M4 10l8-7 8 7M9 21v-6h6v6M8 11h.01M16 11h.01"/></symbol>
+        <symbol id="icon-coins" viewBox="0 0 24 24"><ellipse cx="10" cy="6" rx="7" ry="3"/><path d="M3 6v5c0 1.7 3.1 3 7 3m-7-3v5c0 1.7 3.1 3 7 3M17 6v4"/><ellipse cx="17" cy="13" rx="4" ry="2"/><path d="M13 13v6c0 1.1 1.8 2 4 2s4-.9 4-2v-6M13 16c0 1.1 1.8 2 4 2s4-.9 4-2"/></symbol>
+        <symbol id="icon-timber" viewBox="0 0 24 24"><path d="m3 16 13-8 5 3-13 8-5-3Zm0-5 13-8 5 3-13 8M3 16v4l5 3 13-8v-4"/><path d="M8 19v4"/></symbol>
+        <symbol id="icon-stone" viewBox="0 0 24 24"><path d="M8 3h8M9 3v4c-4 2-5 5-5 8 0 4 3 6 8 6s8-2 8-6c0-3-1-6-5-8V3M5 12h14M5 17h14"/></symbol>
+        <symbol id="icon-silver" viewBox="0 0 24 24"><path d="m3 16 4-8h10l4 8-9 5-9-5Zm4-8 5 7 5-7M3 16l9-1 9 1M12 15v6"/></symbol>
+        <symbol id="icon-grain" viewBox="0 0 24 24"><path d="M12 21V3M12 8C6 8 4 5 4 3c6 0 8 3 8 5Zm0 5c-6 0-8-3-8-5 6 0 8 3 8 5Zm0 5c-6 0-8-3-8-5 6 0 8 3 8 5Zm0-10c6 0 8-3 8-5-6 0-8 3-8 5Zm0 5c6 0 8-3 8-5-6 0-8 3-8 5Z"/></symbol>
+        <symbol id="icon-iron" viewBox="0 0 24 24"><path d="m3 17 3-9h12l3 9H3ZM6 8l3-4h6l3 4M8 17l2-9M16 17l-2-9M3 17v3h18v-3"/></symbol>
+        <symbol id="icon-forces" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="M12 7v10M8 11h8"/></symbol>
+        <symbol id="icon-knowledge" viewBox="0 0 24 24"><path d="M12 6c-3-3-7-3-10-1v15c3-2 7-2 10 1 3-3 7-3 10-1V5c-3-2-7-2-10 1Zm0 0v15M5 8h3M5 12h3M16 8h3M16 12h3"/></symbol>
+        <symbol id="icon-diplomacy" viewBox="0 0 24 24"><path d="m2 10 4-5 5 1 3-1 8 5-4 8-3 2-4-1-7-5-2-4Z"/><path d="m11 6-4 5 3 2 4-4 6 5M11 16l4 4m0-7 4 4"/></symbol>
+        <symbol id="icon-buildings" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></symbol>
+        <symbol id="icon-overview" viewBox="0 0 24 24"><path d="M6 3h13v16H8c-3 0-4-4-1-5h12M6 3v11M8 19v2H4c-3 0-3-4 0-4M10 7h6M10 10h6"/></symbol>
+        <symbol id="icon-center" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></symbol>
+        <symbol id="icon-labels" viewBox="0 0 24 24"><path d="m3 3 9 1 9 9-8 8-9-9-1-9Z"/><circle cx="8" cy="8" r="1"/></symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+        <symbol id="icon-edit" viewBox="0 0 24 24"><path d="m14 5 5 5M4 20l5-1L21 7l-5-5L4 14l-1 7 6-2M3 21h18"/></symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+        <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+        <symbol id="icon-farm" viewBox="0 0 24 24"><path d="M12 21V3M12 8C6 8 4 5 4 3c6 0 8 3 8 5Zm0 5c-6 0-8-3-8-5 6 0 8 3 8 5Zm0 5c-6 0-8-3-8-5 6 0 8 3 8 5Zm0-10c6 0 8-3 8-5-6 0-8 3-8 5Zm0 5c6 0 8-3 8-5-6 0-8 3-8 5Z"/></symbol>
+        <symbol id="icon-workshop" viewBox="0 0 24 24"><path d="m4 5 4-3 7 7-4 4-7-8Zm7 8 7 8 3-3-8-7M3 21l5-5"/></symbol>
+        <symbol id="icon-bazaar" viewBox="0 0 24 24"><path d="M3 10h18L19 3H5l-2 7Zm2 0v11h14V10M8 21v-7h8v7M8 3l-1 7M16 3l1 7"/></symbol>
+        <symbol id="icon-plot" viewBox="0 0 24 24"><path d="m3 13 9-6 9 6-9 6-9-6ZM12 3v4M12 19v3M2 8l4 2M18 16l4 2M2 18l4-2M18 10l4-2"/></symbol>
+        <symbol id="icon-wall" viewBox="0 0 24 24"><path d="M3 21V7h4V3h4v4h2V3h4v4h4v14H3ZM3 13h18M8 7v6M16 7v6M8 17h8M12 13v8"/></symbol>
+        <symbol id="icon-caravan" viewBox="0 0 24 24"><path d="M2 12l3 2h12l2-3 1-5 3 1-1 2-2 1-1 5H5l-3-3M6 15v6M10 15l-1 6M16 15v6M19 14l2 7M6 13V9h9v4M9 9V6h4v3M3 21h18"/></symbol>
+        <symbol id="icon-convoy" viewBox="0 0 24 24"><path d="M3 16h18M5 16V9a7 7 0 0 1 14 0v7M5 10h14M8 5v11M12 2v14M16 5v11M19 12h3v4M8 20h8"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></symbol>
+        <symbol id="icon-harbour" viewBox="0 0 24 24"><path d="M12 3v15M8 6h8M4 14c0 5 4 7 8 7s8-2 8-7M2 16l2-2 3 2M17 16l3-2 2 2"/><circle cx="12" cy="3" r="1"/></symbol>
+        <symbol id="icon-freighter" viewBox="0 0 24 24"><path d="M3 13h18l-3 6H6l-3-6ZM6 13V8h4v5M10 13V5h5v8M15 13V8h4v5M2 21c2-2 4 2 6 0s4 2 6 0 4 2 8 0"/></symbol>
+        <symbol id="icon-merchant-ship" viewBox="0 0 24 24"><path d="M3 15h18l-3 4H6l-3-4ZM12 3v12M12 4l7 8h-7M10 6l-5 6h5M2 22c2-2 4 2 6 0s4 2 6 0 4 2 8 0"/></symbol>
+        <symbol id="icon-population" viewBox="0 0 24 24"><circle cx="12" cy="6" r="3"/><path d="M7 21v-6a5 5 0 0 1 10 0v6M3 21v-5a4 4 0 0 1 3-4M21 21v-5a4 4 0 0 0-3-4"/><circle cx="4.5" cy="8" r="2"/><circle cx="19.5" cy="8" r="2"/></symbol>
+        <symbol id="icon-action-points" viewBox="0 0 24 24"><path d="M5 3h14M5 21h14M7 3v4c0 3 5 5 5 5s5-2 5-5V3M7 21v-4c0-3 5-5 5-5s5 2 5 5v4M9 7h6M9 17h6"/></symbol>
+        <symbol id="icon-inventory" viewBox="0 0 24 24"><path d="M3 10V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v3M3 10h18v11H3V10ZM3 10v3h7M21 13h-7M10 10h4v6h-4v-6ZM6 3v7M18 3v7"/></symbol>
+        <symbol id="icon-world" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6.5c4 2 10 2 14 0M5 17.5c4-2 10-2 14 0"/></symbol>
+        <symbol id="icon-island" viewBox="0 0 24 24"><path d="m3 5 6-2 6 3 6-2v15l-6 2-6-3-6 2V5ZM9 3v15M15 6v15"/><path d="m5 12 2-2 2 1 3-2 3 3 4-3"/></symbol>
+        <symbol id="icon-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 0c0 2-3 2-3 4M12 16h.01"/></symbol>
+      </defs>
+    </svg>
+
+    <main class="game-shell">
+      <section class="scene" aria-label="Your starting town and its 23 plots">
+        <div class="map-viewport" id="map-viewport" tabindex="0" aria-label="Town map. Select a plot to inspect it. Use the mouse wheel or trackpad to zoom, drag or swipe to explore, and use arrow keys when focused. Browser pinch zoom remains available. Select Town again to re-centre the town.">
+          <div class="map-surface" id="map-surface">
+            <div class="town-map compact-map" id="town-map">
+              <svg class="world-landscape" id="world-landscape" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Original illustrated desert plain with open ground and early dirt paths." viewBox="2140 1580 1720 1640" preserveAspectRatio="none"></svg>
+              <div class="town-core" id="town-core" data-core-width="1400" data-core-height="1320">
+                <div class="map-hotspots" id="map-hotspots"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <span id="town-name" hidden>Your town</span>
+        <button id="toggle-actions" hidden aria-label="Open town options" aria-expanded="false" aria-controls="actions-menu" aria-haspopup="dialog">Options</button>
+      </section>
+
+      <div class="azmara-interface" id="azmara-interface">
+        <header class="azmara-town-bar parchment" aria-label="Town information">
+          <button class="azmara-town-chip" data-panel="rename" aria-label="Rename town">
+            <svg aria-hidden="true"><use href="#icon-town"/></svg>
+            <strong id="floating-town-name">Your town</strong>
+            <svg class="azmara-town-edit" aria-hidden="true"><use href="#icon-edit"/></svg>
+          </button>
+          <nav class="azmara-map-switcher" aria-label="Map view">
+            <button data-desktop-action="town" aria-current="page"><svg aria-hidden="true"><use href="#icon-town"/></svg><span>Town</span></button>
+            <button data-map-navigation="island"><svg aria-hidden="true"><use href="#icon-island"/></svg><span>Region</span></button>
+            <button data-map-navigation="world"><svg aria-hidden="true"><use href="#icon-world"/></svg><span>World</span></button>
+          </nav>
+          <button class="azmara-population-chip" data-panel="overview" title="Population" aria-label="Open town population">
+            <svg aria-hidden="true"><use href="#icon-population"/></svg>
+            <span><small>Population</small><strong id="floating-population">—</strong></span>
+          </button>
+          <div class="azmara-resource-ribbon" aria-label="Resources">
+            <span class="azmara-resource-chip" title="Coins"><svg aria-hidden="true"><use href="#icon-coins"/></svg><strong id="floating-resource-coins">2,400</strong></span>
+            <span class="azmara-resource-chip" title="Timber"><svg aria-hidden="true"><use href="#icon-timber"/></svg><strong id="floating-resource-timber">760</strong></span>
+            <span class="azmara-resource-chip" title="Clay"><svg aria-hidden="true"><use href="#icon-stone"/></svg><strong id="floating-resource-stone">540</strong></span>
+            <span class="azmara-resource-chip" title="Silver"><svg aria-hidden="true"><use href="#icon-silver"/></svg><strong id="floating-resource-silver">—</strong></span>
+            <span class="azmara-resource-chip" title="Grain"><svg aria-hidden="true"><use href="#icon-grain"/></svg><strong id="floating-resource-grain">—</strong></span>
+            <span class="azmara-resource-chip" title="Iron"><svg aria-hidden="true"><use href="#icon-iron"/></svg><strong id="floating-resource-iron">—</strong></span>
+          </div>
+          <button class="azmara-pearls-chip" data-action="shop" title="Pearls and Shop" aria-label="Open Shop and Pearls">
+            <svg aria-hidden="true"><use href="#icon-silver"/></svg><strong>—</strong><span aria-hidden="true">+</span>
+          </button>
+        </header>
+
+        <button class="azmara-dock-reveal parchment" id="azmara-dock-reveal" aria-label="Show game menu" aria-controls="azmara-side-dock" hidden>
+          <span aria-hidden="true">✧</span>
+        </button>
+        <nav class="azmara-side-dock parchment" id="azmara-side-dock" aria-label="Game menu">
+          <button class="azmara-dock-hide" id="azmara-dock-toggle" aria-label="Hide game menu" aria-expanded="true" aria-controls="azmara-side-dock"><svg aria-hidden="true"><use href="#icon-chevron"/></svg><span>Hide</span></button>
+          <button class="dock-button" data-panel="overview"><svg aria-hidden="true"><use href="#icon-town"/></svg><span>Town</span></button>
+          <button class="dock-button" data-panel="forces"><svg aria-hidden="true"><use href="#icon-forces"/></svg><span>Military</span></button>
+          <button class="dock-button" data-panel="trade"><svg aria-hidden="true"><use href="#icon-caravan"/></svg><span>Trade</span></button>
+          <button class="dock-button" data-panel="diplomacy"><svg aria-hidden="true"><use href="#icon-diplomacy"/></svg><span>Diplomacy</span></button>
+          <button class="dock-button" data-panel="knowledge"><svg aria-hidden="true"><use href="#icon-knowledge"/></svg><span>Discoveries</span></button>
+          <button data-action="shop"><svg aria-hidden="true"><use href="#icon-bazaar"/></svg><span>Shop</span></button>
+          <button data-action="inventory"><svg aria-hidden="true"><use href="#icon-inventory"/></svg><span>Inventory</span></button>
+          <button data-desktop-action="help"><svg aria-hidden="true"><use href="#icon-help"/></svg><span>Help</span></button>
+          <button data-desktop-action="options" aria-haspopup="dialog" aria-controls="actions-menu"><svg aria-hidden="true"><use href="#icon-buildings"/></svg><span>Options</span></button>
+        </nav>
+
+        <button class="azmara-dev-button parchment" data-panel="appearance" data-dev-only aria-label="Open Dev design tools">Dev</button>
+
+        <nav class="azmara-phone-dock parchment" aria-label="Game menu">
+          <button class="dock-button" data-panel="overview"><svg aria-hidden="true"><use href="#icon-town"/></svg><span>Town</span></button>
+          <button class="dock-button" data-panel="forces"><svg aria-hidden="true"><use href="#icon-forces"/></svg><span>Military</span></button>
+          <button class="dock-button" data-panel="trade"><svg aria-hidden="true"><use href="#icon-caravan"/></svg><span>Trade</span></button>
+          <button class="dock-button" data-panel="diplomacy"><svg aria-hidden="true"><use href="#icon-diplomacy"/></svg><span>Diplomacy</span></button>
+          <button class="dock-button" data-panel="knowledge"><svg aria-hidden="true"><use href="#icon-knowledge"/></svg><span>Discoveries</span></button>
+          <button data-desktop-action="options" aria-haspopup="dialog" aria-controls="actions-menu"><svg aria-hidden="true"><use href="#icon-buildings"/></svg><span>More</span></button>
+        </nav>
+      </div>
+
+      <div class="desktop-hud" id="desktop-hud">
+        <nav class="sidebar-strip desktop-paper" aria-label="Open town sidebar">
+          <span class="sidebar-strip-mark" aria-hidden="true">✧</span>
+          <button id="sidebar-toggle" class="sidebar-strip-toggle" aria-label="Open town sidebar" aria-expanded="false" aria-controls="town-sidebar"><svg aria-hidden="true"><use href="#icon-overview"/></svg><span>Menu</span></button>
+          <span class="sidebar-strip-wordmark" aria-hidden="true">AZMARA</span>
+        </nav>
+        <button class="sidebar-backdrop" id="sidebar-backdrop" hidden tabindex="-1" aria-label="Close town sidebar"></button>
+        <aside class="desktop-resource-panel desktop-paper" id="town-sidebar" aria-label="Town information and menus">
+          <header class="sidebar-heading">
+            <span class="desktop-wordmark"><span aria-hidden="true">✧</span> AZMARA</span>
+            <button id="sidebar-close" class="icon-button" aria-label="Close town sidebar"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+          </header>
+          <div class="sidebar-scroll">
+            <section class="desktop-town-row" aria-label="Selected town and navigation">
+              <button class="desktop-town-selector" data-panel="rename" aria-label="Rename town from desktop town selector" title="Rename your town">
+                <svg aria-hidden="true"><use href="#icon-town"/></svg>
+                <span><strong id="desktop-town-name" role="heading" aria-level="1">Your town</strong></span>
+                <svg class="desktop-town-edit" aria-hidden="true"><use href="#icon-edit"/></svg>
+              </button>
+              <nav class="desktop-map-navigation" aria-label="Desktop map navigation">
+                <button data-desktop-action="town" aria-label="Return to town view" aria-current="page"><svg aria-hidden="true"><use href="#icon-town"/></svg><span>Town</span></button>
+                <button data-map-navigation="island" aria-label="Open Region view"><svg aria-hidden="true"><use href="#icon-island"/></svg><span>Region</span></button>
+                <button data-map-navigation="world" aria-label="Open world view"><svg aria-hidden="true"><use href="#icon-world"/></svg><span>World</span></button>
+              </nav>
+            </section>
+            <div id="sidebar-atlas-context" class="sidebar-atlas-context"></div>
+            <section class="sidebar-section desktop-status-row" aria-labelledby="sidebar-status-title">
+              <h2 class="sidebar-section-title" id="sidebar-status-title">Town capacity</h2>
+              <nav class="desktop-status-counters" aria-label="Town capacity and transport">
+                <button class="desktop-status-button sidebar-metric-button" data-action="merchant-ships" aria-label="Pack caravans: not configured" title="Pack caravans: not configured"><svg aria-hidden="true"><use href="#icon-caravan"/></svg><strong id="counter-merchant-ships" aria-label="Not configured">—</strong><span class="sidebar-metric-label" aria-hidden="true">Pack caravans</span></button>
+                <button class="desktop-status-button sidebar-metric-button" data-action="freighter-ships" aria-label="Heavy convoys: not configured" title="Heavy convoys: not configured"><svg aria-hidden="true"><use href="#icon-convoy"/></svg><strong id="counter-freighter-ships" aria-label="Not configured">—</strong><span class="sidebar-metric-label" aria-hidden="true">Heavy convoys</span></button>
+                <button class="desktop-status-button sidebar-metric-button" data-action="population" aria-label="Population: not configured" title="Population: not configured"><svg aria-hidden="true"><use href="#icon-population"/></svg><strong id="counter-population" aria-label="Not configured">—</strong><span class="sidebar-metric-label" aria-hidden="true">Population</span></button>
+                <button class="desktop-status-button sidebar-metric-button" data-action="action-points" aria-label="Action points: not configured" title="Action points: not configured"><svg aria-hidden="true"><use href="#icon-action-points"/></svg><strong id="counter-action-points" aria-label="Not configured">—</strong><span class="sidebar-metric-label" aria-hidden="true">Action points</span></button>
+              </nav>
+              <nav class="desktop-account-tools" aria-label="Inventory and shop">
+                <button data-action="inventory" aria-label="Open inventory"><svg aria-hidden="true"><use href="#icon-inventory"/></svg><span>Inventory</span></button>
+                <button data-action="shop" aria-label="Open shop"><svg aria-hidden="true"><use href="#icon-bazaar"/></svg><span>Shop</span></button>
+              </nav>
+            </section>
+            <section class="sidebar-section" aria-labelledby="resources-title">
+              <h2 class="sidebar-section-title" id="resources-title">Resources</h2>
+            <dl class="desktop-resource-list">
+              <div class="desktop-resource desktop-coins"><dt class="visually-hidden">Coins</dt><dd><button class="sidebar-metric-button" type="button" aria-label="Coins" aria-describedby="desktop-resource-coins" title="Coins"><svg aria-hidden="true"><use href="#icon-coins"/></svg><span id="desktop-resource-coins">2,400</span><span class="sidebar-metric-label" aria-hidden="true">Coins</span></button></dd></div>
+              <div class="desktop-resource desktop-timber"><dt class="visually-hidden">Timber</dt><dd><button class="sidebar-metric-button" type="button" aria-label="Timber" aria-describedby="desktop-resource-timber" title="Timber"><svg aria-hidden="true"><use href="#icon-timber"/></svg><span id="desktop-resource-timber">760</span><span class="sidebar-metric-label" aria-hidden="true">Timber</span></button></dd></div>
+              <div class="desktop-resource desktop-clay"><dt class="visually-hidden">Clay</dt><dd><button class="sidebar-metric-button" type="button" aria-label="Clay" aria-describedby="desktop-resource-stone" title="Clay"><svg aria-hidden="true"><use href="#icon-stone"/></svg><span id="desktop-resource-stone">540</span><span class="sidebar-metric-label" aria-hidden="true">Clay</span></button></dd></div>
+              <div class="desktop-resource desktop-silver"><dt class="visually-hidden">Silver</dt><dd><button class="sidebar-metric-button" type="button" aria-label="Silver" aria-describedby="desktop-resource-silver" title="Silver"><svg aria-hidden="true"><use href="#icon-silver"/></svg><span id="desktop-resource-silver"><span aria-hidden="true">—</span><span class="visually-hidden">Not simulated</span></span><span class="sidebar-metric-label" aria-hidden="true">Silver</span></button></dd></div>
+              <div class="desktop-resource desktop-grain"><dt class="visually-hidden">Grain</dt><dd><button class="sidebar-metric-button" type="button" aria-label="Grain" aria-describedby="desktop-resource-grain" title="Grain"><svg aria-hidden="true"><use href="#icon-grain"/></svg><span id="desktop-resource-grain"><span aria-hidden="true">—</span><span class="visually-hidden">Not simulated</span></span><span class="sidebar-metric-label" aria-hidden="true">Grain</span></button></dd></div>
+              <div class="desktop-resource desktop-iron"><dt class="visually-hidden">Iron</dt><dd><button class="sidebar-metric-button" type="button" aria-label="Iron" aria-describedby="desktop-resource-iron" title="Iron"><svg aria-hidden="true"><use href="#icon-iron"/></svg><span id="desktop-resource-iron"><span aria-hidden="true">—</span><span class="visually-hidden">Not simulated</span></span><span class="sidebar-metric-label" aria-hidden="true">Iron</span></button></dd></div>
+            </dl>
+            <div class="queue-chip" id="queue-chip" data-dev-only><span class="queue-dot" aria-hidden="true"></span><span id="queue-label">No preview construction</span></div>
+            </section>
+            <section class="sidebar-section" aria-labelledby="sidebar-advisers-title">
+              <h2 class="sidebar-section-title" id="sidebar-advisers-title">Council</h2>
+              <nav class="desktop-advisers" aria-label="Town advisers">
+                <button class="desktop-adviser adviser active" data-panel="overview" aria-label="Open Advisor"><svg aria-hidden="true"><use href="#icon-town"/></svg><span class="desktop-adviser-name">Advisor</span></button>
+                <button class="desktop-adviser adviser" data-panel="forces" aria-label="Open Forces adviser"><svg aria-hidden="true"><use href="#icon-forces"/></svg><span class="desktop-adviser-name">Forces</span></button>
+                <button class="desktop-adviser adviser" data-panel="knowledge" aria-label="Open Knowledge adviser"><svg aria-hidden="true"><use href="#icon-knowledge"/></svg><span class="desktop-adviser-name">Knowledge</span></button>
+                <button class="desktop-adviser adviser" data-panel="diplomacy" aria-label="Open Diplomacy adviser"><svg aria-hidden="true"><use href="#icon-diplomacy"/></svg><span class="desktop-adviser-name">Diplomacy</span></button>
+              </nav>
+            </section>
+            <section class="desktop-header sidebar-section" data-dev-only aria-labelledby="sidebar-dev-title">
+              <h2 class="sidebar-section-title" id="sidebar-dev-title">Dev workbench</h2>
+              <nav aria-label="Development tools">
+                <button data-panel="appearance" aria-label="Review town appearance stages">Appearance</button>
+                <button data-panel="catalogue" aria-label="Open building catalogue">Catalogue</button>
+                <button data-dev-action="refill" aria-label="Refill Dev test supplies">Supplies</button>
+                <button class="dev-reset-control" data-dev-action="reset" aria-label="Reset all town plots in Dev">Reset plots</button>
+              </nav>
+            </section>
+          </div>
+          <footer class="sidebar-footer">
+            <h2 class="sidebar-section-title" id="sidebar-player-title">Player controls</h2>
+            <nav class="sidebar-support" aria-labelledby="sidebar-player-title">
+              <button data-desktop-action="help" aria-label="Open help"><svg aria-hidden="true"><use href="#icon-help"/></svg><span>Help</span></button>
+              <button data-desktop-action="options" aria-label="Open options" aria-haspopup="dialog" aria-controls="actions-menu"><svg aria-hidden="true"><use href="#icon-buildings"/></svg><span>Options</span></button>
+            </nav>
+            <nav class="preview-mode-controls" aria-label="Local preview mode">
+              <button class="preview-mode-button preview-mode-dev" data-preview-mode="dev" aria-label="Use Dev workbench view" aria-pressed="true">Dev</button>
+              <button class="preview-mode-button preview-mode-gameplay" data-preview-mode="gameplay" aria-label="Use Gameplay view" aria-pressed="false">Gameplay</button>
+            </nav>
+          </footer>
+        </aside>
+        <nav class="desktop-compass desktop-paper" aria-label="Town camera controls" hidden>
+          <button class="desktop-camera-button" data-desktop-action="zoom-out" aria-label="Zoom out map" title="Zoom out"><svg aria-hidden="true"><use href="#icon-minus"/></svg></button>
+          <button class="desktop-camera-button desktop-camera-word" data-desktop-action="fit" aria-label="Fit all 23 town plots">Fit</button>
+          <button class="desktop-compass-center" data-desktop-action="center" aria-label="Recenter map" title="Center town"><svg aria-hidden="true"><use href="#icon-center"/></svg></button>
+          <button class="desktop-camera-button desktop-camera-word" data-desktop-action="close" aria-label="Inspect town details">Inspect</button>
+          <button class="desktop-camera-button" data-desktop-action="zoom-in" aria-label="Zoom in map" title="Zoom in"><svg aria-hidden="true"><use href="#icon-plus"/></svg></button>
+          <output id="desktop-map-zoom-level" aria-label="Map zoom" aria-live="polite" aria-atomic="true">Fit</output>
+        </nav>
+        </div>
+      <div class="toast" id="toast" hidden aria-hidden="true"></div>
+      <div class="visually-hidden" id="announcer" role="status" aria-live="polite" aria-atomic="true"></div>
+    </main>
+
+    <dialog class="actions-menu parchment" id="actions-menu" aria-labelledby="actions-title">
+      <div class="actions-heading"><div><span class="eyebrow">AZMARA</span><h2 id="actions-title">Options</h2></div><button class="icon-button" id="close-actions" aria-label="Close options"><svg aria-hidden="true"><use href="#icon-close"/></svg></button></div>
+      <div class="actions-content">
+        <nav class="town-actions" aria-label="Town navigation">
+          <button class="menu-action" id="show-town"><svg aria-hidden="true"><use href="#icon-town"/></svg><span>Return to town</span></button>
+          <button class="menu-action" data-panel="buildings"><svg aria-hidden="true"><use href="#icon-buildings"/></svg><span>Buildings</span></button>
+          <button class="menu-action rename-action" id="rename-town" aria-label="Rename your town"><svg aria-hidden="true"><use href="#icon-edit"/></svg><span>Rename town</span></button>
+        </nav>
+        <section class="menu-section" aria-labelledby="map-controls-title">
+          <h3 class="menu-section-title" id="map-controls-title">Map view</h3>
+          <div class="zoom-controls">
+            <button class="menu-action" id="zoom-out" aria-label="Zoom out"><svg aria-hidden="true"><use href="#icon-minus"/></svg><span>Out</span></button>
+            <output class="zoom-level" id="map-zoom-level" aria-label="Map zoom" aria-live="polite" aria-atomic="true">Fit</output>
+            <button class="menu-action" id="zoom-in" aria-label="Zoom in"><svg aria-hidden="true"><use href="#icon-plus"/></svg><span>In</span></button>
+          </div>
+          <div class="map-actions">
+            <button class="menu-action map-view-button" id="toggle-map-view" aria-label="Inspect town details" aria-pressed="false">Inspect</button>
+            <button class="menu-action" id="center-map" aria-label="Center town map"><svg aria-hidden="true"><use href="#icon-center"/></svg><span>Center</span></button>
+            <button class="menu-action" id="toggle-labels" aria-label="Hide building labels" aria-pressed="true"><svg aria-hidden="true"><use href="#icon-labels"/></svg><span>Labels</span></button>
+          </div>
+          <p class="menu-note">Tap a plot or Town Hall. Choose Inspect for detail, then swipe or use arrow keys to explore.</p>
+        </section>
+      </div>
+      <!-- Retain the original HUD sync targets without a second resource UI. -->
+      <div hidden><span id="resource-coins">2,400</span><span id="resource-timber">760</span><span id="resource-stone">540</span></div>
+    </dialog>
+
+    <dialog class="detail-panel parchment" id="detail-panel" aria-labelledby="panel-title">
+      <div class="panel-top"><span class="eyebrow" id="panel-kicker">Your town</span><button class="icon-button close-panel" id="close-panel" aria-label="Close panel"><svg aria-hidden="true"><use href="#icon-close"/></svg></button></div>
+      <div id="panel-content"></div>
+    </dialog>
+  </body>
+</html>

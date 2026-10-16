@@ -1,0 +1,52 @@
+{
+  "createdAt": "2026-10-11T22:17:32.735Z",
+  "purpose": "Pockets/entrances proposal only",
+  "method": "1:1 unchanged screenshots plus deterministic offline Canvas marks and appended side legend; no generative editing",
+  "images": [
+    {
+      "level": 1,
+      "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-11-oasis-pocket-proposal/measured-level-1-desktop.png",
+      "sourceSha256": "a638775d11e63e331a3e719ebbaef4706a9422be886efc762f05181fdd2158c8",
+      "output": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/docs/ideas/oasis-pocket-proposal/level-1-proposal.png",
+      "outputSha256": "ce1da08374d8243cbacb0ad30af6beceb62f3c41fa828b9adcb710c3be75f025",
+      "verification": {
+        "width": 1830,
+        "height": 900,
+        "sourceWidth": 1440,
+        "checkedPixels": 1293138,
+        "changedOutsideMarkup": 0,
+        "ctm": {
+          "a": 0.24680119253099012,
+          "b": 0,
+          "c": 0,
+          "d": 0.24680118840021026,
+          "e": 193.5730864584968,
+          "f": 161.46506806481398
+        }
+      }
+    },
+    {
+      "level": 50,
+      "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-11-oasis-pocket-proposal/measured-level-50-desktop.png",
+      "sourceSha256": "d5b89526797d4053a9faec90cc2922a49166dcbd7f56682dd3e23295807e2dbd",
+      "output": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/docs/ideas/oasis-pocket-proposal/level-50-proposal.png",
+      "outputSha256": "d5fcc7fbe2c3711f5ba974213deb12b006abaa6acacbff30dd8d444dd84c9220",
+      "verification": {
+        "width": 1830,
+        "height": 900,
+        "sourceWidth": 1440,
+        "checkedPixels": 1287141,
+        "changedOutsideMarkup": 0,
+        "ctm": {
+          "a": 0.24680119253099012,
+          "b": 0,
+          "c": 0,
+          "d": 0.24680118840021026,
+          "e": 193.5730864584968,
+          "f": 161.46506806481398
+        }
+      }
+    }
+  ],
+  "browserClosed": true
+}

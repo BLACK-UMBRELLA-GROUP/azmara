@@ -1,0 +1,181 @@
+{
+  "authority": "DEC-078; existing Owner-authorized exact fringe cleanup only",
+  "src": "assets/oasis-pilot/shade-middle-v1.png",
+  "width": 1254,
+  "height": 1254,
+  "rects": {
+    "M1": [
+      37,
+      345,
+      727,
+      585
+    ],
+    "M2": [
+      813,
+      465,
+      424,
+      465
+    ]
+  },
+  "alphaBodyBounds": {
+    "M1": [
+      45,
+      353,
+      711,
+      569
+    ],
+    "M2": [
+      821,
+      473,
+      408,
+      449
+    ]
+  },
+  "fullMotifOwnership": true,
+  "fullAtlasAlphaOwnership": false,
+  "excludedDetachedNoise": {
+    "pixels": 6661,
+    "maxAlpha": 1,
+    "sourcePixelsUnchanged": true
+  },
+  "componentAudit": {
+    "components": 2551,
+    "largest": [
+      {
+        "pixels": 259089,
+        "rect": [
+          45,
+          353,
+          711,
+          569
+        ],
+        "maxAlpha": 255
+      },
+      {
+        "pixels": 113379,
+        "rect": [
+          821,
+          473,
+          408,
+          449
+        ],
+        "maxAlpha": 255
+      },
+      {
+        "pixels": 202,
+        "rect": [
+          409,
+          322,
+          21,
+          25
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 140,
+        "rect": [
+          923,
+          176,
+          15,
+          25
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 139,
+        "rect": [
+          859,
+          1137,
+          15,
+          21
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 130,
+        "rect": [
+          853,
+          855,
+          19,
+          33
+        ],
+        "maxAlpha": 2
+      },
+      {
+        "pixels": 129,
+        "rect": [
+          771,
+          430,
+          17,
+          16
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 117,
+        "rect": [
+          517,
+          328,
+          18,
+          26
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 100,
+        "rect": [
+          972,
+          1160,
+          11,
+          22
+        ],
+        "maxAlpha": 1
+      },
+      {
+        "pixels": 99,
+        "rect": [
+          757,
+          468,
+          13,
+          14
+        ],
+        "maxAlpha": 1
+      }
+    ]
+  },
+  "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-0645b55a-2eb3-4992-a9fb-af4e2ad3cc75.png",
+  "sourceSha256": "cb5e520f0e267c8faf99155e908a7de174d96ad4565f093e66baa4c71e78fb03",
+  "runtimeSha256": "e3176b32288a12d5e0a372321d356b56cbd36c564011b884f9ca6538255dc325",
+  "bytes": 1052711,
+  "rgbaPixelBytes": 6290064,
+  "cleanup": {
+    "typeId": "shade-middle",
+    "source": "exec-0645b55a-2eb3-4992-a9fb-af4e2ad3cc75.png",
+    "runtime": "shade-middle-v1.png",
+    "width": 1254,
+    "height": 1254,
+    "sourceSha256": "cb5e520f0e267c8faf99155e908a7de174d96ad4565f093e66baa4c71e78fb03",
+    "runtimeSha256": "e3176b32288a12d5e0a372321d356b56cbd36c564011b884f9ca6538255dc325",
+    "mattePixels": {
+      "red": {
+        "candidates": 11412,
+        "cleared": 9231,
+        "protected": 2181
+      },
+      "yellow": {
+        "candidates": 2263,
+        "cleared": 2211,
+        "protected": 52
+      }
+    },
+    "changedPixels": 11442,
+    "originalPreserved": true,
+    "noncandidateRgbaUnchanged": true,
+    "allRgbUnchanged": true,
+    "alphaAbove8Unchanged": true,
+    "idempotent": true
+  },
+  "cropMethod": "Eight-pixel padding around complete nonzero-alpha connected motifs, including shadow/feather alpha1; exact runtime crop clips and uniform meet; no pixel crop/resample.",
+  "generationAttempts": 1,
+  "attemptLimit": 2
+}

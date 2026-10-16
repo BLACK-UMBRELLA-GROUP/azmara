@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-11",
+  "status": "Proposal only; Step 5 paused; no publication",
+  "inspection": "Main agent opened all four selected paint-overs and both annotated evidence images with view_image. Additional independent agents reviewed screenshots, code and the written proposal read-only.",
+  "referenceBoundary": "Only original AZMARA screenshots and an original AZMARA paint-over were passed to built-in ImageGen. No Ikariam image or crop was used as generation input.",
+  "attemptLimit": 2,
+  "generationCalls": 5,
+  "selectedPaintOverDimensions": { "width": 1586, "height": 992 },
+  "outputs": [
+    {
+      "file": "oasis-level-1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-15d16acb-7f94-4353-95c1-ddf8ee7677f9.png",
+      "attempt": 1,
+      "selected": true,
+      "sha256": "bdb0f3089d79f23e52589bf4e8bc1f87c8ffcb021cf67d13732c209d462f361f",
+      "findings": "Improved earth-clearings and ground hierarchy. Palm pocket and shade props exceed sparse founding-town intent; receding canyon remains. Fewer palms/props and a same-view illustrated rear ridge are needed. Generated UI/sprite drift is not accepted geometry."
+    },
+    {
+      "file": "oasis-level-50-attempt-1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-39dd8a50-e194-4b74-8b91-86873067034a.png",
+      "attempt": 1,
+      "selected": false,
+      "sha256": "180b47af5d2e93d862f712783d6c8fcc763d900b792c0234016631f2e40bba28",
+      "findings": "Better shared paving, public pockets and shade; missing clearly legible garden rills and retained canyon perspective. Kept only as generation provenance."
+    },
+    {
+      "file": "oasis-level-50.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-63185bf9-c451-4dd7-99d9-63079561b60b.png",
+      "attempt": 2,
+      "selected": true,
+      "sha256": "7d01c2b39ac76e68c4a3dc450c36475a2e5884279ea787d8b2681d0d47f3553b",
+      "findings": "Rear relief is closer to the elevated illustrated common-view intent. Long central diagonal channel is a miss: reads as a stream and crowds the Hall. Written replacement is one or two closed small fountain basins in one public garden pocket, optionally a short narrow connection inside that pocket only, away from streets and targets. No third attempt. Incidental wall towers, sprite/UI drift, scale and geometry remain unaccepted."
+    },
+    {
+      "file": "caravan-level-1.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-66ce7490-ef53-4721-a7fe-6d2089b3ab16.png",
+      "attempt": 1,
+      "selected": true,
+      "sha256": "81fb0f7227b6abffc8de6a9b12b3120875525e75333effb36eceadab84327df3",
+      "findings": "Useful dry tracks and compacted service ground. Receding canyon remains; same-view camera is not proven. Generated UI/sprite drift is not accepted geometry."
+    },
+    {
+      "file": "caravan-level-50.png",
+      "source": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-cf7eb06c-9de5-4370-8089-93b04af7819b.png",
+      "attempt": 1,
+      "selected": true,
+      "sha256": "c4dd7999cce6718bbedb4ee6700a1c425b061a63f66dba84fca711ff9dce21e2",
+      "findings": "Connected service courts and ground ownership improve cohesion. Too many tents, goods and people compete near controls; retained receding canyon needs replacement. Decorative activity is not new owned buildings or simulated population."
+    }
+  ],
+  "diagnostics": [
+    { "file": "diagnosis-start-desktop.png", "width": 1820, "height": 900, "sha256": "90f62e6316c0cd2785aa09975001b816868a1a0f1036c38c818f023451df4243" },
+    { "file": "diagnosis-level-50-desktop.png", "width": 1820, "height": 900, "sha256": "30aaf46f7515abcfe518b575546f0c7f08f278bf57e290cf63846efb58941256" }
+  ],
+  "acceptanceBoundary": "Concept direction and written rules only. Not proof of exact plot count/anchors, camera calibration, door registration, wall tower count, target accessibility, phone Fit, memory or maximum zoom. All open Step 5 defects remain unclosed.",
+  "scopeVerification": "See unchanged-scope-receipt.json for protected runtime/art, wall evidence, staged Site and native source/bundle hashes and modification times. No player save or queue was accessed."
+}

@@ -1,0 +1,214 @@
+{
+  "mode": "Built-in ImageGen",
+  "date": "2026-10-12",
+  "decision": "DEC-086",
+  "attemptsPerAsset": 1,
+  "referenceInputs": [
+    "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/docs/ideas/valley-wall-study/a-rear-pass-desktop-50-v1.png",
+    "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/assets/progression/azmara-hall-level-50.png"
+  ],
+  "assets": [
+    {
+      "kind": "cliffs",
+      "original": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-1170d8fa-76bd-4055-a16b-6fa2d8224352.png",
+      "projectCopy": "prototype/assets/valley-wall/rear-valley-cliffs-v1.png",
+      "prompt": "Use case: background-extraction / precise-object-edit.\nAsset type: ORIGINAL transparent rear-valley cliff raster for the AZMARA strategy game.\nInput1 is the approved AZMARA town mock-up, EDIT TARGET for extracting/recomposing only the northern orange sandstone cliffs. Input2 is AZMARA's own Hall sprite, angle/light/style reference only; do not include the building.\nPrimary request: isolate a single cohesive VERY WIDE LOW sandstone ridge strip with two inward-curving rocky shoulders and an OPEN central rear valley pass. Remove all UI, buildings, roads, ground rectangles, the wall, gate and towers. No wall anywhere in this asset.\nCamera: elevated orthographic/dimetric 2.5D painted miniature matching the building sprite, not a photo canyon and not a horizon/vanishing point.\nGeometry for use behind a town: two cliff shoulders flank a central dry open gap about22% of the entire ridge width. Cliffs extend a little toward the viewer around that gap, not giant arms surrounding the whole city. Front/south remains open; no ring, no foreground boulders, no whole-town scene.\nComposition: transparent LANDSCAPE1536x1024 canvas. Complete rock crowns, bases, sparse desert shrubs/palms and soft lower-right contact shadows belong to ONE narrow horizontal band within the upper half of the canvas, roughly x50..1486,y140..430; remainder completely transparent. Crucial: ridge must be broad/low (about5:1 opaque width:height), not tall towering cliffs consuming the playfield. Keep generous transparent padding on every side; no objects cut by image edges.\nMaterials: warm orange ochre sandstone with convincing layered surfaces and ledges, tiny sparse dry vegetation, upper-left sun, subtle lower-right shadow. Existing AZMARA palette. No flat 2D triangles. No broad opaque sand slab, beige box, black background, water/rivers/sea/boats/gods/text/logos.\nOutput: genuine alpha transparency, clean natural boundaries/no red fringe/no checkerboard baked into pixels. This will be registered behind independent live buildings, so NO buildings, people, wall, gate, towers, labels, UI or roads.",
+      "pixelEdits": "None; byte-exact project copy. Source SVG ownership crop only."
+    },
+    {
+      "kind": "wall-atlas",
+      "original": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-7cc8c562-3ca1-4c08-ab63-d722876ccb05.png",
+      "projectOriginal": "prototype/assets/valley-wall/rear-wall-atlas-v1-original.png",
+      "runtime": "prototype/assets/valley-wall/azmara-town-wall-stages-v2.png",
+      "prompt": "Use case: precise-object-edit / background-extraction.\nAsset type: ORIGINAL transparent three-row wall progression atlas for AZMARA.\nInput1 is approved AZMARA concept, EDIT TARGET: extract/recompose only its SHORT northern gate wall, not any town/UI/cliffs. Input2 is own AZMARA building sprite, camera/light/style reference only; no building in output.\nCreate a square transparent sprite atlas1536x1536 with exactly THREE separate complete horizontal short gate-wall specimens stacked top/middle/bottom. Each row same front-facing slightly elevated orthographic/dimetric angle as the concept's rear gate, same centered doorway, same span width and same ground baseline. Each is ONE cohesive short straight span with ONE central closed gate flanked by EXACTLY TWO towers/watch platforms, short side curtains ending just outside those towers. No side returns, no enclosing ring, no additional towers/gates; no mountains.\nRows: TOP timber: weak irregular upright timber posts/braced log wall, modest timber watch platforms, dark simple braced wooden double gate. MIDDLE adobe: warm earthen plaster/brick low curtain, two modest square adobe gate towers, same wooden door and position. BOTTOM sandstone: stronger dressed orange/cream sandstone blocks, two square crenellated towers, restrained teal details if present in source, dark arched double timber gate. Starts rough/weak, becomes stronger, not fantasy or deity-themed.\nComposition: each row roughly1200–1350px wide and280–330px high inside a500px row; complete towers, curtain ends, footprint and baked shadow included, at least70px transparent separation between rows and50px padding at canvas edges. No row touches another, no captions/numbers. Door midpoint is exactly centered horizontally in each row; gate door ground baseline should be consistent near the lower quarter of each row.\nStyle: dimensional hand-painted miniature, visible top/side faces, coherent upper-left light and soft lower-right grounded shadow, same scale/angle/palette as AZMARA's own sprite. Not copied modules or flat vector.\nOutput: genuine alpha, NO earth rectangle/base island, NO white/red/black background, no halo or red speckles, no ground scene, cliffs, other buildings, UI, people, rivers/water/boats/gods, text/logos/watermark. THREE wall specimens only. Preserve same recognizable gate composition across the three material variants.",
+      "pixelEdits": "Existing explicitly Owner-authorized exact matte RGB red/yellow alpha1–8 exterior fringe cleanup only;21266alpha changes, allRGB/alpha>8 unchanged."
+    }
+  ],
+  "registration": {
+    "atlas": {
+      "src": "assets/valley-wall/azmara-town-wall-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "scales": {
+        "desktop": 0.75,
+        "compact": 0.5
+      },
+      "variants": {
+        "timber": {
+          "crop": {
+            "x": 40,
+            "y": 55,
+            "width": 1200,
+            "height": 342
+          },
+          "alphaBounds": {
+            "x": 40,
+            "y": 55,
+            "width": 1200,
+            "height": 342
+          },
+          "gateSource": {
+            "x": 632,
+            "y": 286,
+            "openingWidth": 240,
+            "height": 150
+          },
+          "towers": [
+            {
+              "x": 302,
+              "y": 62,
+              "width": 184,
+              "height": 316
+            },
+            {
+              "x": 778,
+              "y": 62,
+              "width": 185,
+              "height": 316
+            }
+          ]
+        },
+        "adobe": {
+          "crop": {
+            "x": 35,
+            "y": 440,
+            "width": 1200,
+            "height": 345
+          },
+          "alphaBounds": {
+            "x": 35,
+            "y": 440,
+            "width": 1200,
+            "height": 345
+          },
+          "gateSource": {
+            "x": 632,
+            "y": 678,
+            "openingWidth": 240,
+            "height": 145
+          },
+          "towers": [
+            {
+              "x": 276,
+              "y": 449,
+              "width": 224,
+              "height": 323
+            },
+            {
+              "x": 770,
+              "y": 449,
+              "width": 207,
+              "height": 323
+            }
+          ]
+        },
+        "grandstone": {
+          "crop": {
+            "x": 35,
+            "y": 822,
+            "width": 1200,
+            "height": 353
+          },
+          "alphaBounds": {
+            "x": 35,
+            "y": 822,
+            "width": 1200,
+            "height": 353
+          },
+          "gateSource": {
+            "x": 632,
+            "y": 1062,
+            "openingWidth": 240,
+            "height": 144
+          },
+          "towers": [
+            {
+              "x": 277,
+              "y": 833,
+              "width": 229,
+              "height": 323
+            },
+            {
+              "x": 770,
+              "y": 833,
+              "width": 230,
+              "height": 323
+            }
+          ]
+        }
+      }
+    },
+    "valleyArt": {
+      "src": "assets/valley-wall/rear-valley-cliffs-v1.png",
+      "width": 1536,
+      "height": 1024,
+      "crop": {
+        "x": 0,
+        "y": 130,
+        "width": 1536,
+        "height": 362
+      },
+      "alphaBounds": {
+        "x": 10,
+        "y": 148,
+        "width": 1516,
+        "height": 326
+      },
+      "desktop": {
+        "x": -204,
+        "y": -846,
+        "scale": 3,
+        "focusBounds": {
+          "x": 1660,
+          "y": 140,
+          "width": 880,
+          "height": 440
+        },
+        "decorExclusions": [
+          {
+            "id": "valley-west-shoulder",
+            "x": -174,
+            "y": -402,
+            "width": 1794,
+            "height": 980
+          },
+          {
+            "id": "valley-east-shoulder",
+            "x": 2580,
+            "y": -402,
+            "width": 1794,
+            "height": 980
+          }
+        ]
+      },
+      "compact": {
+        "x": 1883,
+        "y": 940,
+        "scale": 1.65,
+        "focusBounds": {
+          "x": 2840,
+          "y": 1380,
+          "width": 620,
+          "height": 350
+        },
+        "decorExclusions": [
+          {
+            "id": "valley-west-shoulder",
+            "x": 1899.5,
+            "y": 1184.2,
+            "width": 950,
+            "height": 540
+          },
+          {
+            "id": "valley-east-shoulder",
+            "x": 3450,
+            "y": 1184.2,
+            "width": 950,
+            "height": 540
+          }
+        ]
+      }
+    }
+  },
+  "verification": "Originals retained; Root inspected original and cleaned art. Final browser/phone verification manual, no automatic browser."
+}

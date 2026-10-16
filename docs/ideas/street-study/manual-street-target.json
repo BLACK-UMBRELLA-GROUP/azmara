@@ -1,0 +1,189 @@
+{
+  "kind": "Proposal-only manual composition; no runtime code or saved state changed",
+  "sourceComposition": "Approved canyon top layers plus original AZMARA ground/building/scenery assets",
+  "canvas": {
+    "width": 1123,
+    "height": 784,
+    "origin": "upper-left",
+    "yDirection": "down"
+  },
+  "layout": "grid",
+  "buildingScale": 0.8,
+  "fixedHall": {
+    "id": "HALL",
+    "x": 561,
+    "y": 410,
+    "rx": 84,
+    "ry": 52
+  },
+  "fixedGate": [
+    561,
+    136
+  ],
+  "plotAnchorsChanged": false,
+  "plots": [
+    {
+      "id": "G02",
+      "x": 210,
+      "y": 244
+    },
+    {
+      "id": "G03",
+      "x": 385,
+      "y": 244
+    },
+    {
+      "id": "G04",
+      "x": 561,
+      "y": 329
+    },
+    {
+      "id": "G05",
+      "x": 737,
+      "y": 244
+    },
+    {
+      "id": "G06",
+      "x": 913,
+      "y": 244
+    },
+    {
+      "id": "G07",
+      "x": 210,
+      "y": 353
+    },
+    {
+      "id": "G08",
+      "x": 385,
+      "y": 353
+    },
+    {
+      "id": "G09",
+      "x": 737,
+      "y": 353
+    },
+    {
+      "id": "G10",
+      "x": 913,
+      "y": 353
+    },
+    {
+      "id": "G11",
+      "x": 210,
+      "y": 465
+    },
+    {
+      "id": "G12",
+      "x": 385,
+      "y": 465
+    },
+    {
+      "id": "G13",
+      "x": 737,
+      "y": 465
+    },
+    {
+      "id": "G14",
+      "x": 913,
+      "y": 465
+    },
+    {
+      "id": "G15",
+      "x": 210,
+      "y": 577
+    },
+    {
+      "id": "G16",
+      "x": 385,
+      "y": 577
+    },
+    {
+      "id": "G17",
+      "x": 561,
+      "y": 577
+    },
+    {
+      "id": "G18",
+      "x": 737,
+      "y": 577
+    },
+    {
+      "id": "G19",
+      "x": 913,
+      "y": 577
+    },
+    {
+      "id": "C1",
+      "x": 222,
+      "y": 630
+    },
+    {
+      "id": "C2",
+      "x": 902,
+      "y": 630
+    },
+    {
+      "id": "F1",
+      "x": 561,
+      "y": 678
+    }
+  ],
+  "contacts": {
+    "G05": "SE",
+    "G09": "NE",
+    "G13": "NE",
+    "G04": "NE",
+    "G17": "NE",
+    "G18": "NE",
+    "G19": "NW",
+    "C2": "SE",
+    "G14": "NE",
+    "G10": "SE",
+    "F1": "NE",
+    "G06": "SW",
+    "G16": "SE",
+    "G12": "NE",
+    "G08": "NE",
+    "G03": "NE",
+    "C1": "NE",
+    "G15": "NE",
+    "G11": "NE",
+    "G07": "NE",
+    "G02": "SE"
+  },
+  "verification": {
+    "sideContactCount": 21,
+    "expectedSideContactCount": 21,
+    "verifiedPlanContactsMatch": true,
+    "segmentCount": 71
+  },
+  "streetRules": {
+    "axes": [
+      0.55,
+      -0.55
+    ],
+    "allSegmentsValid": true,
+    "mainWidth": 39,
+    "laneWidth": 20,
+    "ringRoad": false,
+    "bareSandDeadEnds": false
+  },
+  "art": {
+    "main": "sandstone paving",
+    "lanes": "packed earth with wheel ruts",
+    "levelUpgrade": "reserved for a later approved implementation",
+    "movingDetails": 0
+  },
+  "outputs": [
+    {
+      "level": 1,
+      "svg": "manual-start-v1.svg",
+      "png": "manual-start-v1.png"
+    },
+    {
+      "level": 50,
+      "svg": "manual-level50-v1.svg",
+      "png": "manual-level50-v1.png"
+    }
+  ]
+}

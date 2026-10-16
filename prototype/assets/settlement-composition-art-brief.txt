@@ -1,0 +1,39 @@
+AZMARA — composed starting-settlement artwork, 8 October 2026
+
+Authority: DEC-034. Original fictional Islamic Golden Age-inspired game artwork.
+Method: built-in image_gen tool; three new independently generated assets.
+No proprietary reference-game images supplied to generation.
+Copied without post-generation pixel editing; historical originals retained.
+All generated town objects are separately placed by code. Terrain contains no
+occupied buildings, fixed plots, flags or completed infrastructure.
+
+Terrain
+Saved project asset: prototype/assets/azmara-starting-terrain-v2.png
+Original: <LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-a93e025c-26e7-4d93-8a31-9f76feb02a9a.png
+1254 × 1254 RGB, opaque.
+Actual shoreline is irregular/diagonal: approximately 60–80% of image height,
+not an exact horizontal 78% line. Placement and waterfront anchors must follow
+the inspected result while preserving aspect ratio.
+
+Empty plot
+Saved project asset: prototype/assets/azmara-empty-plot-v2.png
+Original: <LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-d1f0a0af-dbc8-442b-bc65-b3ba6f02bfaa.png
+1536 × 1024 RGBA, alpha range 0–254, transparent top-left corner.
+Bare-earth clearing with blue flag and timber stakes; no completed foundation.
+
+Town Hall
+Saved project asset: prototype/assets/azmara-town-hall-v2.png
+Original: <LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-b3b75f1d-b6f5-40ee-a0d8-0b9669a11b18.png
+1536 × 1024 RGBA, alpha range 0–254, transparent top-left corner.
+Modest sandbrick flat-roof civic courtyard; no sacred building or extra facility.
+The same artwork represents the existing illustrative Hall levels; this does
+not implement progression-art stages.
+
+FINAL TERRAIN PROMPT
+Use case: stylized-concept. Asset type: square seamless-edge-friendly town landscape backdrop for a mobile/web strategy game; separately coded building sites will overlay it. Primary request: an original welcoming starting-settlement riverside terrain illustration with believable depth and large usable open land. Style: Original hand-painted isometric strategy-game illustration, fixed elevated three-quarter orthographic camera, clear small-scale readable forms, gently stylized painted shading, soft warm upper-left sunlight and short lower-right shadows. Muted leaf greens, dusty ochre earth, sand-colored clay brick and turquoise water. NOT photorealistic, NOT pixel art, NOT a flat top-down board, NOT glossy 3D render. Consistent restrained illustrated game-asset style for AZMARA, fictional Islamic Golden Age-inspired civilisation, no sacred content. Composition: square, land across upper roughly 78% of image, a gently curving continuous river shoreline crossing around 78% of image height, turquoise water across bottom roughly22%. Mostly open gentle grassy and dusty earth throughout central area x20–80%, y20–72% so 23 selectable sites can be placed there separately. Natural irregular patches, a few low sloping terraces at the edges, banks visibly raised above water, modest rounded rocks and clusters of palms/leafy trees mainly along left/right and upper boundaries. No symmetrical grid or rows. Interior open ground must be visually calm; simplify fine texture to support readable small game sprites. No tall cliff enclosing every side. No completed roads, no buildings, no walls, no plots, no square pads, no flags, no piers, no boats, no people, no text, no UI, no deities, no statues. Fully opaque full-bleed illustration.
+
+FINAL EMPTY-PLOT PROMPT
+Use case: stylized-concept. Asset type: transparent empty construction-site sprite. Primary request: one original empty cleared patch of earth with one small blue cloth flag and four inconspicuous timber corner stakes. Style: Original hand-painted isometric strategy-game illustration, fixed elevated three-quarter orthographic camera, clear small-scale readable forms, gently stylized painted shading, soft warm upper-left sunlight and short lower-right shadows. Muted leaf greens, dusty ochre earth, sand-colored clay brick and turquoise water. NOT photorealistic, NOT pixel art, NOT a flat top-down board, NOT glossy 3D render. Consistent restrained illustrated game-asset style for AZMARA, fictional Islamic Golden Age-inspired civilisation, no sacred content. Composition: a single wide isometric diamond footprint viewed at the same elevated three-quarter camera; a quiet low ground clearing, not a raised platform, not a tile/block. Soft irregular dusty ochre edges fading naturally into grass wisps; no paving or completed foundations. Blue flag on a slim wooden pole positioned at rear-left side, blue fabric clearly readable when small, no symbol/text on flag. Keep the overall sprite compact with no excessive empty margins, complete shadow fits inside canvas. One site only, no building, no other objects, no background landscape, no text/UI, no sacred/deity content. Genuinely transparent surrounding background, preserve true alpha.
+
+FINAL TOWN-HALL PROMPT
+Use case: stylized-concept. Asset type: transparent level-1 Town Hall sprite. Primary request: one modest sandbrick civic courtyard house for the beginning of a fictional Islamic Golden Age-inspired settlement. Style: Original hand-painted isometric strategy-game illustration, fixed elevated three-quarter orthographic camera, clear small-scale readable forms, gently stylized painted shading, soft warm upper-left sunlight and short lower-right shadows. Muted leaf greens, dusty ochre earth, sand-colored clay brick and turquoise water. NOT photorealistic, NOT pixel art, NOT a flat top-down board, NOT glossy 3D render. Consistent restrained illustrated game-asset style for AZMARA, fictional Islamic Golden Age-inspired civilisation, no sacred content. Composition: elevated isometric three-quarter view, one simple low rectangular courtyard complex with two small connected flat-roof wings and a modest shaded wooden entrance; clear coherent silhouette readable on phone; simple brick edges and restrained ochre clay material. This is a small starting civic building, NOT a palace or advanced capital. Slightly raised shallow base with soft contact shadow, no oversized square plinth. Full object and shadow visible, centered with small transparent margin. No dome, minaret, sacred building, religious symbol/text, statues, extravagant decoration, greenery hiding the silhouette, flags, people, roads or surrounding landscape. Genuinely transparent surrounding background, preserve true alpha.

@@ -1,0 +1,393 @@
+/* Approved 15 Oct 2026 AZMARA information shell.
+   This layer owns presentation only; the existing map, saves and panel logic
+   remain authoritative underneath it. */
+:root {
+  --azmara-ui-paper: #f5e8c9;
+  --azmara-ui-paper-light: #fff7df;
+  --azmara-ui-ink: #5b3b22;
+  --azmara-ui-muted: #8d7455;
+  --azmara-ui-line: #b88d50;
+  --azmara-ui-teal: #2f776e;
+  --azmara-ui-copper: #a76639;
+  --azmara-ui-shadow: #26180f52;
+  --azmara-townbar-left: 14px;
+  --azmara-townbar-top: 12px;
+  --azmara-townbar-height: 48px;
+  --azmara-dock-left: 14px;
+  --azmara-dock-top: 72px;
+  --sidebar-inset: 0px !important;
+}
+
+.scene { left: 0 !important; }
+.desktop-hud { display: none !important; }
+
+.azmara-interface {
+  position: fixed;
+  inset: 0;
+  z-index: 14;
+  pointer-events: none;
+  color: var(--azmara-ui-ink);
+}
+
+.azmara-interface button { pointer-events: auto; }
+.azmara-interface svg { flex: 0 0 auto; }
+.azmara-interface button:focus-visible {
+  outline: 3px solid #49a89a;
+  outline-offset: 2px;
+  position: relative;
+  z-index: 3;
+}
+
+.azmara-town-bar {
+  position: fixed;
+  top: calc(var(--azmara-townbar-top) + var(--safe-top));
+  left: var(--azmara-townbar-left);
+  display: flex;
+  align-items: stretch;
+  width: min(1040px, calc(100vw - 28px));
+  height: var(--azmara-townbar-height);
+  padding: 3px;
+  border-radius: 17px;
+  overflow: hidden;
+  pointer-events: auto;
+  box-shadow: inset 0 0 0 2px #fff7e2, inset 0 0 0 4px #c59a5c47, 0 5px 18px var(--azmara-ui-shadow);
+}
+
+.azmara-town-bar button {
+  min-width: 44px;
+  min-height: 40px;
+  color: var(--azmara-ui-ink);
+  border: 0;
+  border-right: 1px solid #b9946080;
+  background: transparent;
+}
+
+.azmara-town-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 154px;
+  padding: 4px 9px;
+  text-align: left;
+}
+.azmara-town-chip > svg:first-child { width: 21px; height: 21px; color: var(--azmara-ui-copper); }
+.azmara-town-chip strong {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: #50311d;
+  font: 600 14px/1.1 Georgia, "Times New Roman", serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.azmara-town-edit { width: 14px; height: 14px; color: #9c7041; }
+
+.azmara-map-switcher { display: flex; align-items: stretch; }
+.azmara-map-switcher button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 70px;
+  padding: 3px 5px;
+  font-size: 11px;
+}
+.azmara-map-switcher svg { width: 18px; height: 18px; color: #8d6036; }
+.azmara-map-switcher button.active,
+.azmara-map-switcher button[aria-current="page"] {
+  color: #2d6d63;
+  background: linear-gradient(180deg, #e6ead1, #d2d9b1);
+  box-shadow: inset 0 0 0 1px #718c6c;
+}
+
+.azmara-population-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 96px;
+  padding: 3px 8px;
+}
+.azmara-population-chip svg { width: 20px; height: 20px; color: #8f603a; }
+.azmara-population-chip span { display: grid; gap: 1px; text-align: left; }
+.azmara-population-chip small { color: var(--azmara-ui-muted); font-size: 8px; letter-spacing: .04em; }
+.azmara-population-chip strong { font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.azmara-resource-ribbon {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: stretch;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+}
+.azmara-resource-ribbon::-webkit-scrollbar { display: none; }
+.azmara-resource-chip {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 67px;
+  padding: 4px 8px;
+  border-right: 1px solid #b9946060;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.azmara-resource-chip svg { width: 18px; height: 18px; }
+.azmara-resource-chip:nth-child(1) svg { color: #b07d24; }
+.azmara-resource-chip:nth-child(2) svg { color: #99612d; }
+.azmara-resource-chip:nth-child(3) svg { color: #a15f43; }
+.azmara-resource-chip:nth-child(4) svg { color: #63818a; }
+.azmara-resource-chip:nth-child(5) svg { color: #9b8128; }
+.azmara-resource-chip:nth-child(6) svg { color: #6f776b; }
+
+.azmara-pearls-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 70px;
+  padding: 4px 7px;
+  border-right: 0 !important;
+}
+.azmara-pearls-chip svg { width: 19px; height: 19px; color: #4d8e9a; }
+.azmara-pearls-chip span {
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  color: #fff8df;
+  background: #2f776e;
+  font-weight: 700;
+}
+
+.azmara-side-dock {
+  position: fixed;
+  top: calc(var(--azmara-dock-top) + var(--safe-top));
+  left: var(--azmara-dock-left);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 86px;
+  max-height: calc(100dvh - var(--azmara-dock-top) - 14px - var(--safe-top) - var(--safe-bottom));
+  padding: 8px;
+  border-radius: 20px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  pointer-events: auto;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.azmara-side-dock::-webkit-scrollbar { display: none; }
+.azmara-side-dock button {
+  display: flex;
+  flex: 0 0 62px;
+  width: 70px;
+  min-width: 70px;
+  min-height: 62px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 3px;
+  color: #69472a;
+  border: 1px solid #bd98626b;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff1cfba, #e8c98e7a);
+  box-shadow: inset 0 1px #fff9e6b8, 0 1px 2px #5c432529;
+  font-size: 10px;
+  line-height: 1.05;
+}
+.azmara-side-dock button svg { width: 22px; height: 22px; color: #8d5d35; }
+.azmara-side-dock button:hover { filter: brightness(1.04); }
+.azmara-side-dock button.active,
+.azmara-side-dock button[aria-current="page"] {
+  color: #275f57;
+  border-color: #769078;
+  background: linear-gradient(180deg, #e7ecd4, #cdd9b5);
+}
+.azmara-side-dock button.active svg,
+.azmara-side-dock button[aria-current="page"] svg { color: #2f776e; }
+.azmara-side-dock .azmara-dock-hide {
+  flex-basis: 44px;
+  min-height: 44px;
+  color: #795536;
+  background: #f3e4c3;
+}
+.azmara-dock-hide svg { width: 17px !important; height: 17px !important; transform: rotate(180deg); }
+
+.azmara-dock-reveal {
+  position: fixed;
+  top: calc(var(--azmara-dock-top) + var(--safe-top));
+  left: var(--azmara-dock-left);
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 14px;
+  color: #9b6535;
+  font: 24px/1 Georgia, serif;
+  pointer-events: auto;
+}
+body[data-azmara-dock-collapsed="true"] .azmara-side-dock {
+  opacity: 0;
+  transform: translateX(-110%);
+  visibility: hidden;
+  pointer-events: none;
+}
+body[data-azmara-dock-collapsed="true"] .azmara-dock-reveal { display: block; }
+
+.azmara-dev-button {
+  position: fixed;
+  top: calc(var(--azmara-townbar-top) + var(--safe-top));
+  right: 14px;
+  min-width: 54px;
+  height: var(--azmara-townbar-height);
+  padding: 0 12px;
+  border-radius: 15px;
+  color: #fff7df;
+  border-color: #204d47;
+  background: linear-gradient(180deg, #4c887e, #2f615a);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 2px #fff0bd3d, 0 4px 14px #24190f42;
+}
+
+.azmara-phone-dock { display: none; }
+
+/* Replace the old flat pilot paint with the approved one-picture foundation.
+   The current layered wall and live building sprites remain above it. */
+#town-terrain-overlay,
+#town-street-ground,
+#town-scenery-decor,
+#town-wall-approach { display: none !important; }
+#azmara-oasis-foundation { display: block; }
+
+/* Content panels open beside the dock rather than replacing the game. */
+@media (min-width: 700px) {
+  #detail-panel:not(.appearance-tool),
+  #actions-menu {
+    top: calc(72px + var(--safe-top));
+    left: 116px;
+    right: auto;
+    bottom: auto;
+    width: min(480px, calc(100vw - 136px));
+    max-width: min(480px, calc(100vw - 136px));
+    max-height: calc(100dvh - 84px - var(--safe-top) - var(--safe-bottom));
+    margin: 0;
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 3px #fff4d9, inset 0 0 0 4px #b89a6452, 0 12px 36px #21170f57;
+  }
+  #detail-panel:not(.appearance-tool) #panel-content { padding: 6px 24px 24px; }
+  #detail-panel:not(.appearance-tool) .overview-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #detail-panel:not(.appearance-tool) .building-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+  #detail-panel:not(.appearance-tool)::backdrop,
+  #actions-menu::backdrop { background: #24180e22; }
+}
+
+@media (min-width: 700px) and (max-width: 1120px) {
+  .azmara-town-bar { width: calc(100vw - 96px); }
+  .azmara-dev-button { top: calc(68px + var(--safe-top)); right: 12px; height: 42px; }
+  .azmara-town-chip { width: 132px; }
+  .azmara-map-switcher button { width: 62px; }
+  .azmara-population-chip { width: 84px; }
+  .azmara-resource-chip { min-width: 61px; }
+}
+
+@media (max-width: 699px) {
+  :root {
+    --azmara-townbar-left: 8px;
+    --azmara-townbar-top: 8px;
+    --azmara-townbar-height: auto;
+  }
+  .azmara-town-bar {
+    right: 8px;
+    width: auto;
+    height: auto;
+    min-height: 88px;
+    display: grid;
+    grid-template-columns: minmax(108px, 1fr) auto auto;
+    grid-template-rows: 44px 38px;
+    padding: 4px;
+    border-radius: 15px;
+  }
+  .azmara-town-chip { width: auto; min-width: 0; }
+  .azmara-town-chip strong { font-size: 13px; }
+  .azmara-town-edit { display: none; }
+  .azmara-map-switcher { grid-column: 2; grid-row: 1; }
+  .azmara-map-switcher button { width: 44px; min-width: 44px; padding: 2px; }
+  .azmara-map-switcher button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .azmara-population-chip { grid-column: 3; grid-row: 1; width: 52px; padding: 3px; }
+  .azmara-population-chip small { display: none; }
+  .azmara-population-chip strong { font-size: 11px; }
+  .azmara-resource-ribbon { grid-column: 1 / 3; grid-row: 2; }
+  .azmara-resource-chip { min-width: 60px; padding: 3px 6px; font-size: 11px; }
+  .azmara-resource-chip svg { width: 17px; height: 17px; }
+  .azmara-pearls-chip { grid-column: 3; grid-row: 2; width: 52px; min-height: 38px !important; }
+  .azmara-side-dock,
+  .azmara-dock-reveal { display: none !important; }
+  .azmara-dev-button {
+    top: calc(101px + var(--safe-top));
+    right: 8px;
+    height: 40px;
+    min-width: 48px;
+    border-radius: 12px;
+  }
+  .azmara-phone-dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px;
+    min-height: calc(68px + var(--safe-bottom));
+    padding: 5px 4px calc(5px + var(--safe-bottom));
+    border-width: 1px 0 0;
+    border-radius: 17px 17px 0 0;
+    pointer-events: auto;
+  }
+  .azmara-phone-dock button {
+    display: flex;
+    min-width: 44px;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+    padding: 4px 1px;
+    color: #704d2e;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    font-size: clamp(8px, 2.3vw, 10px);
+    line-height: 1;
+  }
+  .azmara-phone-dock svg { width: 21px; height: 21px; }
+  .azmara-phone-dock button.active,
+  .azmara-phone-dock button[aria-current="page"] {
+    color: #2c675f;
+    border-color: #738d726e;
+    background: #dce2c2a8;
+  }
+  #detail-panel:not(.appearance-tool),
+  #actions-menu {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: calc(68px + var(--safe-bottom));
+    width: 100%;
+    max-width: 100%;
+    max-height: 72dvh;
+    margin: 0;
+    border-radius: 19px 19px 0 0;
+    box-shadow: inset 0 0 0 3px #fff4d9, 0 -10px 35px #21170f4d;
+  }
+  #detail-panel:not(.appearance-tool)::backdrop,
+  #actions-menu::backdrop { background: #24180e54; }
+  .toast { bottom: calc(78px + var(--safe-bottom)) !important; left: 50% !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .azmara-side-dock { transition: none; }
+}

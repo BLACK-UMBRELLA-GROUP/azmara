@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-11",
+  "evidence": "Observed execution of the pure Node geometry suite after the principal fountain source was refrozen.",
+  "command": "<LOCAL_HOME>/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node prototype/tests/scenery-layout.cjs",
+  "cwd": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM",
+  "exitCode": 0,
+  "sourceSha256": {
+    "prototype/building-art.js": "f52fc3cb93649d06769863f3af2e270eedc258d50e045e8062611efb717a3621",
+    "prototype/tests/scenery-layout.cjs": "21664f8813d76c24e706179238e578d86977c59b00ca4d4855b54196d17ef0f3",
+    "prototype/tests/fixtures/compact-ideal50-footprints.json": "f168ec6e1597fb4c60cf017db2552098e8a47d5ee8dca5d1ecdca587d4378218",
+    "prototype/tests/fixtures/desktop-grid50-footprints.json": "626f218a3e31f6c0765728fc802ae48c85c07bb28f2b97174d9b6924828cc387"
+  },
+  "result": {
+    "groups": 176,
+    "profiles": 16,
+    "activeStableSchedules": 30,
+    "buildingLevelChecks": 1550,
+    "roadSegmentPlotChecks": 226573,
+    "ornamentPlotChecks": 22609,
+    "localApproachChecks": 3570,
+    "fullFountainRoadChecks": 6705,
+    "browserCertification": false
+  },
+  "profiles": "Five source layout choices in desktop and compact native geometry (10), four explicit expanded/native stress fixtures, plus independent live-recovered compact390x844 Ideal50 and desktop1280x720 Grid native footprint captures (2). Each profile covers11 Hall milestones.",
+  "assertions": [
+    "At level50 every tested profile contains at least one full-size45x42 native fountain.",
+    "No road painted-width envelope plus5px margin crosses any full plot rectangle.",
+    "Every complete fountain/shadow rectangle clears every road painted-width envelope plus3px.",
+    "Every ornament's full declared bounds clear full plot rectangles plus6px.",
+    "Approaches carry the exact plot owner, use lesser Hall/building quality, and terminate beyond the protected full footprint.",
+    "Thirty active roles have different immutable deterministic eleven-stage schedules; legacy Shipyard maps to Caravan artwork.",
+    "All1550 readable ID/completed-level descriptors refer to existing local artwork and valid native crops."
+  ],
+  "boundary": "Pure numerical/native-SVG checks, not browser or current viewport certification. Source-anchor fixtures are not actual responsive poses. The independent captured fixtures record the stated390/1280 views at their capture precision; the later2560x900 wall projection fix is separately covered by browser QA fresh CTM captures. No saves, levels, resources, queues, timers or native app were changed by this suite."
+}

@@ -1,0 +1,12 @@
+AZMARA starting-town civic hall sprite
+Date: 8 October 2026
+Authority: DEC-032
+Method: built-in image generation; transparent-background request.
+Output: azmara-town-hall-v1.png, 1536 x 1024 RGBA.
+Observed alpha range: 0..254; corner pixel fully transparent.
+Use: one modest Town Hall in the original 23-plot starting-settlement layout.
+Not a historical reconstruction, final architecture choice or progression stage set.
+The old city concept image is retained separately and is not this starting map.
+
+Final generation prompt:
+Use case: stylized-concept. Asset type: single transparent-background town-building sprite for the original strategy game AZMARA. Primary request: a modest level-1 Town Hall in a fictional civilisation inspired by the Abbasid era and Islamic Golden Age, seen from a high isometric strategy-game camera. One small simple sand-coloured mud-brick civic courtyard building, flat roofs, one timber doorway, a restrained arched entrance, simple modest proportions appropriate to a brand-new settlement. Warm earthy illustrated game art, crisp readable silhouette, tasteful hand-painted detail. Ground footprint is a shallow isometric diamond; entire building and a very small dusty base are visible, centered with generous transparent margin. Lighting from upper left, soft small shadow contained beneath footprint. Constraints: truly transparent background; exactly one civic building and its enclosed courtyard, no surrounding houses or city, no roads spreading out, no UI, no text, no numbers, no logos or watermark. No sacred building, no minaret, no sacred texts, no statues, gods or supernatural effects. This is a humble early settlement civic hall, not a palace.

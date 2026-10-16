@@ -1,0 +1,32 @@
+{
+  "kind": "Proposal-only annotated plan; not runtime art",
+  "source": "owner-road-markup.png",
+  "layout": "grid",
+  "plotAnchorsChanged": false,
+  "roadSegmentAxesVerified": true,
+  "mainWidthPixels": 39,
+  "laneWidthPixels": 20,
+  "contacts": {
+    "G05": "SE",
+    "G09": "NE",
+    "G13": "NE",
+    "G04": "NE",
+    "G17": "NE",
+    "G18": "NE",
+    "G19": "NW",
+    "C2": "SE",
+    "G14": "NE",
+    "G10": "SE",
+    "F1": "NE",
+    "G06": "SW",
+    "G16": "SE",
+    "G12": "NE",
+    "G08": "NE",
+    "G03": "NE",
+    "C1": "NE",
+    "G15": "NE",
+    "G11": "NE",
+    "G07": "NE",
+    "G02": "SE"
+  }
+}

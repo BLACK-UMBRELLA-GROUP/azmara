@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-12",
+  "status": "Proposal only; Owner prefers A under DEC-083; no route or implementation approval.",
+  "tool": "Built-in ImageGen",
+  "edits_after_generation": "None; byte-exact copies. Original generated files retained.",
+  "records": [
+    {
+      "output": "a-rear-pass-desktop-start-v1.png",
+      "original": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-89b3daf5-31ab-4a0a-9e34-43c4bd6a5ade.png",
+      "attempt": 1,
+      "prompt": "Use case: precise-object-edit. Proposal-only paint-over of AZMARA's own new sidebar screenshot. Owner has selected the REAR/NORTHERN VALLEY PASS composition in Image2.\nImage1 is the edit target. Image2 is the chosen original AZMARA rear-pass concept, for cliff geography, wall route and same-angle materials only. Preserve all original sidebar/strip UI, text, menu and zoom controls; edit ONLY game landscape/obsolete ring fortifications. Keep every original town building/plot silhouette and relative location; no new town buildings, players or sites. Preserve the game's elevated orthographic/dimetric 2.5D angle, warm upper-left sun/lower-right shadow, original desert palette, not photo perspective.\nThe town remains on the broad open plain SOUTH/in front of the valley pass. Upper sandstone cliffs descend into the upper-middle/centre and create a narrow pass BEHIND the town. The sides open outward around, never cover/move plots. NO enclosing front wall, side-return curtains or ring. This preferred route is a visual concept, not registered runtime gate/control geometry; do not invent controls/labels/callouts.\nDesktop1440x900 target. Preserve304px full left sidebar. TRUE GAME START: exactly one existing small wooden TownHall,22empty sites represented by subtlebare-earth stakes at their present locations. NO BUILT WALL/GATE/TOWERS or any other buildings. The rear-pass gap remains OPEN between cliffs, showing the future gate-wall location only through geography; do not copy Image2's completedwall. BarequietOasisfoundingground, one sparsepalmpocket, no paving/fountains/formalgardens/water.",
+      "referenced_images": [
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-12-sidebar-valley/after-captures-2026-10-12T10-31-43-036Z//after-captures-start1-desktop-fit.png",
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/docs/ideas/valley-wall-study/a-rear-pass-desktop-50-v1.png"
+      ]
+    },
+    {
+      "output": "a-rear-pass-phone-start-v1.png",
+      "original": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-7a8c4d91-b106-4bbb-9c35-50a59db8f24f.png",
+      "attempt": 1,
+      "prompt": "Use case: precise-object-edit. Proposal-only paint-over of AZMARA's own new sidebar screenshot. Owner has selected the REAR/NORTHERN VALLEY PASS composition in Image2.\nImage1 is the edit target. Image2 is the chosen original AZMARA rear-pass concept, for cliff geography, wall route and same-angle materials only. Preserve all original sidebar/strip UI, text, menu and zoom controls; edit ONLY game landscape/obsolete ring fortifications. Keep every original town building/plot silhouette and relative location; no new town buildings, players or sites. Preserve the game's elevated orthographic/dimetric 2.5D angle, warm upper-left sun/lower-right shadow, original desert palette, not photo perspective.\nThe town remains on the broad open plain SOUTH/in front of the valley pass. Upper sandstone cliffs descend into the upper-middle/centre and create a narrow pass BEHIND the town. The sides open outward around, never cover/move plots. NO enclosing front wall, side-return curtains or ring. This preferred route is a visual concept, not registered runtime gate/control geometry; do not invent controls/labels/callouts.\nPhone390x844 portrait. Preserve56px left strip and bottomzoomcontrols. TRUE GAMESTART: exactlyone existing smallwoodenTownHall and22emptysites at currentphone-relativepositions, subtleearthstakes ratherthangreenboardgametiles. NO BUILTWALL/GATE/TOWERS/otherbuildings. The rear-passgap behind/northofthesites is OPEN, representing futurewalllocation onlybygeography. QuietbareOasisground likeImage2without maturepaving/gardens/fountains. Atmostone sparsefoundingpalmrefuge. Removeoldphotolikecanyon/horizontalgroundseam. Keep playabletownlarge; nocliffscoveringsites.",
+      "referenced_images": [
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-12-sidebar-valley/after-captures-2026-10-12T10-31-43-036Z//after-captures-start1-phone-fit.png",
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/docs/ideas/valley-wall-study/a-rear-pass-desktop-50-v1.png"
+      ]
+    },
+    {
+      "output": "a-rear-pass-phone-50-v1.png",
+      "original": "<LOCAL_HOME>/.codex/generated_images/01a110d7-7840-71d3-b4bb-ec945e585d0b/exec-52e426ff-65bf-4238-a9d7-876ae02ca88d.png",
+      "attempt": 1,
+      "prompt": "Use case: precise-object-edit. Proposal-only paint-over of AZMARA's own new sidebar screenshot. Owner has selected the REAR/NORTHERN VALLEY PASS composition in Image2.\nImage1 is the edit target. Image2 is the chosen original AZMARA rear-pass concept, for cliff geography, wall route and same-angle materials only. Preserve all original sidebar/strip UI, text, menu and zoom controls; edit ONLY game landscape/obsolete ring fortifications. Keep every original town building/plot silhouette and relative location; no new town buildings, players or sites. Preserve the game's elevated orthographic/dimetric 2.5D angle, warm upper-left sun/lower-right shadow, original desert palette, not photo perspective.\nThe town remains on the broad open plain SOUTH/in front of the valley pass. Upper sandstone cliffs descend into the upper-middle/centre and create a narrow pass BEHIND the town. The sides open outward around, never cover/move plots. NO enclosing front wall, side-return curtains or ring. This preferred route is a visual concept, not registered runtime gate/control geometry; do not invent controls/labels/callouts.\nPhone390x844 portrait. Preserve56px left strip and bottomzoomcontrols. LEVEL50: preserve every existing phone building and footprint/count. Replace old distant photographic canyon/ground seam/thin circuit roads with the quiet Oasis ground and mature restrained paving/palmshade/closedfountainfamily from Image2. Build ONE SHORT strong sandstone gatewall with exactlytwo flanking towers across the REARpass above/behind the town's topbuildingrow, between cliffshoulders. NOT at the town's front/bottom. Foreground remains open dry land. Keep town large inavailablephoneplayarea; do not create enormous top/bottomfiller or shrinkbuildings. PhoneOasiscenery is conceptonly.",
+      "referenced_images": [
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/evidence/2026-10-12-sidebar-valley/after-captures-2026-10-12T10-31-43-036Z//after-captures-town50-phone-fit.png",
+        "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/docs/ideas/valley-wall-study/a-rear-pass-desktop-50-v1.png"
+      ]
+    }
+  ]
+}

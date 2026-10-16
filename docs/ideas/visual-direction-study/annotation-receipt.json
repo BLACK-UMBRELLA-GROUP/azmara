@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-10-11T19:01:01.570Z",
+  "browserClosed": true,
+  "images": [
+    {
+      "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T18-56-31-757Z-town-start-staggered-1440x900-8b2eb271.png",
+      "originalSha256": "5bdca21214366d30b8be5882f4823c53c03e2e23dfefd7db5810ce7a84ac878a",
+      "originalCopy": "current-start-desktop.png",
+      "output": "diagnosis-start-desktop.png",
+      "outputSha256": "90f62e6316c0cd2785aa09975001b816868a1a0f1036c38c818f023451df4243",
+      "method": "Canvas leader lines, numbered marks and side legend only; original screenshot not resized"
+    },
+    {
+      "source": "<LOCAL_HOME>/Developer/DEVELOPMENT/APP GAME PROJECT - IKARIAM/prototype/debug/2026-10-11T18-56-34-633Z-town-all-built-50-staggered-1440x900-a0021b2e.png",
+      "originalSha256": "125699e6fdc7008725c623d2974702ea7fa9da55b03878a266c64d6aea29ff84",
+      "originalCopy": "current-level-50-desktop.png",
+      "output": "diagnosis-level-50-desktop.png",
+      "outputSha256": "30aaf46f7515abcfe518b575546f0c7f08f278bf57e290cf63846efb58941256",
+      "method": "Canvas leader lines, numbered marks and side legend only; original screenshot not resized"
+    }
+  ]
+}

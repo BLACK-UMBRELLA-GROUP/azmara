@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-13",
+  "status": "proposal-only; generated concepts rejected; manual target pending Owner approval",
+  "generator": "built-in image generation",
+  "attempts": 2,
+  "inputs": [
+    "owner-road-markup.png",
+    "approved-canyon-reference.png"
+  ],
+  "outputs": [
+    {
+      "file": "concept-start-v1.png",
+      "result": "rejected: forbidden horizontal/vertical segments and large outlined plots"
+    },
+    {
+      "file": "concept-level50-v1.png",
+      "result": "rejected: forbidden axes, loose outer circuit, anchor drift and empty sites"
+    }
+  ],
+  "manualComposition": {
+    "generator": "deterministic local SVG composition rendered with Sharp",
+    "script": "manual-compose.cjs",
+    "inputs": [
+      "../canyon-defences-study/desktop-start-v1.png",
+      "../canyon-defences-study/desktop-level50-v1.png",
+      "../../../prototype/assets/oasis-pilot/ground-start-v1.png",
+      "../../../prototype/assets/oasis-pilot/ground-mature-v1.png",
+      "../../../prototype/assets/oasis-pilot/street-stone-v1.png",
+      "../../../prototype/assets/oasis-pilot/shade-pockets-v2.png",
+      "../../../prototype/assets/progression/* registered building crops"
+    ],
+    "outputs": [
+      "manual-start-v1.png",
+      "manual-level50-v1.png",
+      "manual-street-target.json"
+    ],
+    "newGeneratedArt": false,
+    "plotAnchorsChanged": false,
+    "runtimeIntegrated": false
+  },
+  "ikariamImagesUsed": false,
+  "runtimeIntegrated": false
+}

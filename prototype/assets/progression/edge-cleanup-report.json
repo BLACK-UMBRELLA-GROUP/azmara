@@ -1,0 +1,818 @@
+{
+  "authority": "Founder explicitly approved edge-only local pixel cleanup, 10 October 2026",
+  "method": "Exact RGB red(255,0,0) or yellow(255,255,0), alpha1–8 only. Four-connected exterior flood through alpha<=8; eight-connected candidate components clear only if exterior-adjacent or isolated from noncandidate alpha>8 paint. Set only selected alpha to0.",
+  "scope": "30 nonHall generated atlases only; Hall and terrain never selected",
+  "files": [
+    {
+      "typeId": "academy",
+      "source": "azmara-academy-stages-v1.png",
+      "runtime": "azmara-academy-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "06bd6255c9def2e534e9a670b205da561f5161324faf5c70c19d9eed8b64079b",
+      "runtimeSha256": "0e11fe5934c2e37046dcb6811f81cabf31a4e88ff416b81f9425c06727e9dbb9",
+      "mattePixels": {
+        "red": {
+          "candidates": 8239,
+          "cleared": 8237,
+          "protected": 2
+        },
+        "yellow": {
+          "candidates": 490,
+          "cleared": 490,
+          "protected": 0
+        }
+      },
+      "changedPixels": 8727,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "warehouse",
+      "source": "azmara-warehouse-stages-v1.png",
+      "runtime": "azmara-warehouse-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "09be8e8a68004b22bd7d575949304b7672c8424d0ddfd42e63bab0fd3f37ebf4",
+      "runtimeSha256": "6d6caec0b0cf53196f6c09d9baf11fd5928e9d8de2b7f977acbf4a2a28e11d95",
+      "mattePixels": {
+        "red": {
+          "candidates": 26500,
+          "cleared": 26495,
+          "protected": 5
+        },
+        "yellow": {
+          "candidates": 2459,
+          "cleared": 2457,
+          "protected": 2
+        }
+      },
+      "changedPixels": 28952,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "provision-house",
+      "source": "azmara-provision-house-stages-v1.png",
+      "runtime": "azmara-provision-house-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "b78d7cadf5a57136e3af0cb1875783f4f61645f7df7c7c4a87c3d568d4b8b0af",
+      "runtimeSha256": "5fb3bbedc8a96cf7051c6b3f618dc70b6c5c455f31949ddd38c9a3b07a3e1d78",
+      "mattePixels": {
+        "red": {
+          "candidates": 22679,
+          "cleared": 22678,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 716,
+          "cleared": 716,
+          "protected": 0
+        }
+      },
+      "changedPixels": 23394,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "palace",
+      "source": "azmara-palace-stages-v1.png",
+      "runtime": "azmara-palace-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "49f0e1ccf0937a074b990f054f876b386acd23ced3f0d0e98601cfef5651f211",
+      "runtimeSha256": "560695e5ed162e7e5615d0800b08f2f1f70752a8a7fcd4250cd222dc5307d4a1",
+      "mattePixels": {
+        "red": {
+          "candidates": 8747,
+          "cleared": 8746,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 474,
+          "cleared": 474,
+          "protected": 0
+        }
+      },
+      "changedPixels": 9220,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "governors-residence",
+      "source": "azmara-governors-residence-stages-v1.png",
+      "runtime": "azmara-governors-residence-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "72a656ca75e3c44a122c3ca98a8198f1b00b14797e88f8ea5b388ec93673a180",
+      "runtimeSha256": "f0213052353ed1fb400120e72a1195b13e194f113555f5bd016318c7979f9347",
+      "mattePixels": {
+        "red": {
+          "candidates": 12917,
+          "cleared": 12915,
+          "protected": 2
+        },
+        "yellow": {
+          "candidates": 754,
+          "cleared": 753,
+          "protected": 1
+        }
+      },
+      "changedPixels": 13668,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "museum",
+      "source": "azmara-museum-stages-v1.png",
+      "runtime": "azmara-museum-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "bdbda35b197dd3fb78f0d718a550bb22c53207785506825e207a0a095f2a0e8c",
+      "runtimeSha256": "2b9e65034d35d23a7eef6664a4824500c50ff59fe58347d47a5960727ea29076",
+      "mattePixels": {
+        "red": {
+          "candidates": 11294,
+          "cleared": 11294,
+          "protected": 0
+        },
+        "yellow": {
+          "candidates": 1374,
+          "cleared": 1374,
+          "protected": 0
+        }
+      },
+      "changedPixels": 12668,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "embassy",
+      "source": "azmara-embassy-stages-v1.png",
+      "runtime": "azmara-embassy-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "011b45d4591da9b10593405977bccfbdd59c0a47727827d25bbfa2fc2c8e2b3c",
+      "runtimeSha256": "9cd98ffdc646bb2a0be04be01b422333ac2f7e21e4b631623d26dd8b41f72bd7",
+      "mattePixels": {
+        "red": {
+          "candidates": 10914,
+          "cleared": 10914,
+          "protected": 0
+        },
+        "yellow": {
+          "candidates": 539,
+          "cleared": 539,
+          "protected": 0
+        }
+      },
+      "changedPixels": 11453,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "prayer-area",
+      "source": "azmara-prayer-area-stages-v1.png",
+      "runtime": "azmara-prayer-area-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "dbd535d93176ff33426d0a2a377242a02f1a8f22a3fe5e287160171a13abdaee",
+      "runtimeSha256": "a244f8f56000ef7660819dff37252ae3e75241d3cb398b868fd13885eefc7fb4",
+      "mattePixels": {
+        "red": {
+          "candidates": 15745,
+          "cleared": 15744,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 532,
+          "cleared": 532,
+          "protected": 0
+        }
+      },
+      "changedPixels": 16276,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "trading-port",
+      "source": "azmara-trading-port-stages-v1.png",
+      "runtime": "azmara-trading-port-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "3c808c7cb474572eab91f443594f1abe2ebcf904a3a7336f4504027358bd14f4",
+      "runtimeSha256": "866dc8a558cccfa797600abad925e243143727c38b18d2bc9436c23ae3be089e",
+      "mattePixels": {
+        "red": {
+          "candidates": 17386,
+          "cleared": 17361,
+          "protected": 25
+        },
+        "yellow": {
+          "candidates": 404,
+          "cleared": 391,
+          "protected": 13
+        }
+      },
+      "changedPixels": 17752,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "trading-post",
+      "source": "azmara-trading-post-stages-v1.png",
+      "runtime": "azmara-trading-post-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "bba1b00caf020b1ce696483cc46b7185330e6f23dda2c7e2420cebc2f5f601cb",
+      "runtimeSha256": "b4beeef2174a8bee897dcf8ac908c5a418955664ffe9f46f6a6be3bd9817d11b",
+      "mattePixels": {
+        "red": {
+          "candidates": 23942,
+          "cleared": 23941,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 1038,
+          "cleared": 1038,
+          "protected": 0
+        }
+      },
+      "changedPixels": 24979,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "depot",
+      "source": "azmara-depot-stages-v1.png",
+      "runtime": "azmara-depot-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "053f0cc2b40e5092031009bd4b7d47811ad5fdbb61d2031a5f13ddac42dd752d",
+      "runtimeSha256": "1c602126acbc86580c2478fe56d3b9a5539e03a1d2416c1175a754717641b181",
+      "mattePixels": {
+        "red": {
+          "candidates": 10605,
+          "cleared": 10604,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 597,
+          "cleared": 597,
+          "protected": 0
+        }
+      },
+      "changedPixels": 11201,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "military-exchange",
+      "source": "azmara-military-exchange-stages-v1.png",
+      "runtime": "azmara-military-exchange-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "a02898e23a91f9459ad0a956de7df72201cb81bfea096e56f237494fe9db0651",
+      "runtimeSha256": "5aed57003c52d9941d4527cd852bd45a4581326f0849b655f75b1a98cbc16439",
+      "mattePixels": {
+        "red": {
+          "candidates": 15537,
+          "cleared": 15537,
+          "protected": 0
+        },
+        "yellow": {
+          "candidates": 803,
+          "cleared": 803,
+          "protected": 0
+        }
+      },
+      "changedPixels": 16340,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "sea-chart-archive",
+      "source": "azmara-sea-chart-archive-stages-layout-v1.png",
+      "runtime": "azmara-sea-chart-archive-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "a35680716926d0b7c5852e82c0691a298f2183896aafdbd3e66faf1b786a196e",
+      "runtimeSha256": "269911c91fb8d40a7c4beb05f3286508188383b086b2d2353e3a8db998b78dcc",
+      "mattePixels": {
+        "red": {
+          "candidates": 9213,
+          "cleared": 9211,
+          "protected": 2
+        },
+        "yellow": {
+          "candidates": 378,
+          "cleared": 376,
+          "protected": 2
+        }
+      },
+      "changedPixels": 9587,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "dockyard",
+      "source": "azmara-dockyard-stages-v1.png",
+      "runtime": "azmara-dockyard-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "462e885b57570bdaf1daf5de2d075d5351881c2d562302fb80b1265bd766c54e",
+      "runtimeSha256": "502c7256ab6e922ab452987b4f2b01ed8d10f260d455a1f42d93f3a92ee80131",
+      "mattePixels": {
+        "red": {
+          "candidates": 16224,
+          "cleared": 16212,
+          "protected": 12
+        },
+        "yellow": {
+          "candidates": 988,
+          "cleared": 962,
+          "protected": 26
+        }
+      },
+      "changedPixels": 17174,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "intelligence-house",
+      "source": "azmara-intelligence-house-stages-layout-v1.png",
+      "runtime": "azmara-intelligence-house-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "5167a9ba44691be8cfb077a1b9e33e2b0086235bc70cf049751963944ddff25b",
+      "runtimeSha256": "7b28cce30a06e82e7af0cc1893b356830ce85068c6206b5db317b0fde2d0d8da",
+      "mattePixels": {
+        "red": {
+          "candidates": 11018,
+          "cleared": 11012,
+          "protected": 6
+        },
+        "yellow": {
+          "candidates": 1389,
+          "cleared": 1389,
+          "protected": 0
+        }
+      },
+      "changedPixels": 12401,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "shipyard",
+      "source": "azmara-shipyard-stages-v1.png",
+      "runtime": "azmara-shipyard-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "7332183a2ab9c2d57bed14b48b4ceea5cffb9402e44801b53e6851e53a8b0735",
+      "runtimeSha256": "4237e4df21f737c16c61549eaf53e17c10a1870eb87cd33754176b16c5e24c29",
+      "mattePixels": {
+        "red": {
+          "candidates": 15046,
+          "cleared": 15030,
+          "protected": 16
+        },
+        "yellow": {
+          "candidates": 497,
+          "cleared": 478,
+          "protected": 19
+        }
+      },
+      "changedPixels": 15508,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "barracks",
+      "source": "azmara-barracks-stages-v1.png",
+      "runtime": "azmara-barracks-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "5a7707f0569966a638740207badebdf8bf95f2ce7cf0896518e44bea0b1c351d",
+      "runtimeSha256": "05fca9a24b04ac91a4647a1767d9c8826a1502198758a5abc96b2e7cc55c8864",
+      "mattePixels": {
+        "red": {
+          "candidates": 13212,
+          "cleared": 13208,
+          "protected": 4
+        },
+        "yellow": {
+          "candidates": 949,
+          "cleared": 949,
+          "protected": 0
+        }
+      },
+      "changedPixels": 14157,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "town-wall",
+      "source": "azmara-town-wall-stages-v1.png",
+      "runtime": "azmara-town-wall-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "f73de42dc88b204b5c015b8db1e71c3a60a5d82b36aa2dfdb43c1fb3c4fa3b3d",
+      "runtimeSha256": "a42d076931ac1d41b8e76779ac1be58139816e635a27e3b05f040fe5ad104d31",
+      "mattePixels": {
+        "red": {
+          "candidates": 27115,
+          "cleared": 27107,
+          "protected": 8
+        },
+        "yellow": {
+          "candidates": 5432,
+          "cleared": 5425,
+          "protected": 7
+        }
+      },
+      "changedPixels": 32532,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "workshop",
+      "source": "azmara-workshop-stages-v1.png",
+      "runtime": "azmara-workshop-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "8baf75dc209d816fdd2bb6211bf68f5c911cf14f171c533a92b4b7d9fc7686c6",
+      "runtimeSha256": "f10e341c69c0ec3614866a6164432098c31d90b7ee6819e501d02c74d5100a72",
+      "mattePixels": {
+        "red": {
+          "candidates": 14206,
+          "cleared": 14188,
+          "protected": 18
+        },
+        "yellow": {
+          "candidates": 759,
+          "cleared": 743,
+          "protected": 16
+        }
+      },
+      "changedPixels": 14931,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "foresters-house",
+      "source": "azmara-foresters-house-stages-v1.png",
+      "runtime": "azmara-foresters-house-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "4c89469e8fb2107cb68fd9334904abb5128a120dc5c2084eb28eb14a947d1839",
+      "runtimeSha256": "77c9338d21b3889636695aa482ad56ccae8d3b5bc25e9f227da45b356c664015",
+      "mattePixels": {
+        "red": {
+          "candidates": 33540,
+          "cleared": 33519,
+          "protected": 21
+        },
+        "yellow": {
+          "candidates": 1438,
+          "cleared": 1425,
+          "protected": 13
+        }
+      },
+      "changedPixels": 34944,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "silver-refinery",
+      "source": "azmara-silver-refinery-stages-v1.png",
+      "runtime": "azmara-silver-refinery-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "97d2ef503935bdd552b54fcf1a445a0dfc0bb174f5da775294c9f2d4f9955e7d",
+      "runtimeSha256": "4030351ec7fceed591469c3a1344d7e00c4e7e4cdf96d4302c68462094a6c2e7",
+      "mattePixels": {
+        "red": {
+          "candidates": 14333,
+          "cleared": 14294,
+          "protected": 39
+        },
+        "yellow": {
+          "candidates": 1086,
+          "cleared": 1085,
+          "protected": 1
+        }
+      },
+      "changedPixels": 15379,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "iron-foundry",
+      "source": "azmara-iron-foundry-stages-v1.png",
+      "runtime": "azmara-iron-foundry-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "82b3c834ab78cd8f917d6f28f339e6250629f6dc5bf5bdf035d552eea948c0c6",
+      "runtimeSha256": "4eaec756032d9f247aa31d27b7f5e02f4ef02d198ecaab1ed0997340860f5111",
+      "mattePixels": {
+        "red": {
+          "candidates": 9710,
+          "cleared": 9707,
+          "protected": 3
+        },
+        "yellow": {
+          "candidates": 919,
+          "cleared": 916,
+          "protected": 3
+        }
+      },
+      "changedPixels": 10623,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "grain-estate",
+      "source": "azmara-grain-estate-stages-v1.png",
+      "runtime": "azmara-grain-estate-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "ad3be6789ec7445572d1b48ac01bc24141c4f74a3d6303ec6b11bba546a464a3",
+      "runtimeSha256": "59b017372e54a800448998d6e00bd21ee1b3592ade67d5f976204a6c89e4e925",
+      "mattePixels": {
+        "red": {
+          "candidates": 15927,
+          "cleared": 15927,
+          "protected": 0
+        },
+        "yellow": {
+          "candidates": 848,
+          "cleared": 847,
+          "protected": 1
+        }
+      },
+      "changedPixels": 16774,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "clayworks",
+      "source": "azmara-clayworks-stages-v1.png",
+      "runtime": "azmara-clayworks-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "77fa7791e8e5b4860e536e13b45f5ea9e2baa6a53323d9e2c6765975ec833856",
+      "runtimeSha256": "d66d0fc219801aac1362fa033fcb2561067661a515aeac6041cd8c3696405d91",
+      "mattePixels": {
+        "red": {
+          "candidates": 17998,
+          "cleared": 17997,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 664,
+          "cleared": 663,
+          "protected": 1
+        }
+      },
+      "changedPixels": 18660,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "carpenters-workshop",
+      "source": "azmara-carpenters-workshop-stages-v1.png",
+      "runtime": "azmara-carpenters-workshop-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "f45758fd48b655ead51d6ca18847227177b0e68bd4cc8a159ab69e2710b87fd8",
+      "runtimeSha256": "9c655195078e32ab3aa0849fdede349a9fa56ddaef7bfc8c79a23d75a5e98970",
+      "mattePixels": {
+        "red": {
+          "candidates": 12798,
+          "cleared": 12797,
+          "protected": 1
+        },
+        "yellow": {
+          "candidates": 511,
+          "cleared": 510,
+          "protected": 1
+        }
+      },
+      "changedPixels": 13307,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "precision-workshop",
+      "source": "azmara-precision-workshop-stages-v1.png",
+      "runtime": "azmara-precision-workshop-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "9f6419e27f4460185a1052928715c008953eeb72fcf1a760dd19532db1910b97",
+      "runtimeSha256": "dcc8f7e52035a5f925ad5edb7e0ccba832a2796aa13772ed5148af130097d96e",
+      "mattePixels": {
+        "red": {
+          "candidates": 12723,
+          "cleared": 12709,
+          "protected": 14
+        },
+        "yellow": {
+          "candidates": 907,
+          "cleared": 896,
+          "protected": 11
+        }
+      },
+      "changedPixels": 13605,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "materials-workshop",
+      "source": "azmara-materials-workshop-stages-v1.png",
+      "runtime": "azmara-materials-workshop-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "b0b1d3c2e483034253bff5e470e37030bd63b55db3b990e04612d27901d29955",
+      "runtimeSha256": "274e1ad67909d8e6bb1982049a0a661da0b115a6ef632e70c406fa712149b482",
+      "mattePixels": {
+        "red": {
+          "candidates": 25151,
+          "cleared": 25141,
+          "protected": 10
+        },
+        "yellow": {
+          "candidates": 887,
+          "cleared": 884,
+          "protected": 3
+        }
+      },
+      "changedPixels": 26025,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "grain-store",
+      "source": "azmara-grain-store-stages-v1.png",
+      "runtime": "azmara-grain-store-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "b6210ffcb0ff920e009a243e879b99116ab1e34e59452aa1eaf5b7109ea5f037",
+      "runtimeSha256": "2ed167c324a8b987bac1cf8c3c4f83a613938995339f596f7905426dc66d1af1",
+      "mattePixels": {
+        "red": {
+          "candidates": 17106,
+          "cleared": 17100,
+          "protected": 6
+        },
+        "yellow": {
+          "candidates": 604,
+          "cleared": 604,
+          "protected": 0
+        }
+      },
+      "changedPixels": 17704,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "architects-office",
+      "source": "azmara-architects-office-stages-v1.png",
+      "runtime": "azmara-architects-office-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "17e82d2f00bb169a1873d6b7e81fb4276a2d1236e9e0b2a2e7aa188ee48ed9e6",
+      "runtimeSha256": "5abe0a32e201eb3b01a6c7c4f7d4edadc3106ce3a9adbea5d295e1b44fbaefe7",
+      "mattePixels": {
+        "red": {
+          "candidates": 14838,
+          "cleared": 14835,
+          "protected": 3
+        },
+        "yellow": {
+          "candidates": 615,
+          "cleared": 612,
+          "protected": 3
+        }
+      },
+      "changedPixels": 15447,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    },
+    {
+      "typeId": "chronos-forge",
+      "source": "azmara-chronos-forge-stages-v1.png",
+      "runtime": "azmara-chronos-forge-stages-v2.png",
+      "width": 1254,
+      "height": 1254,
+      "sourceSha256": "01bec7f1d6da77cf4872cc1af9dc6bd0d0ff96f4d6c1c8b07a1120af5b6bb23a",
+      "runtimeSha256": "41054e818a8a1bd9ba83f61802b9df631b68820c01ef07829995bdf8ef14215b",
+      "mattePixels": {
+        "red": {
+          "candidates": 15602,
+          "cleared": 15586,
+          "protected": 16
+        },
+        "yellow": {
+          "candidates": 873,
+          "cleared": 853,
+          "protected": 20
+        }
+      },
+      "changedPixels": 16439,
+      "originalPreserved": true,
+      "noncandidateRgbaUnchanged": true,
+      "allRgbUnchanged": true,
+      "alphaAbove8Unchanged": true,
+      "idempotent": true
+    }
+  ],
+  "totalChangedPixels": 509827
+}
