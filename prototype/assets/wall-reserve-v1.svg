@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 220">
+  <defs><linearGradient id="earth" x2="0" y2="1"><stop stop-color="#c7ac70"/><stop offset="1" stop-color="#887b4b"/></linearGradient><linearGradient id="stone" x2="0" y2="1"><stop stop-color="#f2deac"/><stop offset="1" stop-color="#b29a6c"/></linearGradient></defs>
+  <ellipse cx="172" cy="151" rx="133" ry="26" fill="#294833" opacity=".16"/>
+  <path d="m21 137 105-81 185 70-107 80z" fill="url(#earth)" stroke="#819250" stroke-width="6"/>
+  <path d="m34 134 92-65 172 60-96 64z" fill="#a38b58" opacity=".5"/>
+  <path d="m59 128 65-45 147 55-65 45z" fill="none" stroke="#d6c397" stroke-width="12" stroke-dasharray="18 5"/>
+  <path d="m59 124 65-45 147 55-65 45z" fill="none" stroke="url(#stone)" stroke-width="8" stroke-dasharray="18 5"/>
+  <g stroke="#715b38" stroke-width="5"><path d="M27 134v-15m103-56V48m172 78v-15m-103 85v-15"/></g>
+  <g fill="#ead29a"><circle cx="27" cy="119" r="3"/><circle cx="130" cy="48" r="3"/><circle cx="302" cy="111" r="3"/><circle cx="199" cy="181" r="3"/></g>
+  <g fill="#748851"><path d="m39 146 8-9-1 13m-9 0-8-6 6 11m230 30 5-12 3 13m-28 5-2-13 7 11"/></g>
+</svg>
