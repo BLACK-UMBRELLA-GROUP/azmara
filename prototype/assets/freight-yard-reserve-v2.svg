@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="220" viewBox="0 0 330 220">
+  <defs><pattern id="earth" width="17" height="13" patternUnits="userSpaceOnUse"><rect width="17" height="13" fill="#c6a16a"/><path d="M2 4h5m5 6h3M6 12h4" stroke="#ab8954" stroke-width="1.2" opacity=".55"/></pattern></defs>
+  <path d="m16 116 141-76 157 78-143 81z" fill="#82633d" opacity=".17"/>
+  <path d="m16 105 141-76 157 78-143 81z" fill="url(#earth)" stroke="#927046" stroke-width="2"/>
+  <path d="m37 106 120-63 135 65-120 68z" fill="none" stroke="#dec193" stroke-width="5"/>
+  <path d="m68 112 90-45m-67 60 91-45m-57 62 82-42" stroke="#907147" stroke-width="2" opacity=".22"/>
+  <g fill="#998451"><ellipse cx="27" cy="104" rx="11" ry="4"/><ellipse cx="160" cy="30" rx="11" ry="4"/><ellipse cx="304" cy="104" rx="11" ry="4"/><ellipse cx="172" cy="187" rx="11" ry="4"/></g>
+</svg>

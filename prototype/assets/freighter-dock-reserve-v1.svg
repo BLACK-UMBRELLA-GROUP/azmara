@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 220">
+  <defs><linearGradient id="timber" x2="0" y2="1"><stop stop-color="#dcc18b"/><stop offset="1" stop-color="#ac824d"/></linearGradient></defs>
+  <path d="m28 135 87-67 173 61-94 74z" fill="#356968" opacity=".22"/>
+  <g stroke="#584830" stroke-width="8"><path d="M57 131v26m55-69v31m81 70v25m73-84v28"/></g>
+  <path d="m30 105 83-48 98 34-26 18 35 13 26-18 57 20-45 34-57-20-30 24-35-13 29-24-82-28z" fill="#745635" stroke="#645138" stroke-width="3"/>
+  <path d="m30 100 83-48 98 34-26 18 35 13 26-18 57 20-45 34-57-20-30 24-35-13 29-24-82-28z" fill="url(#timber)" stroke="#d4b77d" stroke-width="3"/>
+  <path d="m30 100 83-48 98 34-26 18m61-5 57 20" fill="none" stroke="#efe0b2" stroke-width="4"/>
+  <g stroke="#8e693b" stroke-width="2" opacity=".8"><path d="m47 106 80-49m-60 56 80-49m-60 56 80-49m-60 56 80-49m-53 64 24-16m-1 25 27-22m28 21 32-24m-17 30 32-24"/></g>
+  <g stroke="#7b5935" stroke-width="7"><path d="M39 113V93m77-35V38m167 78V96m-90 91v-20"/></g>
+  <g stroke="#f0d597" stroke-width="2.5"><path d="M36 96h6m71-55h6m164 58h6m-96 71h6"/></g>
+  <g fill="none" stroke="#77cec2" stroke-width="2" opacity=".6"><path d="m93 197 25 9m104-8 24-6m-13-13 15-3"/></g>
+</svg>
