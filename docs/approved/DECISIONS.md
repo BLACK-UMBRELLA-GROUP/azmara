@@ -1938,4 +1938,37 @@ unselected.
 - This entry records the starting-state rule only. It changes no game code,
   artwork, saves, live-site behaviour, hosting or deployment configuration.
 
-Next unused decision identifier: `DEC-099`.
+## DEC-099 — Level 1 town master V3
+
+- Date: 17 October 2026 (Europe/London).
+- Source: the Owner locked option 4 of five "worse Level 1" versions ("yes lets
+  lock in option 4"), then asked for the background homes to be wooden at
+  Level 1 ("in level 1 make them wooden"), then said "OK lets lock it all in".
+- Locked master: `docs/approved/art/TOWN_MASTER_CURRENT_VERSION_V3.png`.
+- V2 (option 4) compared with V1: the six road palms and four oasis palms are
+  removed, the plants are dry, the pond is half mud, the waterfall is dry, the
+  crops are dead and four side palms are removed. V3 is V2 with the five
+  background homes as wooden shacks; nothing else changed.
+- Archives, reference only and never overriding V3, version numbers kept:
+  `docs/approved/art/TOWN_MASTER_2026-10-17_V1.png` (locked 16 Oct) and
+  `docs/approved/art/TOWN_MASTER_2026-10-17_V2.png` (locked 17 Oct).
+- This entry records the approved master. Build scope is set in DEC-100.
+
+## DEC-100 — Land stages for every Town Hall look
+
+- Date: 17 October 2026 (Europe/London).
+- Source: the Owner reviewed eleven land pictures with Claude, asked for the
+  oasis to improve from Town Hall 12 to 22, for the homes to go from wooden to
+  finest, for the swamp look to clear from Town Hall 22, and for the pool's
+  stone edge and the avenue shrubs to be removed, then said "OK lets lock it
+  all in".
+- Locked specification: `docs/approved/LAND_STAGES_CURRENT_VERSION_V1.md`,
+  with stage 1 = `docs/approved/art/TOWN_MASTER_CURRENT_VERSION_V3.png` and
+  stages 2–11 in `docs/approved/art/land/`.
+- Rule: land stage k shows while the Town Hall's completed look is k. The
+  pictures are copied exactly; the game fills the whole screen with them; a
+  Dev-only land stage picker sets the test Town Hall level.
+- Spot data, IDs, saves and queues stay unchanged until the spot map is
+  locked. Publishing to azmara.app needs the Owner's explicit OK.
+
+Next unused decision identifier: `DEC-101`.
