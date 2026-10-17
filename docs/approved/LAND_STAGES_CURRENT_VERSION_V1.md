@@ -13,7 +13,7 @@ The town's land (everything around the buildings: canyon, sand, oasis, fields, p
 | In this document | Not in this document (comes later) |
 |---|---|
 | The 11 land pictures and when each one shows | The looks of each building, including the Town Hall's own looks |
-| How the land fills the screen | The spot map: where each of the 24 building spots sits on the land |
+| How the land fills the screen | The spot map: where each of the 23 game plots sits on the land |
 | What is painted into the pictures | The Town Wall's looks on this land |
 | The Dev option to check every stage | Higher-resolution copies of the same pictures |
 
@@ -104,7 +104,7 @@ Inside the existing Dev button (dev mode only, hidden in Gameplay mode):
 | Risk or gap | What happens now | Fix |
 |---|---|---|
 | Game spots don't line up with the painted spots | Spot data stays as it is this round; empty-spot markers are not drawn on top | Spot map from Claude (next step) |
-| The pictures paint about 15 empty spots, but the town needs 24 | Not solved this round | Spot map decides where the rest go |
+| The pictures paint about 15 empty spots, but a new town has 22 empty plots among its 23 game plots | Not solved this round | Spot map decides where the rest go |
 | The five layout choices (DEC-060) don't fit one painted land | Leave the layout data untouched | Decided with the spot map |
 | Town Hall looks 2–11 not designed yet | The painted Level 1 hut stays at every stage | Each building's looks (later step) |
 | Town Wall on this land not designed yet | Click area and label at the gate only | Town Wall looks (later step) |
