@@ -1437,7 +1437,17 @@
     const lockedFrame = landFrame();
     const lockedWidth = viewport.clientWidth;
     const lockedHeight = viewport.clientHeight;
-    return { scale: Math.max(lockedWidth / lockedFrame.width, lockedHeight / lockedFrame.height),
+    const lockedHall = paintedControl("hall");
+    const horizontalReach = Math.min(lockedHall.x - lockedFrame.x,
+      lockedFrame.x + lockedFrame.width - lockedHall.x);
+    const verticalReach = Math.min(lockedHall.y - lockedFrame.y,
+      lockedFrame.y + lockedFrame.height - lockedHall.y);
+    // A normal cover scale can run out of picture before this deliberately
+    // off-centre painted Hall reaches the viewport centre. Give the Hall equal
+    // painted reach on both sides, then crop the extra exactly as DEC-100 asks.
+    const coverScale = Math.max(lockedWidth / lockedFrame.width, lockedHeight / lockedFrame.height);
+    const hallCentredScale = Math.max(lockedWidth / (2 * horizontalReach), lockedHeight / (2 * verticalReach));
+    return { scale: Math.max(coverScale, hallCentredScale),
       centerX: lockedWidth / 2, centerY: lockedHeight / 2 };
     /* istanbul ignore next -- retained rollback algorithm, unreachable while DEC-100 is active */
     const width = viewport.clientWidth;

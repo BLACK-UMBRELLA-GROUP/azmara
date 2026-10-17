@@ -72,7 +72,9 @@ for (const legacy of ["OasisFoundation", "StreetGround", "SceneryDecor", "TownWa
 // Cover is the minimum zoom, the locked picture is the only pan boundary,
 // and Fit targets the registered painted Town Hall.
 const initialFit = section(app, "function initialFitArea(", "function fitArea(");
-assert.match(initialFit, /Math\.max\(lockedWidth \/ lockedFrame\.width, lockedHeight \/ lockedFrame\.height\)/);
+assert.match(initialFit, /const coverScale = Math\.max\(lockedWidth \/ lockedFrame\.width, lockedHeight \/ lockedFrame\.height\)/);
+assert.match(initialFit, /const hallCentredScale = Math\.max\(lockedWidth \/ \(2 \* horizontalReach\), lockedHeight \/ \(2 \* verticalReach\)\)/);
+assert.match(initialFit, /scale: Math\.max\(coverScale, hallCentredScale\)/);
 const completeFrame = section(app, "function completeTownFrame(", "function closeZoom(");
 assert.match(completeFrame, /return landFrame\(desktop\)/);
 const layout = section(app, "function layoutMap(", "function stopCameraAnimation(");
