@@ -345,7 +345,13 @@
       const viewportBox = viewport.getBoundingClientRect();
       const cameraBox = camera.getBoundingClientRect();
       const cameraInside = cameraBox.width && cameraBox.height && cameraBox.right > viewportBox.left && cameraBox.left < viewportBox.right && cameraBox.top < viewportBox.bottom;
-      const top = 12;
+      const townBarBox = document.querySelector(".azmara-town-bar")?.getBoundingClientRect();
+      // Compact Region/World canvases remain full-bleed behind the floating
+      // bar, but their finite target plane starts below it. This keeps the
+      // northern 44px locations reachable in short phone-landscape viewports.
+      const top = small && townBarBox?.height
+        ? Math.max(12, townBarBox.bottom - viewportBox.top + 10)
+        : 12;
       const bottom = cameraInside ? Math.max(12, viewportBox.bottom - cameraBox.top + 12) : 12;
       root.style.setProperty("--atlas-footer-height", "0px");
       stageSize = view === "world" ? { width: (worldBounds.right - worldBounds.left) * coordinateUnit, height: (worldBounds.bottom - worldBounds.top) * coordinateUnit } : { width: 2200, height: 2200 / 1.5 };

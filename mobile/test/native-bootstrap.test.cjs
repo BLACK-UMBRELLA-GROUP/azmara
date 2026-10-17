@@ -16,7 +16,9 @@ const town = (name = "Native town", level = 1) => JSON.stringify({
   hallLevel: level, construction: null,
 });
 
-function fixture({ bridge = true, seed = {}, badImage = false, missingPlot = false } = {}) {
+function fixture({ bridge = true, seed = {}, badImage = false, badImageSource = null,
+  missingPlot = false, missingLandRegistry = false, missingBuildingRegistry = false,
+  occupied = 1 } = {}) {
   class Storage {
     constructor(values = {}) { this.values = new Map(Object.entries(values)); }
     getItem(key) { return this.values.has(String(key)) ? this.values.get(String(key)) : null; }
@@ -29,12 +31,13 @@ function fixture({ bridge = true, seed = {}, badImage = false, missingPlot = fal
   const events = new Map();
   const messages = [];
   const scripts = [];
+  const imageRequests = [];
   const timers = new Map();
   const dispatched = [];
   let timerId = 0;
   const plots = Array.from({ length: missingPlot ? 22 : 23 }, (_, index) => ({
     dataset: {
-      occupied: index === 0 ? "true" : "false",
+      occupied: index < occupied ? "true" : "false",
       kind: index < 19 ? "general" : index === 19 ? "wall" : index < 22 ? "harbour" : "freighter",
     },
   }));
@@ -54,12 +57,36 @@ function fixture({ bridge = true, seed = {}, badImage = false, missingPlot = fal
     addEventListener(type, callback) { events.set(type, callback); },
     dispatchEvent(event) { dispatched.push(`window:${event.type}`); },
   };
+  if (!missingLandRegistry) {
+    window.AzmaraLandStages = {
+      forHallLevel(level) {
+        const stage = Number(level) >= 5 ? "02" : "01";
+        return { src: `assets/land/land-stage-${stage}.png` };
+      },
+    };
+  }
+  if (!missingBuildingRegistry) {
+    window.AzmaraBuildingArt = {
+      forBuilding(typeId, level) {
+        if (typeof typeId !== "string" || !Number.isInteger(level)) return null;
+        return { src: `assets/progression/${typeId}-stages-v2.png` };
+      },
+    };
+  }
   if (bridge) window.AZMARASave = { postMessage(raw) { messages.push(JSON.parse(raw)); } };
   const context = vm.createContext({
     window, document, Storage, localStorage, sessionStorage,
     MutationObserver: class { observe() {} }, NodeFilter: { SHOW_TEXT: 4 },
     Image: class {
-      set src(value) { this.url = value; queueMicrotask(() => badImage ? this.onerror() : this.onload()); }
+      constructor() { this.naturalWidth = 1536; }
+      async decode() { if (badImage || this.url === badImageSource) throw new Error("decode"); }
+      set src(value) {
+        this.url = value;
+        imageRequests.push(value);
+        const broken = badImage || value === badImageSource;
+        this.naturalWidth = broken ? 0 : 1536;
+        queueMicrotask(() => broken ? this.onerror() : this.onload());
+      }
     },
     Event: class { constructor(type) { this.type = type; } },
     requestAnimationFrame(callback) { queueMicrotask(callback); },
@@ -67,10 +94,10 @@ function fixture({ bridge = true, seed = {}, badImage = false, missingPlot = fal
     clearTimeout(id) { timers.delete(id); },
   });
   vm.runInContext(code, context, { filename: "native-bootstrap.js" });
-  return { context, window, document, localStorage, sessionStorage, messages, scripts, timers, events, dispatched };
+  return { context, window, document, localStorage, sessionStorage, messages, scripts, timers, events, dispatched, imageRequests };
 }
 
-const settle = async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); };
+const settle = async () => { for (let i = 0; i < 30; i++) await Promise.resolve(); };
 
 test("only the ready handshake is posted before native hydration; no game starts early", () => {
   const f = fixture({ seed: { [KEY]: town("Old WebKit container") } });
@@ -194,12 +221,53 @@ test("loaded health requires 23/22, role counts, decoded artwork and a saved tow
     hallLevel: 2, construction: false, saved: true, nativePresent: true,
     menu: true, nativeZoom: true })) assert.equal(loaded.health[key], value, key);
   assert.match(loaded.health.fingerprint, /^[a-f0-9]{8}$/);
+  assert.deepEqual(f.imageRequests, ["assets/land/land-stage-01.png"]);
   f.window.AZMARA_NATIVE.resume();
   assert.deepEqual(f.dispatched, ["document:visibilitychange", "window:resize"]);
 });
 
-test("missing plot or failed artwork produces failure instead of a loaded health claim", async () => {
-  for (const options of [{ missingPlot: true }, { badImage: true }]) {
+test("current saved occupancy is accepted instead of assuming only the Hall exists", async () => {
+  const value = JSON.parse(town("Built town", 5));
+  value.buildings = {
+    "general-02": { typeId: "warehouse", level: 4 },
+    "harbour-01": { typeId: "shipyard", level: 2 },
+  };
+  const f = fixture({ occupied: 3 });
+  f.window.AZMARA_NATIVE.hydrate({ town: JSON.stringify(value), legacy: null });
+  f.scripts[0].onload();
+  await settle();
+  const loaded = f.messages.find((m) => m.type === "loaded");
+  assert.ok(loaded);
+  assert.equal(loaded.health.occupied, 3);
+  assert.equal(loaded.health.empty, 20);
+  assert.deepEqual(f.imageRequests, [
+    "assets/land/land-stage-02.png",
+    "assets/progression/warehouse-stages-v2.png",
+    "assets/progression/shipyard-stages-v2.png",
+  ]);
+});
+
+test("active occupied-building artwork must decode before native readiness", async () => {
+  const value = JSON.parse(town("Broken atlas", 5));
+  value.buildings = {
+    "general-02": { typeId: "warehouse", level: 4 },
+  };
+  const source = "assets/progression/warehouse-stages-v2.png";
+  for (const options of [
+    { badImageSource: source },
+    { missingBuildingRegistry: true },
+  ]) {
+    const f = fixture({ ...options, occupied: 2 });
+    f.window.AZMARA_NATIVE.hydrate({ town: JSON.stringify(value), legacy: null });
+    f.scripts[0].onload();
+    await settle();
+    assert.equal(f.messages.some((m) => m.type === "loaded"), false);
+    assert.deepEqual(f.messages.at(-1), { type: "failed" });
+  }
+});
+
+test("missing plot, land registry or failed artwork produces failure instead of a loaded health claim", async () => {
+  for (const options of [{ missingPlot: true }, { badImage: true }, { missingLandRegistry: true }]) {
     const f = fixture(options);
     f.window.AZMARA_NATIVE.hydrate({ town: town(), legacy: null });
     f.scripts[0].onload();

@@ -1,10 +1,43 @@
 # What actually exists
 
-As of: 15 October 2026. Phase: **desktop/web final visual shell, private web review**.
-Current authority: `DEC-011` through `DEC-096`. Foundation records below
-describe the earlier documentation-only stage.
+As of: 17 October 2026. Phase: **full-screen web30 live; native build 3 ready**.
+Current authority: `DEC-011` through `DEC-101`. Foundation records below
+describe earlier delivery stages.
 
-## Current delivery — full-bleed oasis private web28
+## Current delivery — full-screen private web30 and native build 3
+
+DEC-100's exact eleven land masters are live in private web30. The completed
+Town Hall look selects the land at levels 1, 5, 8, 12, 17, 22, 28, 34, 41, 45
+and 50; the Dev picker uses the same rule without saving its override. The old
+foundation/scenery layers no longer sit over the master. Other plot targets
+remain deliberately unmoved until the spot map is locked.
+
+The official Sites workflow pushed
+`38385508a478049c7a9ef7b25430f7bf87707193` and delivered a terminal-success
+77-file archive. Fresh live headless checks pass desktop and phone Town, Region
+and World full-viewport geometry with zero outer borders or browser errors.
+Compact Region/World targets now remain below the floating bar and every
+Options/More trigger reports dialog state correctly.
+The custom domain and one-owner/no-group/no-external audience are unchanged;
+there is no auto-deploy. See [web30 delivery](WEB_PUBLICATION_30.md).
+
+The independent iPhone wrapper is prepared and signed as AZMARA `0.1.0 (3)`.
+Its exact 77-file embedded runtime and updated save/startup bridge pass 14 Node
+tests, 53 Flutter tests, clean analysis, signature/profile/identity checks and
+target-device membership. The paired phone is currently unavailable, so the
+artifact is ready but not installed; existing phone data was not touched. See
+[native build 3](NATIVE_BUILD_3.md). A quiet 15-minute heartbeat will install
+that exact artifact in place once the paired phone is available and unlocked;
+it is forbidden from uninstalling, clearing data, rebuilding or substituting a
+different install path.
+
+## Previous delivery — locked land stages private web29
+
+DEC-100's exact land masters first went live in web29 with full-viewport Town,
+Region and World. It is the immediate rollback for web30; see
+[web29 delivery](WEB_PUBLICATION_29.md).
+
+## Previous delivery — full-bleed oasis private web28
 
 DEC-097 removes the desktop foundation's300-unit left/right insets and maps the
 same approved painting to the full4200×2400 desktop art plane. A centred cover

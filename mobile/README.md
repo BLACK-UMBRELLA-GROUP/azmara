@@ -7,12 +7,12 @@ a public store release, multiplayer backend or a ZYRA client.
 ## Identity and source
 
 - Display name: AZMARA; provisional local bundle ID:
-  `com.shakeelahmad.azmara.preview`; first version `0.1.0+1`, current `0.1.0+2`.
+  `com.shakeelahmad.azmara.preview`; first version `0.1.0+1`, current `0.1.0+3`.
 - Existing authorised Apple development team: `9Y7Z8F36SJ`. Development
   provisioning is for AZMARA's separate identity, never a copied ZYRA profile.
 - `../prototype/` remains the canonical game source. Generated `assets/game/`
-  contains only current HTML/CSS/JS and three original v3 PNGs plus the native
-  save bootstrap. Do not edit the generated copy or include historical assets.
+  contains only the allowlisted current runtime closure plus the native save
+  bootstrap. Do not edit the generated copy or include historical assets.
 - `tool/render_icon.swift` generates an original provisional A-monogram from
   code. Its opaque PNGs replace the scaffold's Flutter icon; final branding
   remains unresolved.
@@ -22,8 +22,8 @@ a public store release, multiplayer backend or a ZYRA client.
 
 ## Build and install
 
-Installed toolchain checked 9 October 2026: Flutter 3.44.2 / Dart 3.12.2,
-Xcode 27.0 (27A266a), CocoaPods 1.16.2. Source pins/lockfile are the authority
+Installed toolchain checked 17 October 2026: Flutter 3.44.2 / Dart 3.12.2,
+Xcode 27.1, CocoaPods 1.16.2. Source pins/lockfile are the authority
 for package versions. Run from the canonical project root:
 
 ```sh

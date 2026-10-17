@@ -1,11 +1,11 @@
 # AZMARA strategy game
 
 Provisional game name: **AZMARA** (`DEC-009`). Final branding remains undecided.
-Current phase: **desktop/web visual iteration alongside rule definition**
+Current phase: **locked land-stage delivery alongside rule definition**
 (`DEC-028`, narrowly updating the visual pause in `DEC-015`).
 The first local town-screen prototype remains available (`DEC-012`, `DEC-013`).
-The Founder paused native phone changes and prioritised the desktop reference-
-style overview under `DEC-043`; the installed iPhone build stays unchanged.
+The current private web and prepared native package are tracked under
+`DEC-100`/`DEC-101`; physical app installation remains in-place only.
 
 Target platforms: **iOS, Android and web browsers** (`DEC-010`). Engine,
 architecture, cross-platform account behaviour and launch order remain open.
@@ -47,12 +47,27 @@ app; build, installation and device verification are tracked in the status.
 
 ## Try the prototype
 
-**Current delivery, private web28 (DEC-097):** the oasis foundation now fills
-the complete desktop playfield instead of sitting inside a narrower central
-rectangle. It uses a centred cover crop, so the painting reaches both edges
-without horizontal stretching. Game data and controls are unchanged. The Site
-is still owner-only; Chrome was not opened automatically. Refresh manually at
-[azmara.app](https://azmara.app). See
+**Current delivery, private web30 (DEC-100/DEC-101):** all eleven locked land
+stages are live. Town, Region and World fill the browser viewport edge-to-edge
+with no outer game border; compact Region/World locations remain reachable
+below the floating town bar, and phone More/Options state is repaired. The Site
+remains owner-only and is not connected to auto-deploy. Refresh manually at
+[azmara.app](https://azmara.app). See the
+[web delivery](docs/implemented/WEB_PUBLICATION_30.md).
+
+**Prepared iPhone build, AZMARA 0.1.0 (3):** the signed app contains the same
+current runtime and supports the current save/construction schema. It is ready
+for an in-place installation when the paired iPhone is available and unlocked;
+the phone was not modified while unavailable. See
+[native build 3](docs/implemented/NATIVE_BUILD_3.md).
+
+**Previous delivery, private web29 (DEC-100/DEC-101):** the exact locked land
+stages first went live with the full-viewport shell. It is the immediate web
+rollback. See [delivery](docs/implemented/WEB_PUBLICATION_29.md).
+
+**Previous delivery, private web28 (DEC-097):** the oasis foundation first
+filled the complete desktop playfield with a centred cover crop. It is the
+earlier rollback. See
 [delivery](docs/implemented/WEB_PUBLICATION_28.md).
 
 **Previous delivery, private web27 (DEC-096):** the final-design shell v1 is live
@@ -269,9 +284,10 @@ records ZYRA ADMIN's delivery lessons and the proposed independent AZMARA route.
 The subsequent `DEC-039` authorises local iPhone delivery using the installed
 Flutter/Xcode tools. This does not authorise a store upload or public release.
 
-An independent **AZMARA** app (`0.1.0+2`) has now been built, signed and installed
-on the Founder's paired iPhone. His screenshot confirms the native town loads.
-The edge-to-edge update preserves the current native save byte-for-byte;
+An independent **AZMARA** app (`0.1.0+3`) is now built and signed for the
+Founder's paired iPhone. Build 3 packages the locked land runtime and current
+save schema; the phone was unavailable, so it has not yet replaced the earlier
+installed build. Installation must be in place and preserve the native save;
 full touch, orientation, changed-save and offline acceptance remain separate.
 See the [native delivery runbook](mobile/README.md) and
 [current verification status](docs/implemented/STATUS.md). Native progress is

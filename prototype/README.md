@@ -1,5 +1,13 @@
 # AZMARA town screen design preview
 
+## Current private delivery
+
+Private web30 is live at [azmara.app](https://azmara.app/). It uses the eleven
+locked land masters and fills Town, Region and World edge-to-edge on desktop
+and phone with no outer game border. Compact atlas targets sit below the
+floating town bar, and phone More/Options state is synchronised. See
+[`WEB_PUBLICATION_30.md`](../docs/implemented/WEB_PUBLICATION_30.md).
+
 ## Current local pilot — not published
 
 DEC-072 tests the recommended Oasis Town ground direction on desktop/Staggered
@@ -656,8 +664,9 @@ included. Generated concept art and UI styling still need Founder review.
 - This is a visual and interaction prototype, not the production game.
 - No live resource simulation, multiplayer, game authentication, server persistence,
   anti-cheat or store integration exists.
-- The separate installed iPhone prototype (0.1.0+2) is unchanged and paused;
-  this browser-only revision does not update, build or install the native app.
+- The separate iPhone prototype has a signed `0.1.0+3` package containing this
+  runtime. It is not yet installed because the paired phone was unavailable;
+  any later installation must be in place and retain the native save.
 - Sample resource values, costs and timing do not establish game balance.
 - Desktop and responsive browser checks do not establish real-device support.
 - Site access is owner-private. Only the sanitised browser delivery copy and

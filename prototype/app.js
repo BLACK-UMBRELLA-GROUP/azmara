@@ -1764,7 +1764,7 @@
     closeSidebar(false);
     actionsMenu.showModal();
     actionsMenu.scrollTop = 0;
-    $('[data-desktop-action="options"]')?.setAttribute("aria-expanded", "true");
+    all('[data-desktop-action="options"]').forEach((button) => button.setAttribute("aria-expanded", "true"));
     $("#close-actions").focus();
   }
 
@@ -1865,7 +1865,7 @@
   }, { capture: true });
   actionsMenu.addEventListener("close", () => {
     actionsToggle.setAttribute("aria-expanded", "false");
-    $('[data-desktop-action="options"]')?.setAttribute("aria-expanded", "false");
+    all('[data-desktop-action="options"]').forEach((button) => button.setAttribute("aria-expanded", "false"));
     if (!panel.open) returnToControl(actionsTrigger());
   });
   actionsMenu.addEventListener("keydown", (event) => {

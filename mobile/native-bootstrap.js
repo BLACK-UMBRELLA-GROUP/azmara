@@ -11,6 +11,7 @@
   let nativePresent = false;
   let failed = false;
   let loaded = false;
+  let landReady = false;
   let sequence = 0;
   const pending = new Map();
 
@@ -102,7 +103,7 @@
       wall: plots.filter((plot) => plot.dataset.kind === "wall").length,
       harbour: plots.filter((plot) => plot.dataset.kind === "harbour").length,
       freighter: plots.filter((plot) => plot.dataset.kind === "freighter").length,
-      imagesReady: [...document.images].every((image) => image.complete && image.naturalWidth > 0),
+      imagesReady: landReady && [...document.images].every((image) => image.complete && image.naturalWidth > 0),
       hallLevel: value?.hallLevel,
       construction: value?.construction !== null,
       saved: Boolean(saved),
@@ -114,18 +115,50 @@
       nativeZoom: document.querySelector('meta[name="viewport"]')?.content.includes("user-scalable=no") !== true,
     };
   }
-  async function finished() {
-    const filenames = ["azmara-starting-terrain-v3.png", "azmara-town-hall-v3.png", "azmara-empty-plot-v3.png"];
-    await Promise.all(filenames.map((name) => new Promise((resolve, reject) => {
+  async function decodeImage(source) {
+    await new Promise((resolve, reject) => {
       const image = new Image();
-      image.onload = resolve;
+      image.onload = async () => {
+        try {
+          if (typeof image.decode === "function") await image.decode();
+          if ("naturalWidth" in image && image.naturalWidth <= 0) throw new Error("Empty image.");
+          resolve();
+        } catch (error) { reject(error); }
+      };
       image.onerror = reject;
-      image.src = `assets/${name}`;
-    })));
-    await Promise.all([...document.images].map((image) => image.decode()));
+      image.src = source;
+    });
+  }
+  function activeBuildingSources(value) {
+    if (!value?.buildings || typeof value.buildings !== "object") return [];
+    const sources = new Set();
+    for (const [plotId, building] of Object.entries(value.buildings)) {
+      // Hall and wall visuals are painted into the locked land scene.
+      if (plotId === "general-01" || plotId === "wall-01") continue;
+      const art = window.AzmaraBuildingArt?.forBuilding?.(building?.typeId, building?.level);
+      if (!art || typeof art.src !== "string" || !art.src.startsWith("assets/progression/")) {
+        throw new Error("Current building artwork is unavailable.");
+      }
+      sources.add(art.src);
+    }
+    return [...sources];
+  }
+  async function finished() {
+    const saved = localStorage.getItem(KEY);
+    const value = saved ? JSON.parse(saved) : null;
+    const land = window.AzmaraLandStages?.forHallLevel?.(value?.hallLevel);
+    if (!land || typeof land.src !== "string" || !land.src.startsWith("assets/land/")) {
+      throw new Error("Current land stage is unavailable.");
+    }
+    await decodeImage(land.src);
+    for (const source of activeBuildingSources(value)) await decodeImage(source);
+    landReady = true;
+    for (const image of document.images) await image.decode();
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const result = health();
-    if (result.plots !== 23 || result.empty !== 22 || result.occupied !== 1 ||
+    const occupied = (value?.hallPlaced === false ? 0 : 1) +
+      (value?.buildings && typeof value.buildings === "object" ? Object.keys(value.buildings).length : 0);
+    if (result.plots !== 23 || result.empty !== 23 - occupied || result.occupied !== occupied ||
         result.general !== 19 || result.wall !== 1 || result.harbour !== 2 ||
         result.freighter !== 1 || !result.imagesReady || !result.menu || !result.saved) {
       throw new Error("Bundled town health check failed.");

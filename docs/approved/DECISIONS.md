@@ -1971,4 +1971,26 @@ unselected.
 - Spot data, IDs, saves and queues stay unchanged until the spot map is
   locked. Publishing to azmara.app needs the Owner's explicit OK.
 
-Next unused decision identifier: `DEC-101`.
+## DEC-101 — Deliver locked land stages on web and prepare native build 3
+
+- Date: 17 October 2026 (Europe/London).
+- Source: after approving the locked-land implementation and screenshot pass,
+  the Owner instructs Codex to complete QA, make the web pages active for
+  testing, include an app version, and ensure the browser game occupies the
+  whole screen without borders.
+- Publish DEC-100's exact eleven land masters to the existing owner-private
+  `azmara.app` Site. Town, Region and World must each fill the browser viewport
+  edge-to-edge; floating controls do not reserve or border the game area.
+- Package the same current runtime in the independent native AZMARA wrapper as
+  version `0.1.0` build `3`, retaining bundle ID
+  `com.shakeelahmad.azmara.preview`, signing team `9Y7Z8F36SJ`, save data and
+  in-place-install rules. Never uninstall the existing app or clear its data.
+- Preserve the Site's one-owner/no-group/no-external audience and manual
+  deployment model. Nothing is connected to auto-deploy. Keep private web28,
+  the prior native source and all canonical art for rollback.
+- The Owner permits an isolated headless QA pass but visible Chrome must remain
+  closed. Physical installation waits for the paired iPhone to be available
+  and unlocked; preparing and signing the exact app does not authorize data
+  removal or a substitute install path.
+
+Next unused decision identifier: `DEC-102`.

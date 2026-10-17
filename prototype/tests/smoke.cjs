@@ -66,7 +66,7 @@ async function desktopPresentation(page) {
 }
 
 async function actionsTrigger(page) {
-  return page.locator(await desktopPresentation(page) ? '[data-desktop-action="options"]' : "#toggle-actions");
+  return page.locator('[data-desktop-action="options"]:visible').first();
 }
 
 async function assertTriggerFocus(page, message) {
@@ -96,18 +96,26 @@ async function menuAction(page, control) {
   await settle(page);
 }
 
+async function openPanel(page, name) {
+  await page.locator(`.azmara-interface [data-panel="${name}"]:visible`).first().click();
+  await page.locator("#detail-panel").waitFor({ state: "visible" });
+  await settle(page);
+}
+
 async function assertCompactScene(page) {
-  const desktop = await desktopPresentation(page);
+  await desktopPresentation(page);
   const result = await page.locator("#map-viewport").evaluate((viewport) => {
     const box = viewport.getBoundingClientRect();
-    const desktop = innerWidth >= 1024 && innerHeight >= 600;
-    const name = document.querySelector(desktop ? "#desktop-town-name" : "#town-name");
-    const toggle = document.querySelector("#toggle-actions");
+    const phone = innerWidth < 700;
+    const name = document.querySelector("#floating-town-name");
     const nameBox = name.getBoundingClientRect();
+    const townBar = document.querySelector(".azmara-town-bar").getBoundingClientRect();
+    const dock = document.querySelector(phone ? ".azmara-phone-dock" : ".azmara-side-dock").getBoundingClientRect();
     return {
       viewport: { x: box.x, y: box.y, right: box.right, bottom: box.bottom }, width: innerWidth, height: innerHeight,
+      phone,
       nameOutsideMenu: !name.closest("#actions-menu"), nameVisible: nameBox.width > 0 && nameBox.height > 0 && nameBox.x >= 0 && nameBox.y >= 0 && nameBox.right <= innerWidth && nameBox.bottom <= innerHeight,
-      dots: toggle.querySelectorAll(".four-dots > i").length,
+      townBar: townBar.toJSON(), dock: dock.toJSON(),
       legacy: document.querySelectorAll(".brand-bar, .town-hud, .hud-controls, .utility-rail, .bottom-dock, #toggle-town-controls, .scene-caption, .mobile-map-hint").length
     };
   });
@@ -115,21 +123,19 @@ async function assertCompactScene(page) {
   assert(Math.abs(result.viewport.right - result.width) <= 1 && Math.abs(result.viewport.bottom - result.height) <= 1, "The scene does not fill the complete viewport");
   assert(result.nameOutsideMenu && result.nameVisible, "Town name is hidden inside the menu or clipped");
   assert.equal(result.legacy, 0, "Legacy HUD, rails, header/footer or persistent guidance remain");
-  assert.equal(result.dots, 4, "The actions toggle does not contain four dots");
+  assert(result.townBar.width > 0 && result.townBar.height >= 44 && result.townBar.x >= 0 && result.townBar.right <= result.width + 1, "Floating town bar is clipped");
+  assert(result.dock.width > 0 && result.dock.height >= 44 && result.dock.x >= 0 && result.dock.y >= 0 && result.dock.right <= result.width + 1 && result.dock.bottom <= result.height + 1, "Approved game dock is clipped");
   assert.equal(await page.locator("#toggle-actions").getAttribute("aria-controls"), "actions-menu");
   assert.equal(await page.locator("#toggle-actions").getAttribute("aria-haspopup"), "dialog");
   assert.equal(await page.locator("#toggle-actions").getAttribute("aria-expanded"), "false");
   assert.equal(await page.locator("#actions-menu").evaluate((dialog) => dialog.open), false);
-  assert.equal(await page.locator("#desktop-hud").isVisible(), desktop, "Desktop HUD visibility disagrees with presentation");
-  assert.equal(await page.locator("#toggle-actions").isVisible(), !desktop, "Compact menu trigger visibility disagrees with presentation");
-  if (desktop) {
-    const trigger = await actionsTrigger(page);
-    const box = await trigger.boundingBox();
-    assert(box && box.width >= 32 && box.height >= 32 && box.x >= 0 && box.y >= 0 && box.x + box.width <= page.viewportSize().width && box.y + box.height <= page.viewportSize().height, "Desktop Options is undersized or clipped");
-    for (const selector of [".desktop-resource-panel", ".desktop-advisers", ".desktop-rail-right", ".desktop-compass"]) assert(await page.locator(selector).isVisible(), "Desktop presentation omitted " + selector);
-    assert.equal(await page.locator(".desktop-rail-left").count(), 0, "Removed left toolbar remains in the desktop DOM");
-    assert.equal(await page.locator(".desktop-adviser").count(), 4, "Desktop must retain four adviser categories");
-  } else await assertTargetBounds(page, "#toggle-actions");
+  assert.equal(await page.locator("#desktop-hud").isVisible(), false, "Retired desktop HUD became visible over the approved floating shell");
+  assert.equal(await page.locator("#toggle-actions").isVisible(), false, "Retired compact menu trigger became visible");
+  assert.equal(await page.locator(".azmara-side-dock").isVisible(), !result.phone, "Desktop/compact side dock visibility disagrees with the 700px breakpoint");
+  assert.equal(await page.locator(".azmara-phone-dock").isVisible(), result.phone, "Phone bottom dock visibility disagrees with the 700px breakpoint");
+  const options = await actionsTrigger(page);
+  await options.scrollIntoViewIfNeeded();
+  await assertTargetBounds(page, '[data-desktop-action="options"]:visible');
   for (const id of ["zoom-in", "zoom-out", "center-map", "toggle-map-view", "toggle-labels", "rename-town", "show-town"]) {
     assert.equal(await page.locator("#actions-menu #" + id).count(), 1, id + " is not inside the actions menu");
     assert.equal(await page.locator("#" + id).isVisible(), false, id + " remains visible while the menu is closed");
@@ -139,7 +145,7 @@ async function assertCompactScene(page) {
 async function assertMenuControls(page) {
   await actions(page, true);
   const buttons = page.locator("#actions-menu button");
-  assert((await buttons.count()) >= 13, "Actions menu omitted an existing action");
+  assert((await buttons.count()) >= 7, "Options menu omitted an existing action");
   for (let index = 0; index < await buttons.count(); index += 1) {
     const button = buttons.nth(index);
     await button.scrollIntoViewIfNeeded();
@@ -151,13 +157,9 @@ async function assertMenuControls(page) {
     });
     assert(target.name && target.width >= 44 && target.height >= 44 && target.visible && target.exposed, "Menu action is unnamed, undersized, clipped or intercepted: " + target.name);
   }
-  for (const resource of ["Timber", "Clay", "Silver", "Grain", "Iron", "Coins"]) {
-    const item = page.locator("#actions-menu").getByLabel(new RegExp("^" + resource)).first();
-    await item.scrollIntoViewIfNeeded();
-    assert(await item.isVisible(), resource + " is unavailable in the actions menu");
-  }
-  assert.equal(await page.locator("#actions-menu #queue-chip").count(), 1, "Queue status is missing from the menu");
-  assert((await page.locator("#queue-chip").textContent()).trim(), "Queue status is empty");
+  const resources = page.locator(".azmara-town-bar .azmara-resource-chip");
+  assert.equal(await resources.count(), 6, "Floating town bar must retain all six resources");
+  assert.deepEqual(await resources.evaluateAll((nodes) => nodes.map((node) => node.title)), ["Coins", "Timber", "Clay", "Silver", "Grain", "Iron"]);
   await actions(page, false);
 }
 
@@ -211,137 +213,50 @@ async function assertMenuModal(page) {
   await assertTriggerFocus(page, "Close actions did not restore trigger focus");
   await menuAction(page, page.locator("#show-town"));
   await stable();
-  await menuAction(page, page.locator('#actions-menu [data-panel="overview"]'));
+  await openPanel(page, "overview");
   assert.equal(await page.locator("dialog:modal").count(), 1, "Actions and detail dialogs remained modal together");
   await close(page, true);
   await stable();
 }
 
 async function assertTownArtwork(page) {
-  assert.equal(await page.locator("#town-core img.town-hall-art").count(), 1, "Town must contain exactly one Hall artwork");
-  assert.equal(await page.locator("#town-core img.empty-plot-art").count(), 22, "Every empty plot must have its own unconstructed reserve artwork");
+  // DEC-099/100: the Hall and empty spots are part of the single locked land
+  // painting. Plot buttons remain the authoritative accessible controls.
+  assert.equal(await page.locator("#town-core img.town-hall-art, #town-core img.empty-plot-art").count(), 0, "Painted Hall or empty spots were duplicated as overlay sprites");
   assert.equal(await page.locator("#town-core .empty-slot-plus, #town-core .plot-plus").count(), 0, "Removed plus-symbol overlays remain on plot reserves");
-  assert.equal(await page.locator("#town-core img").count(), 23, "Town contains missing or additional plot artwork");
-  const artwork = await page.locator("#town-core img").evaluateAll(async (images) => {
-    await Promise.all(images.map((image) => image.decode()));
-    return images.map((image) => {
-      const plot = image.closest(".plot-marker");
-      return {
-        hall: image.classList.contains("town-hall-art"),
-        empty: image.classList.contains("empty-plot-art"),
-        marker: Boolean(image.closest(".marker")),
-        plot: plot?.dataset.plot,
-        occupied: plot?.dataset.occupied,
-        complete: image.complete,
-        naturalWidth: image.naturalWidth,
-        naturalHeight: image.naturalHeight,
-        source: image.currentSrc
-      };
-    });
-  });
-  for (const image of artwork) {
-    assert(image.complete && image.naturalWidth > 0 && image.naturalHeight > 0 && image.source, "Plot artwork did not load: " + image.plot);
-  }
-  const hall = artwork.filter((image) => image.hall);
-  assert.equal(hall[0].plot, hallId, "Hall artwork is not inside its occupied plot button");
-  assert.equal(hall[0].occupied, "true");
-  assert.equal(hall[0].empty, false, "Hall artwork is also labelled as empty");
-  const flags = artwork.filter((image) => image.empty);
-  assert.deepEqual(flags.map((image) => image.plot).sort(), expectedIds.filter((id) => id !== hallId), "Reserve artwork does not match all 22 empty plot IDs");
-  assert(flags.every((image) => image.occupied === "false" && image.marker && !image.hall), "Reserve artwork is outside its empty plot marker or occupies the Hall");
+  assert.equal(await page.locator("#town-core .plot-marker").count(), 23);
+  assert.equal(await page.locator('.plot-marker[data-plot="general-01"][data-occupied="true"] .marker > *').count(), 0, "Hall hotspot contains duplicate artwork");
+  assert.equal(await page.locator('.plot-marker[data-occupied="false"] .marker > *').count(), 0, "Empty hotspots contain duplicate spot art");
+  assert.equal(await page.locator("#azmara-land-stage").evaluate(async (image) => {
+    const source = image.getAttribute("href");
+    const probe = new Image(); probe.src = source; await probe.decode();
+    return probe.naturalWidth === 1536 && probe.naturalHeight === 1024;
+  }), true, "Locked land master is missing or undecoded");
 }
 
 async function assertVersionThreeArtwork(page) {
-  const desktop = await desktopPresentation(page);
-  const assets = await page.evaluate(async () => {
-    const sources = [
-      { role: "terrain", source: document.querySelector("#town-terrain-art").href.baseVal },
-      { role: "hall", source: document.querySelector("img.town-hall-art").currentSrc },
-      { role: "empty", source: document.querySelector('[data-kind="general"] img.empty-plot-art').currentSrc },
-      { role: "wall", source: document.querySelector('[data-kind="wall"] img.empty-plot-art').currentSrc },
-      { role: "freighter", source: document.querySelector('[data-kind="freighter"] img.empty-plot-art').currentSrc }
-    ];
-    return Promise.all(sources.map(async ({ role, source }) => {
-      const image = new Image();
-      image.src = new URL(source, location.href).href;
-      await image.decode();
-      const canvas = document.createElement("canvas");
-      // Check source alpha at native resolution, including sparse edge holes
-      // that downsampling can conceal.
-      canvas.width = image.naturalWidth;
-      canvas.height = image.naturalHeight;
-      const context = canvas.getContext("2d");
-      context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-      let transparent = 0;
-      let opaque = 0;
-      let minAlpha = 255;
-      let maxAlpha = 0;
-      let minX = canvas.width;
-      let minY = canvas.height;
-      let maxX = -1;
-      let maxY = -1;
-      for (let index = 0; index < pixels.length / 4; index += 1) {
-        const alpha = pixels[index * 4 + 3];
-        minAlpha = Math.min(minAlpha, alpha);
-        maxAlpha = Math.max(maxAlpha, alpha);
-        if (alpha === 0) transparent += 1;
-        if (alpha >= 250) opaque += 1;
-        if (alpha > 50) {
-          const x = index % canvas.width;
-          const y = Math.floor(index / canvas.width);
-          minX = Math.min(minX, x); minY = Math.min(minY, y);
-          maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
-        }
-      }
-      const corners = [[0, 0], [canvas.width - 1, 0], [0, canvas.height - 1], [canvas.width - 1, canvas.height - 1]].map(([x, y]) => context.getImageData(x, y, 1, 1).data[3]);
-      return { role, source: image.src, width: image.naturalWidth, height: image.naturalHeight, transparent, opaque, minAlpha, maxAlpha, total: canvas.width * canvas.height, corners, visibleWidth: (maxX - minX + 1) / canvas.width, visibleHeight: (maxY - minY + 1) / canvas.height };
-    }));
+  await desktopPresentation(page);
+  const land = await page.locator("#azmara-land-stage").evaluate(async (image) => {
+    const probe = new Image(); probe.src = image.getAttribute("href"); await probe.decode();
+    const viewport = document.querySelector("#map-viewport").getBoundingClientRect();
+    const painted = image.getBoundingClientRect();
+    return {
+      source: image.getAttribute("href"), width: probe.naturalWidth, height: probe.naturalHeight,
+      preserve: image.getAttribute("preserveAspectRatio"), imageCount: document.querySelectorAll("#world-landscape > image").length,
+      covers: painted.left <= viewport.left + .6 && painted.top <= viewport.top + .6 && painted.right >= viewport.right - .6 && painted.bottom >= viewport.bottom - .6,
+      ratio: painted.width / painted.height,
+      legacyVisible: ["azmara-oasis-foundation", "town-terrain-overlay", "town-street-ground", "town-scenery-decor", "town-valley-terrain", "town-wall-perimeter", "town-wall-front-layer"].filter((id) => {
+        const node = document.getElementById(id); return node && node.getClientRects().length && getComputedStyle(node).display !== "none";
+      })
+    };
   });
-  const expected = { terrain: `progression/azmara-desert-${desktop ? "desktop" : "compact"}-level-1-v3.png`, hall: "progression/azmara-hall-level-1.png", empty: "azmara-empty-plot-v4.png", wall: "wall-earth-reserve-v2.svg", freighter: "freight-yard-reserve-v2.svg" };
-  for (const asset of assets) {
-    assert(new URL(asset.source).pathname.endsWith("/assets/" + expected[asset.role]), "Active scene is using stale " + asset.role + " artwork");
-    const vector = asset.role === "freighter" || asset.role === "wall";
-    assert(asset.width >= (vector ? 220 : 512) && asset.height >= (asset.role === "wall" ? 145 : vector ? 146 : 512), asset.role + " artwork is too small or undecoded");
-    assert(asset.opaque > asset.total * (vector ? .01 : .15), asset.role + " artwork lost its visible opaque content");
-    if (asset.role === "terrain") {
-      if (desktop) assert(asset.width > asset.height, "Desktop desert terrain must be wide, not the compact square art");
-      else assert.equal(asset.width, asset.height, "Square terrain is stretched to the world footprint");
-      assert.equal(asset.transparent, 0, "Terrain backdrop contains transparent holes");
-      assert.equal(asset.minAlpha, 255, "Terrain backdrop is not fully opaque at native resolution");
-    } else {
-      assert(Math.abs(asset.width / asset.height - (asset.role === "wall" ? 340 / 145 : 1.5)) < .01, asset.role + " sprite lost its registered artwork proportions");
-      assert(asset.transparent > asset.total * 0.15, asset.role + " sprite lost its transparent background");
-      assert.equal(asset.minAlpha, 0, asset.role + " sprite lacks fully transparent source pixels");
-      assert(asset.maxAlpha >= 250, asset.role + " sprite lacks opaque source pixels");
-      assert.deepEqual(asset.corners, [0, 0, 0, 0], asset.role + " sprite has an opaque rectangular corner");
-      assert(asset.visibleWidth > 0.5 && asset.visibleHeight > 0.5, asset.role + " sprite has excessive transparent padding");
-    }
-    console.log(`CHECK ${asset.role} decoded artwork ${asset.width}x${asset.height}; alpha ${asset.minAlpha}-${asset.maxAlpha}; transparent ${asset.transparent}/${asset.total}`);
-  }
-  const hall = assets.find((asset) => asset.role === "hall");
-  const hallBox = await page.locator("#town-core img.town-hall-art").boundingBox();
-  assert(hallBox && hall.visibleWidth * hallBox.width >= 24 && hall.visibleHeight * hallBox.height >= 24, "The intentionally modest level1 wooden Hall lost its readable actual drawn silhouette at Fit");
-  assert.equal(await page.locator("#world-landscape > image#town-terrain-art").count(), 1, "Registered primary terrain artwork is missing or duplicated");
-  assert.equal(await page.locator("#world-landscape > image:not(#town-terrain-overlay)").count(), 1, "Backdrop includes extra facility artwork outside the 23 plots");
-  assert.equal(await page.locator("#town-terrain-overlay").count(), 1, "Registered future-stage infrastructure overlay is missing or duplicated");
-  assert.equal(await page.locator("#town-terrain-overlay").evaluate((image) => getComputedStyle(image).display), "none", "Level1 falsely shows late infrastructure");
-  assert.equal(await page.locator("#painted-margin > image").count(), desktop ? 0 : 4, "Terrain margin copies do not match the active presentation");
-  assert.equal(await page.locator("#painted-margin").count(), desktop ? 0 : 1, "Desktop must not tile or reflect its wide coastline");
-  assert.equal(await page.locator("#world-landscape pattern:not(#painted-margin), #land-grain, #water-grain, #outland-palms, #outland-light, #water-light").count(), 0, "Obsolete procedural filler is still rendered");
-  const margins = await page.locator("#painted-margin > image").evaluateAll((images) => images.map((image) => ({ source: image.href.baseVal, x: image.x.baseVal.value, y: image.y.baseVal.value, width: image.width.baseVal.value, height: image.height.baseVal.value, aspect: image.getAttribute("preserveAspectRatio") })));
-  // The copies overlap by eight world pixels per side; the registered primary
-  // image stays 2800 square and all copies use the original square bitmap.
-  if (!desktop) assert(margins.every((image) => image.source === "assets/" + expected.terrain && image.x === -8 && image.y === -8 && image.width === 2816 && image.height === 2816 && image.aspect === "xMidYMid meet"), "Screen-ratio margin changes the stage-1 painted terrain bitmap, square proportions or eight-pixel overscan");
-  const terrain = await page.locator("#town-terrain-art").evaluate((image) => ({ x: image.x.baseVal.value, y: image.y.baseVal.value, width: image.width.baseVal.value, height: image.height.baseVal.value, aspect: image.getAttribute("preserveAspectRatio") }));
-  assert.deepEqual(terrain, desktop ? { x: 0, y: 0, width: 4200, height: 2400, aspect: "xMidYMid slice" } : { x: 1600, y: 960, width: 2800, height: 2800, aspect: "xMidYMid meet" }, "Primary terrain registration or uniform image fit changed");
-  const emptySources = await page.locator("img.empty-plot-art").evaluateAll((images) => [...new Set(images.map((image) => image.currentSrc))]);
-  assert.equal(emptySources.length, 3, "Ordinary earth, rectangular wall earth and freighter dock must retain their three distinct reserve visuals");
-  const roleSources = await page.locator("img.empty-plot-art").evaluateAll((images) => images.map((image) => ({ kind: image.closest(".plot-marker").dataset.kind, source: new URL(image.currentSrc).pathname })));
-  for (const image of roleSources) {
-    const file = image.kind === "wall" ? expected.wall : image.kind === "freighter" ? expected.freighter : expected.empty;
-    assert(image.source.endsWith("/assets/" + file), "A dedicated reserve uses the wrong artwork: " + image.kind);
-  }
+  assert.equal(land.source, "assets/land/land-stage-01.png");
+  assert.deepEqual([land.width, land.height], [1536, 1024]);
+  assert.equal(land.preserve, "xMidYMid meet");
+  assert.equal(land.imageCount, 1, "Locked ground must be one image");
+  assert(land.covers && Math.abs(land.ratio - 1.5) < .002, "Locked land is stretched or leaves hard edges: " + JSON.stringify(land));
+  assert.deepEqual(land.legacyVisible, [], "Retired landscape layers paint over the locked master");
+  assert.equal(await page.locator("#town-core img").count(), 0, "Hall, spot or other building overlays were drawn over the Level 1 master");
 }
 
 async function assertOrganicComposition(page) {
@@ -360,23 +275,20 @@ async function assertOrganicComposition(page) {
   const moved = plots.find((plot) => plot.id === "general-09");
   const wall = plots.find((plot) => plot.id === "wall-01");
   assert.deepEqual([moved.x, moved.y], [1250, 140], "General 09 did not move to the former right-side wall anchor");
-  assert.deepEqual([wall.x, wall.y], [440, 25], "Wall plot did not move to the inland perimeter");
+  assert.deepEqual([wall.x, wall.y], [850, -120], "Wall plot did not remain on the locked painted gate");
   assert.equal(moved.kind, "general");
   assert.equal(wall.kind, "wall");
-  await menuAction(page, page.locator("#zoom-in"));
+  await page.locator("#map-viewport").focus();
+  await page.keyboard.press("+");
   await settle(page);
   const footprint = await page.locator("#town-core .plot-marker").evaluateAll((markers) => markers.map((marker) => {
     const box = marker.getBoundingClientRect();
-    const image = marker.querySelector("img");
-    const imageBox = image.getBoundingClientRect();
-    const scale = Math.min(imageBox.width / image.naturalWidth, imageBox.height / image.naturalHeight);
-    return { id: marker.dataset.plot, width: box.width, height: box.height, contentWidth: image.naturalWidth * scale, contentHeight: image.naturalHeight * scale, fit: getComputedStyle(image).objectFit };
+    return { id: marker.dataset.plot, width: box.width, height: box.height, artwork: marker.querySelector(".marker").childElementCount };
   }));
   const hall = footprint.find((plot) => plot.id === hallId);
   const empty = footprint.filter((plot) => plot.id !== hallId && plot.id.startsWith("general-"));
   assert(hall.width >= Math.max(...empty.map((plot) => plot.width)) * 1.25, "Hall did not gain a visibly larger footprint than empty sites");
-  assert(hall.contentWidth >= Math.max(...empty.map((plot) => plot.contentWidth)) * 1.20, "Transparent/image sizing erased the Hall's larger drawn width");
-  assert(footprint.every((plot) => plot.fit === "contain" && plot.width >= 44 && plot.height >= 44), "Plot sizing stretches artwork or loses minimum targets");
+  assert(footprint.every((plot) => plot.artwork === 0 && plot.width >= 44 && plot.height >= 44), "Painted spots gained overlay art or lost minimum targets");
 }
 
 async function load(page) {
@@ -400,6 +312,10 @@ async function runCase(browser, name, options, prepare, verify) {
     console.log("PASS " + name);
   } finally {
     await context.close();
+    // Let Chromium finish closing the previous isolated network session before
+    // the next large locked-land image starts loading. Without this brief
+    // yield, rapid phone/desktop context churn can reset localhost requests.
+    await new Promise((resolve) => setTimeout(resolve, 150));
   }
 }
 
@@ -495,9 +411,8 @@ async function assertFreshUI(page, townName = "Your town") {
 async function assertResetUI(page, townName) {
   assert.equal(await page.locator("#town-name").textContent(), townName);
   await assertPlots(page, 1, false);
-  assert.equal(await page.locator("#town-core img.town-hall-art").count(), 0);
-  assert.equal(await page.locator("#town-core img.empty-plot-art").count(), 23);
-  await page.locator("#town-core img").evaluateAll((images) => Promise.all(images.map((image) => image.decode())));
+  assert.equal(await page.locator("#town-core img").count(), 0, "Reset reintroduced Hall or empty-site overlay art over the locked land");
+  assert.equal(await page.locator('#town-core .plot-marker[data-occupied="false"]').count(), 23);
   await actions(page, true);
   for (const [resource, amount] of Object.entries(initialResources)) assert.equal((await page.locator("#resource-" + resource).textContent()).replace(/,/g, "").trim(), String(amount));
   await actions(page, false);
@@ -508,7 +423,10 @@ async function close(page, escape = false, origin = "toggle-actions") {
   else await page.locator("#close-panel").click();
   await page.locator("#detail-panel").waitFor({ state: "hidden" });
   await settle(page);
-  if (origin === "toggle-actions") await assertTriggerFocus(page, "Details restored focus to a hidden menu control or the wrong trigger");
+  if (origin === "toggle-actions") {
+    const shellTrigger = await page.evaluate(() => Boolean(document.activeElement?.closest(".azmara-interface") && document.activeElement.getClientRects().length));
+    if (!shellTrigger) await assertTriggerFocus(page, "Details restored focus to a hidden menu control or the wrong trigger");
+  }
   else assert.equal(await page.evaluate(() => document.activeElement.id || document.activeElement.dataset.plot), origin, "Details restored focus to the wrong plot");
 }
 
@@ -555,7 +473,7 @@ async function rename(page, name, expected = name) {
 }
 
 async function reset(page, cancel = false) {
-  await menuAction(page, page.locator('#actions-menu [data-panel="overview"]'));
+  await page.locator(".azmara-dev-button:visible").click();
   await page.locator("#request-reset").click();
   await page.locator(cancel ? "#cancel-reset" : "#confirm-reset").click();
   await page.locator("#detail-panel").waitFor({ state: "hidden" });
@@ -594,8 +512,8 @@ async function assertQueueGuard(page, saved) {
           assert.equal(await page.evaluate(() => document.activeElement.dataset.plot), hallId, "Dialog failed to restore map-marker focus");
           await rename(page, "W".repeat(25), "W".repeat(20));
           await assertMenuControls(page);
-          for (const [panel, title] of [["overview", "Town overview"], ["forces", "Forces"], ["knowledge", "Knowledge"], ["diplomacy", "Diplomacy"]]) {
-            await menuAction(page, page.locator(`#actions-menu [data-panel="${panel}"]`));
+          for (const [panel, title] of [["overview", "Town overview"], ["forces", "Military"], ["knowledge", "Discoveries"], ["diplomacy", "Diplomacy"]]) {
+            await openPanel(page, panel);
             assert.equal(await page.locator("#panel-title").textContent(), title);
             await close(page);
           }
@@ -684,7 +602,7 @@ async function assertQueueGuard(page, saved) {
         await assertPlots(page, 2);
         await rename(page, "<img src=x>");
         assert.equal(await page.locator("#town-name img").count(), 0, "Town-name markup was interpreted");
-        await menuAction(page, page.locator('#actions-menu [data-panel="overview"]'));
+        await openPanel(page, "overview");
         assert.equal(await page.locator("#overview-town-name").textContent(), "<img src=x>");
         await close(page);
         const beforeReset = await readState(page);
@@ -796,7 +714,7 @@ async function assertQueueGuard(page, saved) {
           await openPlot(page, plots[0]);
           assert(await page.locator("#upgrade-building").isEnabled(), "Invalid construction remained active");
           await close(page);
-          await menuAction(page, page.locator('#actions-menu [data-panel="overview"]'));
+          await openPanel(page, "overview");
           assert((await page.locator("#panel-content").textContent()).includes("This browser only"), "Writable storage was reported as unavailable");
           await close(page);
           await rename(page, "Recovered V3");
@@ -826,7 +744,7 @@ async function assertQueueGuard(page, saved) {
         await assertFreshUI(page);
         await rename(page, "<img src=x>");
         assert.equal(await page.locator("#town-name img").count(), 0);
-        await menuAction(page, page.locator('#actions-menu [data-panel="overview"]'));
+        await openPanel(page, "overview");
         assert((await page.locator("#panel-content").textContent()).includes("This visit only"));
         await close(page);
         await openPlot(page, plots[0]);

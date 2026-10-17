@@ -203,10 +203,18 @@ class _NativeTownState extends State<NativeTown> with WidgetsBindingObserver {
           if (!mounted || generation != _generation || _failed) return;
           final health = message['health'] as Map<String, dynamic>;
           final town = _nativeTown;
+          final parsedTown = town == null ? null : SaveContract.parse(town);
+          final savedBuildings = parsedTown?['buildings'];
+          final expectedOccupied = parsedTown == null
+              ? -1
+              : (parsedTown['hallPlaced'] == false ? 0 : 1) +
+                    (savedBuildings is Map<String, dynamic>
+                        ? savedBuildings.length
+                        : 0);
           if (town == null ||
               health['plots'] != 23 ||
-              health['empty'] != 22 ||
-              health['occupied'] != 1 ||
+              health['empty'] != 23 - expectedOccupied ||
+              health['occupied'] != expectedOccupied ||
               health['general'] != 19 ||
               health['wall'] != 1 ||
               health['harbour'] != 2 ||
@@ -216,7 +224,7 @@ class _NativeTownState extends State<NativeTown> with WidgetsBindingObserver {
               health['menu'] != true ||
               health['nativeZoom'] != true ||
               health['fingerprint'] != SaveContract.fingerprint(town) ||
-              health['hallLevel'] != SaveContract.parse(town)['hallLevel']) {
+              health['hallLevel'] != parsedTown?['hallLevel']) {
             throw const FormatException();
           }
           _startupTimer?.cancel();

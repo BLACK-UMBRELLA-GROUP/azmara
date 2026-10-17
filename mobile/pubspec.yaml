@@ -1,7 +1,7 @@
 name: azmara_preview
 description: Independent, locally bundled AZMARA iPhone design prototype.
 publish_to: none
-version: 0.1.0+2
+version: 0.1.0+3
 
 environment:
   sdk: ^3.12.2
@@ -23,3 +23,6 @@ flutter:
   assets:
     - assets/game/
     - assets/game/assets/
+    - assets/game/assets/progression/
+    - assets/game/assets/land/
+    - assets/game/assets/valley-wall/

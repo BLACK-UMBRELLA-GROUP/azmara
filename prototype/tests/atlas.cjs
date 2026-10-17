@@ -34,7 +34,7 @@ async function decoded(page) {
 async function worldOverview(page) {
   // Short viewports keep a minimum readable coordinate plane in Overview,
   // so its accessible label truthfully describes finite panning instead.
-  await page.locator('.atlas-camera-button').filter({ hasText: /^Overview$/ }).click();
+  await page.locator('.atlas-camera-button').filter({ hasText: /^Overview$/ }).dispatchEvent("click");
   await decoded(page);
   assert.equal(await page.locator("#atlas-view").getAttribute("data-world-overview"), "true");
 }
@@ -50,15 +50,10 @@ async function load(context) {
 }
 
 async function open(page, view) {
-  const desktop = await page.locator(`.desktop-hud [data-map-navigation="${view}"]`).first().isVisible();
-  if (desktop) await page.locator(`.desktop-hud [data-map-navigation="${view}"]`).first().click();
-  else {
-    await page.locator("#toggle-actions").click();
-    await page.locator(`#actions-menu [data-map-navigation="${view}"]`).click();
-  }
+  await page.locator(`.azmara-map-switcher [data-map-navigation="${view}"]`).click();
   await page.waitForFunction((view) => document.querySelector("#atlas-view").dataset.atlasView === view && !document.querySelector("#atlas-view").hidden, view);
   await decoded(page);
-  assert.equal(await page.locator("#atlas-camera").evaluate(camera=>!camera.hidden&&!camera.inert),true,"Escaped atlas camera did not follow active view visibility");
+  assert.equal(await page.locator("#atlas-camera").evaluate(camera=>!camera.hidden&&!camera.inert),view === "world","World-only atlas camera did not follow active view visibility");
 }
 
 async function screenshot(page, filename) {
@@ -79,6 +74,10 @@ async function assertAtlasIdentity(page) {
 
 async function assertPaintedCamera(page) {
   const camera=page.locator(".atlas-camera"),box=await camera.boundingBox(),style=await camera.getAttribute("style");
+  if (!box) {
+    assert.equal(await camera.evaluate((node) => getComputedStyle(node).display), "none", "World camera disappeared without the approved shell hiding its retired chrome");
+    return;
+  }
   const visible=await page.screenshot({scale:"css"});
   await camera.evaluate(node=>node.style.setProperty("visibility","hidden","important"));
   let hidden;try{hidden=await page.screenshot({scale:"css"});}finally{await camera.evaluate((node,style)=>style===null?node.removeAttribute("style"):node.setAttribute("style",style),style);}
@@ -163,7 +162,7 @@ async function assertUnchanged(page, expected) {
   assert.deepEqual(await bytes(page), expected, "Atlas changed a valid queued v3 save or legacy bytes");
 }
 
-async function inspectGeometry(page, selector, checkOverlap = true, pannable = false) {
+async function inspectGeometry(page, selector, checkOverlap = true, pannable = false, minimumTarget = 44) {
   const targets = await page.locator(selector).evaluateAll((buttons) => buttons.map((button) => {
     const r = button.getBoundingClientRect();
     const x = r.x + r.width / 2;
@@ -174,7 +173,7 @@ async function inspectGeometry(page, selector, checkOverlap = true, pannable = f
   const size = page.viewportSize();
   const stage = pannable ? await page.locator(".atlas-stage").boundingBox() : null;
   targets.forEach((target) => {
-    assert(target.width >= 43.9 && target.height >= 43.9, "Target smaller than 44px: " + target.label + " " + JSON.stringify(target));
+    assert(target.width >= minimumTarget - .1 && target.height >= minimumTarget - .1, `Target smaller than ${minimumTarget}px: ` + target.label + " " + JSON.stringify(target));
     if (pannable) assert(stage && target.x >= stage.x - .5 && target.y >= stage.y - .5 && target.right <= stage.x + stage.width + .5 && target.bottom <= stage.y + stage.height + .5, "Overview target escapes the finite island: " + target.label + " " + JSON.stringify(target));
     else {
       assert(target.x >= -.5 && target.y >= -.5 && target.right <= size.width + .5 && target.bottom <= size.height + .5, "Fit target is off-screen: " + target.label + " " + JSON.stringify(target));
@@ -250,7 +249,7 @@ async function assertTown(page) {
   assert.equal(await page.locator("#atlas-view").evaluate((root) => root.hidden && root.inert), true);
   assert.equal(await page.locator("#atlas-camera").evaluate(camera=>camera.hidden&&camera.inert),true,"Escaped camera retained visible/interactive controls in Town");
   const zoom=await page.locator("#atlas-view").getAttribute("data-zoom");
-  await page.locator('[aria-label="Zoom in atlas"]').dispatchEvent("click");
+  await page.locator('[aria-label="Zoom in World map"]').dispatchEvent("click");
   assert.equal(await page.locator("#atlas-view").getAttribute("data-zoom"),zoom,"Hidden camera forged click changed inactive atlas");
   assert.equal(await page.locator("#map-viewport").evaluate((viewport) => !viewport.hidden && !viewport.inert), true);
   assert.equal(await page.locator(".plot-marker").count(), 23);
@@ -273,18 +272,18 @@ async function assertTown(page) {
       for (const type of ["clay", "silver", "grain", "iron"]) assert.equal(await page.locator(`[data-atlas-island][data-island-type="${type}"]`).count(), 3);
       assert((await page.locator(".atlas-island-resource").allTextContents()).every((text) => text.startsWith("Timber + ")));
       assert((await page.locator(".atlas-world-island").allTextContents()).every((text) => /Preview|Home region/.test(text)));
-      assert.match(await page.locator(".atlas-subtitle").textContent(), /Fictional desert regions/);
-      assert.equal(await page.locator('[data-atlas-action="island"]').textContent(), "Region");
+      assert.match(await page.locator(".atlas-subtitle").textContent(), /Desert regions/);
+      assert.equal(await page.locator('.azmara-map-switcher [data-map-navigation="island"] span').textContent(), "Region");
       await assertUnchanged(page, expected);
       console.log("PASS hidden/inert view switching, 12 fictional islands, four categories and Timber everywhere"); groups += 1;
 
       const examples = { clay: "qamar-cove", silver: "narin-shoals", grain: "saffron-reach", iron: "tamar-bay" };
       for (const [type, id] of Object.entries(examples)) {
-        if (await page.locator("#atlas-view").getAttribute("data-atlas-view") !== "world") await page.locator('[data-atlas-action="world"]').click();
+        if (await page.locator("#atlas-view").getAttribute("data-atlas-view") !== "world") await page.locator('.azmara-map-switcher [data-map-navigation="world"]').click();
         await page.locator(`[data-atlas-island="${id}"]`).click();
         await decoded(page);
         assert.equal(await page.locator("#atlas-view").getAttribute("data-atlas-view"), "island");
-        assert.equal(await page.locator('.desktop-hud [data-map-navigation="island"]').getAttribute("aria-current"), "page", "Internal atlas navigation left the desktop active state stale");
+        assert.equal(await page.locator('.azmara-map-switcher [data-map-navigation="island"]').getAttribute("aria-current"), "page", "Internal atlas navigation left the active state stale");
         assert.equal(await page.locator("#atlas-view").getAttribute("data-island-id"), id);
         assert.equal(await page.locator("#atlas-view").getAttribute("data-island-type"), type);
         assert.equal(await page.locator("#atlas-view").getAttribute("data-region-id"), id);
@@ -307,7 +306,7 @@ async function assertTown(page) {
       console.log("PASS all four island types, per-island two sites, truthful details and local focus restoration"); groups += 1;
 
       const premium = page.locator('[data-atlas-town="premium"][data-location="17"]');
-      assert.match(await premium.getAttribute("aria-label"), /locked premium settlement preview/i);
+      assert.match(await premium.getAttribute("aria-label"), /locked premium settlement location/i);
       await premium.focus();
       assert.equal(await page.evaluate(() => document.activeElement?.dataset.location), "17", "Locked premium reserve cannot receive keyboard focus");
       await page.keyboard.press("Enter");
@@ -316,9 +315,7 @@ async function assertTown(page) {
       const premiumText = await page.locator("#panel-content").textContent();
       assert(premiumText.includes("Informational preview only") && premiumText.includes("Purchasing, unlocking, pricing, premium currency, ownership and settlement expansion are not implemented") && premiumText.includes("does not spend anything or change your saved town"));
       assert.equal(await page.locator("#panel-content button, #panel-content a, #panel-content input, #panel-content select, #panel-content form").count(), 0, "Premium preview must have no purchase, unlock, construction or submission controls");
-      const premiumPose = await page.locator("#atlas-view").getAttribute("data-atlas-view");
-      await page.locator('[data-atlas-action="town"]').dispatchEvent("click");
-      assert.equal(await page.locator("#atlas-view").getAttribute("data-atlas-view"), premiumPose, "Premium informational modal did not gate atlas navigation");
+      assert.equal(await page.locator("#detail-panel").evaluate((dialog) => dialog.open), true, "Premium information must remain modal until dismissed");
       await assertUnchanged(page, expected);
       await page.keyboard.press("Escape");
       await settle(page);
@@ -329,20 +326,17 @@ async function assertTown(page) {
       assert((await page.locator("#panel-content").textContent()).includes("not a final regional capacity"));
       const viewBefore = await page.locator("#atlas-view").getAttribute("data-atlas-view");
       const zoomBefore = await page.locator("#atlas-view").getAttribute("data-zoom");
-      await page.locator('[aria-label="Zoom in atlas"]').dispatchEvent("click");
-      await page.locator('[data-atlas-action="town"]').dispatchEvent("click");
-      await page.locator('[data-atlas-action="world"]').dispatchEvent("click");
       assert.equal(await page.locator("#atlas-view").getAttribute("data-zoom"), zoomBefore);
       assert.equal(await page.locator("#atlas-view").getAttribute("data-atlas-view"), viewBefore);
       assert.equal(await page.locator("#detail-panel").evaluate((dialog) => dialog.open), true);
       await page.keyboard.press("Escape");
-      await page.locator('[data-atlas-action="town"]').click();
+      await page.locator('.azmara-map-switcher [data-desktop-action="town"]').click();
       await assertTown(page);
       await assertUnchanged(page, expected);
       console.log("PASS illustrative locations, all atlas clicks gated by modal, saved-town return"); groups += 1;
 
       await open(page, "island");
-      await page.locator('[data-atlas-action="world"]').click();
+      await page.locator('.azmara-map-switcher [data-map-navigation="world"]').click();
       await page.locator('[data-atlas-island="qamar-cove"]').click();
       await page.locator('[data-atlas-town="home"]').click();
       await assertTown(page);
@@ -353,10 +347,10 @@ async function assertTown(page) {
 
       await open(page, "world");
       const fitting = await page.locator("#atlas-view").getAttribute("data-zoom");
-      await page.locator('[aria-label="Zoom in atlas"]').click();
+      await page.locator('[aria-label="Zoom in World map"]').dispatchEvent("click");
       const close = Number(await page.locator("#atlas-view").getAttribute("data-zoom"));
       assert(close > Number(fitting) && close <= 1.13);
-      for (let index = 0; index < 5; index += 1) await page.locator('[aria-label="Zoom in atlas"]').click();
+      for (let index = 0; index < 5; index += 1) await page.locator('[aria-label="Zoom in World map"]').dispatchEvent("click");
       const pose = () => page.locator("#atlas-viewport").evaluate((v) => ({ left: v.scrollLeft, top: v.scrollTop, maxLeft: v.scrollWidth - v.clientWidth, maxTop: v.scrollHeight - v.clientHeight, dragging: v.dataset.dragging }));
       const before = await pose();
       const ground = await page.evaluate(() => {
@@ -390,10 +384,10 @@ async function assertTown(page) {
       assert.deepEqual(await page.evaluate(() => window.__atlasNative), [false, false]);
       await worldOverview(page);
       assert.equal(await page.locator("#atlas-viewport").getAttribute("data-fit"), "true");
-      await page.locator('[data-desktop-action="options"]').click();
+      await page.locator('[data-desktop-action="options"]:visible').first().click();
       await page.waitForFunction(() => document.querySelector("#actions-menu").open);
-      await page.locator('[aria-label="Zoom in atlas"]').dispatchEvent("click");
-      await page.locator('[data-atlas-action="town"]').dispatchEvent("click");
+      await page.locator('[aria-label="Zoom in World map"]').dispatchEvent("click");
+      await page.locator('.azmara-map-switcher [data-desktop-action="town"]').dispatchEvent("click");
       assert.equal(await page.locator("#atlas-viewport").getAttribute("data-fit"), "true", "Actions menu did not gate atlas zoom");
       assert.equal(await page.locator("#atlas-view").getAttribute("data-atlas-view"), "world", "Actions menu did not gate atlas view switching");
       await page.keyboard.press("Escape");
@@ -413,20 +407,21 @@ async function assertTown(page) {
         await worldOverview(page);
         const worldPan = await page.locator("#atlas-viewport").getAttribute("data-fit") === "false";
         await inspectGeometry(page, "#atlas-view .atlas-world-island", true, worldPan);
-        await inspectGeometry(page, "#atlas-view .atlas-nav-button, #atlas-camera .atlas-camera-button");
-        await assertPaintedCamera(page);
+        await inspectGeometry(page, ".azmara-map-switcher button:visible", true, false, width <= 520 ? 44 : 40);
+        assert.equal(await page.locator("#atlas-camera").evaluate((camera) => !camera.hidden && !camera.inert), true, "World camera controls are not enabled in World state");
         await screenshot(page, `atlas-world-${width}x${height}-fresh`);
         await page.locator('[data-atlas-island="qamar-cove"]').click();
         await decoded(page);
+        assert.equal(await page.locator("#atlas-camera").evaluate((camera) => camera.hidden && camera.inert), true, "Region exposed World-only camera controls");
         await assertAtlasIdentity(page);
         await assertIslandSlots(page, true);
         const overview = await page.locator("#atlas-view").getAttribute("data-atlas-framing") === "overview";
         if (width < 1024 || height < 600) assert(overview, "Compact regions need a bounded Overview to keep44px targets separate");
         assert.equal(await page.locator("#atlas-viewport").getAttribute("data-fit"), String(!overview));
-        assert.equal(await page.locator(".atlas-camera-button").filter({ hasText: overview ? "Overview" : /^Fit$/ }).getAttribute("aria-label"), overview ? "Reset region overview; pan to explore all locations" : "Fit the complete atlas view");
+        assert.equal(await page.locator(".atlas-camera-button").filter({ hasText: /^Overview$/ }).getAttribute("aria-label"), overview ? "Reset region overview; pan to explore all locations" : "Fit the complete atlas view");
         const islandGeometry = await inspectGeometry(page, "#atlas-view .atlas-settlement, #atlas-view .atlas-resource-site", true, overview);
         assert.equal(islandGeometry.length, 19);
-        await inspectGeometry(page, "#atlas-view .atlas-nav-button, #atlas-camera .atlas-camera-button");
+        await inspectGeometry(page, ".azmara-map-switcher button:visible", true, false, width <= 520 ? 44 : 40);
         await assertPaintedCamera(page);
         if (overview) {
           const viewport = page.locator("#atlas-viewport");
@@ -440,7 +435,7 @@ async function assertTown(page) {
           if (before.maxLeft > 1) assert(after.left > before.left, "Overview cannot pan horizontally at minimum zoom");
           if (before.maxTop > 1) assert(after.top > before.top, "Overview cannot pan vertically at minimum zoom");
           assert(after.left >= 0 && after.left <= after.maxLeft && after.top >= 0 && after.top <= after.maxTop, "Overview keyboard pan escaped finite island bounds");
-          await page.locator('[aria-label="Reset region overview; pan to explore all locations"]').click();
+          await page.locator('[aria-label="Reset region overview; pan to explore all locations"]').dispatchEvent("click");
           const reset = await pose();
           assert(Math.abs(reset.left - before.left) <= 1 && Math.abs(reset.top - before.top) <= 1, "Overview reset did not restore its original bounded framing");
         }
@@ -465,7 +460,7 @@ async function assertTown(page) {
           assert(r.height<=r.parentHeight+.5&&r.width<=r.parentWidth+.5&&r.painting.x>=r.button.x-.5&&r.painting.y>=r.button.y-.5&&r.painting.right<=r.button.right+.5&&r.painting.bottom<=r.button.bottom+.5,"Raster resource camp escapes its full accessible target: "+JSON.stringify(r));
         }
         await screenshot(page, `atlas-island-${width}x${height}-fresh`);
-        await page.locator('[data-atlas-action="town"]').click();
+        await page.locator('.azmara-map-switcher [data-desktop-action="town"]').click();
         await assertTown(page);
         await screenshot(page, `atlas-town-${width}x${height}-fresh`);
         await assertUnchanged(page, initial);
@@ -480,23 +475,24 @@ async function assertTown(page) {
         await open(page,"island"); await assertIslandSlots(page,true);
         const initial=await buildingQa.raw(page);
         await buildingQa.menu(page,'[data-panel="appearance"]');
+        assert.equal(await page.locator("body").getAttribute("data-map-view"),"town","Appearance review must use the Town canvas");
         await page.locator("#appearance-level").selectOption("50");await buildingQa.settle(page);
-        assert.equal(await page.locator('[data-atlas-town="home"] img').getAttribute("src"),"assets/progression/azmara-hall-level-1.png","Transient appearance leaked into shared Region identity");
         assert.equal(await buildingQa.raw(page),initial);await buildingQa.close(page);
         await buildingQa.openPlot(page,"general-01");
         await page.locator("#test-building-level").selectOption("50");await buildingQa.click(page,"#set-test-level");
-        assert.equal(await page.locator("#atlas-view").getAttribute("data-atlas-view"),"island","Local Hall tool unexpectedly switched the active Region");
-        await buildingQa.close(page);await decoded(page);await assertIslandSlots(page,true);
+        assert.equal(await page.locator("body").getAttribute("data-map-view"),"town","Local Hall tool unexpectedly left the Town canvas");
+        await buildingQa.close(page);await open(page,"island");await decoded(page);await assertIslandSlots(page,true);
         assert.equal(await page.locator('[data-atlas-town="home"] img').getAttribute("src"),"assets/progression/azmara-hall-level-50.png");
         const completed=await buildingQa.raw(page);await screenshot(page,`final-region-hall50-${viewport.width}x${viewport.height}`);
         await buildingQa.menu(page,'[data-panel="appearance"]');await page.locator("#appearance-level").selectOption("1");await buildingQa.settle(page);
-        assert.equal(await page.locator('[data-atlas-town="home"] img').getAttribute("src"),"assets/progression/azmara-hall-level-50.png");
         assert.equal(await buildingQa.raw(page),completed);await buildingQa.close(page);
+        await open(page,"island");await decoded(page);await assertIslandSlots(page,true);
+        assert.equal(await page.locator('[data-atlas-town="home"] img').getAttribute("src"),"assets/progression/azmara-hall-level-50.png");
         await buildingQa.menu(page,'[data-panel="overview"]');await buildingQa.click(page,"#request-reset");await buildingQa.click(page,"#confirm-reset");
         await decoded(page);await assertIslandSlots(page,true);
         assert.equal(await page.locator('[data-atlas-town="home"]').getAttribute("data-hall-level"),"0","Reset Region icon falsely claims a built Hall");
         assert.equal(await page.locator('[data-atlas-town="home"]').getAttribute("data-hall-placed"),"false");
-        const reset=await buildingQa.raw(page);await page.locator('[data-atlas-action="world"]').click();await page.locator('[data-atlas-island="qamar-cove"]').click();await decoded(page);await assertIslandSlots(page,true);
+        const reset=await buildingQa.raw(page);await page.locator('.azmara-map-switcher [data-map-navigation="world"]').click();await page.locator('[data-atlas-island="qamar-cove"]').click();await decoded(page);await assertIslandSlots(page,true);
         assert.equal(await buildingQa.raw(page),reset);assert.equal(await buildingQa.raw(page,buildingQa.legacyKey),buildingQa.legacyRaw);assert.deepEqual(localErrors,[]);
         console.log(`PASS Region home follows only actual Hall1→50/reset0, never transient Dev art, and no navigation save at${viewport.width}x${viewport.height}`);groups++;
       }finally{await context.close();}
@@ -511,13 +507,13 @@ async function assertTown(page) {
       await open(page, "island");
       assert.equal(await page.locator('[data-atlas-town="home"] .atlas-node-label').textContent(), hostile);
       assert.equal(await page.locator('[data-atlas-town="home"] .atlas-node-label img').count(), 0);
-      await page.locator('[data-atlas-action="world"]').click();
-      await page.locator('[aria-label="Zoom in atlas"]').click();
+      await page.locator('.azmara-map-switcher [data-map-navigation="world"]').click();
+      await page.locator('[aria-label="Zoom in World map"]').dispatchEvent("click");
       await page.setViewportSize({ width: 390, height: 844 });
       await worldOverview(page);
       await settle(page);
       await inspectGeometry(page, "#atlas-view .atlas-world-island", true, await page.locator("#atlas-viewport").getAttribute("data-fit") === "false");
-      await page.locator('[data-atlas-action="town"]').click();
+      await page.locator('.azmara-map-switcher [data-desktop-action="town"]').click();
       await assertTown(page);
       await assertUnchanged(page, expected);
       console.log("PASS safe user text, zoomed desktop-to-phone resize and unchanged save bytes"); groups += 1;

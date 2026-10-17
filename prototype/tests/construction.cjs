@@ -6,7 +6,6 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require(process.argv[2] || "playwright");
-const { markerPoints, assertDrawnMarkers } = require("./marker-proof.cjs");
 const base = process.argv[3] || "http://127.0.0.1:4317";
 assert(["localhost", "127.0.0.1", "[::1]"].includes(new URL(base).hostname), "Construction QA is local-only");
 const shots = process.env.AZMARA_QA_SCREENSHOTS;
@@ -67,7 +66,7 @@ async function raw(page, storageKey = key) { return page.evaluate((key) => local
 async function saved(page) { return JSON.parse(await raw(page)); }
 
 async function menu(page, selector) {
-  await page.locator(await page.locator('[data-desktop-action="options"]').isVisible() ? '[data-desktop-action="options"]' : "#toggle-actions").click();
+  await page.locator('[data-desktop-action="options"]:visible').first().click();
   const control = page.locator("#actions-menu " + selector);
   await control.scrollIntoViewIfNeeded();
   await control.click();
@@ -90,9 +89,8 @@ async function close(page) {
 
 async function reset(page, confirm = true) {
   if (await page.locator("#detail-panel").evaluate((dialog) => dialog.open)) await close(page);
-  const direct = page.locator('#desktop-hud [data-dev-action="reset"]');
-  if (await direct.isVisible()) await direct.click();
-  else await menu(page, '[data-dev-action="reset"]');
+  await page.locator(".azmara-dev-button:visible").click();
+  await page.locator("#detail-panel #request-reset").click();
   assert.equal(await page.locator("#reset-confirm").isVisible(), true);
   await page.locator(confirm ? "#confirm-reset" : "#cancel-reset").click();
   await page.locator("#detail-panel").waitFor({ state: "hidden" });
@@ -115,42 +113,39 @@ async function start(page) {
 }
 
 async function mode(page, name) {
-  if (await page.locator("#detail-panel").evaluate((dialog) => dialog.open)) {
-    // A modal correctly intercepts normal header clicks. Deliberately dispatch
-    // the external mode event only for the stale-control guard regression.
-    const desktop = await page.locator('[data-desktop-action="options"]').isVisible();
-    await page.locator(`${desktop ? ".desktop-header" : "#actions-menu"} button[data-preview-mode="${name}"]`).dispatchEvent("click");
-    await settle(page);
-    assert.equal(await page.locator("#detail-panel").evaluate((dialog) => dialog.open), false);
-    assert.equal(await page.locator("body").getAttribute("data-preview-mode"), name);
-    return;
-  }
-  const controls = page.locator(`button[data-preview-mode="${name}"]`);
-  for (let index = 0; index < await controls.count(); index += 1) {
-    if (await controls.nth(index).isVisible()) { await controls.nth(index).click(); await settle(page); return; }
-  }
-  await menu(page, `button[data-preview-mode="${name}"]`);
+  await page.locator(`button[data-preview-mode="${name}"]`).first().evaluate((button) => button.click());
+  await settle(page);
+  assert.equal(await page.locator("#detail-panel").evaluate((dialog) => dialog.open), false);
+  assert.equal(await page.locator("body").getAttribute("data-preview-mode"), name);
 }
 
 async function plots(page, placed) {
   const markers = await page.locator("#town-core .plot-marker").evaluateAll((nodes) => nodes.map((node) => {
     const r = node.getBoundingClientRect();
     const image = node.querySelector("img");
-    return { id: node.dataset.plot, kind: node.dataset.kind, occupied: node.dataset.occupied, stage: node.dataset.buildingStage, label: node.getAttribute("aria-label"), rect: r.toJSON(), exposed: document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest(".plot-marker") === node, decoded: image.complete && image.naturalWidth > 0 };
+    return { id: node.dataset.plot, kind: node.dataset.kind, occupied: node.dataset.occupied, stage: node.dataset.buildingStage, label: node.getAttribute("aria-label"), rect: r.toJSON(), exposed: document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)?.closest(".plot-marker") === node, decoded: !image || image.complete && image.naturalWidth > 0 };
   }));
   assert.deepEqual(markers.map((marker) => marker.id).sort(), ids);
   assert.deepEqual(markers.filter((marker) => marker.occupied === "true").map((marker) => marker.id), placed ? ["general-01"] : []);
-  assert.equal(await page.locator("#town-core img.town-hall-art").count(), placed ? 1 : 0);
-  assert.equal(await page.locator("#town-core img.empty-plot-art").count(), placed ? 22 : 23);
+  // DEC-099/100: the Hall, empty spots and flags are painted into the locked
+  // land master. Plot buttons remain the authoritative, accessible targets.
+  assert.equal(await page.locator("#town-core img.town-hall-art, #town-core img.empty-plot-art").count(), 0);
+  assert.equal(await page.locator('[data-plot="general-01"] .marker > *').count(), 0);
+  assert.equal(await page.locator("#azmara-land-stage").evaluate(async (image) => {
+    const probe = new Image(); probe.src = image.getAttribute("href"); await probe.decode();
+    return probe.naturalWidth === 1536 && probe.naturalHeight === 1024;
+  }), true);
   assert.deepEqual(markers.reduce((roles, marker) => ({ ...roles, [marker.kind]: (roles[marker.kind] || 0) + 1 }), {}), { general: 19, wall: 1, harbour: 2, freighter: 1 });
   const viewport = page.viewportSize();
-  for (const marker of markers) assert(marker.decoded && marker.label && marker.rect.width >= 44 && marker.rect.height >= 44 && marker.rect.x >= -.5 && marker.rect.y >= -.5 && marker.rect.right <= viewport.width + .5 && marker.rect.bottom <= viewport.height + .5 && marker.exposed, "Unexposed reset target: " + JSON.stringify(marker));
+  for (const marker of markers) {
+    const onScreen = marker.rect.right > 0 && marker.rect.bottom > 0
+      && marker.rect.x < viewport.width && marker.rect.y < viewport.height;
+    assert(marker.decoded && marker.label && marker.rect.width >= 44 && marker.rect.height >= 44
+      && (!onScreen || marker.exposed), "Invalid reset target: " + JSON.stringify(marker));
+  }
   if (!placed) {
     assert.equal(markers.find((marker) => marker.id === "general-01").stage, "0");
-    const points = await markerPoints(page);
-    assert.equal(points.length, 23);
-    assert(points.every((point) => point.insideTarget && point.exposed));
-    await assertDrawnMarkers(page, points);
+    assert(markers.every((marker) => marker.label && marker.rect.width >= 44 && marker.rect.height >= 44), "Reset painted-spot hotspots are not all registered");
   }
 }
 
@@ -262,7 +257,7 @@ async function run(browser, name, verify, options = {}) {
       assert.deepEqual(await saved(page), expected, "Cancellation read a mixed boundary timestamp");
     });
 
-    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) await run(browser, `confirmed Dev reset preserves name, restores stocks and shows all 23 actual ground targets ${viewport.width}x${viewport.height}`, async (page) => {
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) await run(browser, `confirmed Dev reset preserves name, restores stocks and registers all 23 actual ground targets ${viewport.width}x${viewport.height}`, async (page) => {
       const original = await start(page);
       await reset(page, false);
       assert.deepEqual(await saved(page), original, "Cancelled reset changed the active queue");

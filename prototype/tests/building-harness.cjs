@@ -52,7 +52,23 @@ async function close(page) {
 }
 async function menu(page, selector) {
   await close(page);
-  await page.locator(await page.locator('[data-desktop-action="options"]').isVisible() ? '[data-desktop-action="options"]' : "#toggle-actions").click();
+  const direct = page.locator(`${selector}:visible`).first();
+  if (await direct.count()) {
+    await direct.click();
+    await settle(page);
+    return;
+  }
+  if (selector.includes('data-panel="appearance"') || selector.includes('data-panel="catalogue"')) {
+    await page.locator('.azmara-dev-button:visible').click();
+    const devControl = page.locator("#detail-panel " + selector);
+    await devControl.scrollIntoViewIfNeeded();
+    await devControl.click();
+    await settle(page);
+    return;
+  }
+  const desktopOptions = page.locator('[data-desktop-action="options"]:visible').first();
+  const trigger = await desktopOptions.count() ? desktopOptions : page.locator("#toggle-actions");
+  await trigger.click();
   const control = page.locator("#actions-menu " + selector);
   await control.scrollIntoViewIfNeeded(); await control.click();
   await page.locator("#actions-menu").waitFor({ state: "hidden" });
