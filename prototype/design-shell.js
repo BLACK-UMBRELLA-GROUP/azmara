@@ -20,7 +20,11 @@
   function mirror(sourceId, targetId) {
     const source = byId(sourceId), target = byId(targetId);
     if (!source || !target) return;
-    const text = source.textContent.trim();
+    // Placeholder resources keep an accessible "Not simulated" description
+    // beside their visible dash. Mirror only the visible value into the tight
+    // floating ribbon so assistive copy cannot widen and clip the town bar.
+    const visibleValue = source.querySelector('[aria-hidden="true"]');
+    const text = (visibleValue?.textContent || source.textContent).trim();
     target.textContent = text || "—";
   }
 

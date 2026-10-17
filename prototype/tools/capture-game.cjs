@@ -10,27 +10,33 @@ const crypto = require("node:crypto");
 const assert = require("node:assert/strict");
 const root = fs.realpathSync(path.resolve(__dirname, ".."));
 const layouts = ["staggered", "grid", "circle", "avenues", "garden-quarters"];
-const options = { width: 1440, height: 900, level: null, layout: "staggered", view: "town", debug: false };
+const landMilestones = [1, 5, 8, 12, 17, 22, 28, 34, 41, 45, 50];
+const options = { width: 1440, height: 900, level: null, landStage: null, layout: "staggered", view: "town", debug: false };
 const args = process.argv.slice(2);
 const help = `Usage: ./prototype/tools/capture-game.sh [--level 1..50] [--layout ${layouts.join("|")}]
+       [--land-stage ${landMilestones.join("|")}]
        [--width 1440] [--height 900] [--view town|region|world] [--debug]
 Default: a fresh starting town, not your saved town.
 --level: all 23 sites occupied at that level in disposable test storage.
+--land-stage: only the Town Hall is built, at a locked land milestone.
 --debug: local Town planning grid, toggled on with G for this capture.
 Writes a unique PNG and JSON receipt under prototype/debug/, then closes.
 Existing Node/Playwright can be selected with AZMARA_NODE/AZMARA_PLAYWRIGHT.`;
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--help") { console.log(help); process.exit(0); }
   if (args[i] === "--debug") { options.debug = true; continue; }
-  const key = args[i].replace(/^--/, "");
+  const rawKey = args[i].replace(/^--/, "");
+  const key = rawKey === "land-stage" ? "landStage" : rawKey;
   if (!args[i].startsWith("--") || !Object.hasOwn(options, key) || args[i + 1] == null) {
     console.error(help); process.exit(2);
   }
-  options[key] = ["width", "height", "level"].includes(key) ? Number(args[++i]) : args[++i];
+  options[key] = ["width", "height", "level", "landStage"].includes(key) ? Number(args[++i]) : args[++i];
 }
 assert(Number.isInteger(options.width) && options.width >= 320 && options.width <= 3840, "Width must be 320..3840");
 assert(Number.isInteger(options.height) && options.height >= 320 && options.height <= 2160, "Height must be 320..2160");
 assert(options.level === null || Number.isInteger(options.level) && options.level >= 1 && options.level <= 50, "Level must be 1..50");
+assert(options.landStage === null || landMilestones.includes(options.landStage), "Land stage must be a locked Town Hall milestone");
+assert(options.level === null || options.landStage === null, "Choose --level or --land-stage, not both");
 assert(layouts.includes(options.layout), "Unknown plot layout");
 assert(["town", "region", "world"].includes(options.view), "Unknown view");
 assert(!options.debug || options.view === "town", "The current debug grid is Town-only");
@@ -124,10 +130,11 @@ async function ready() {
   const startedAt = new Date().toISOString(), initialSources = sourceHashes(), errors = [];
   const debug = path.join(root, "debug");
   fs.mkdirSync(debug, { recursive: true });
-  const stem = `${startedAt.replace(/[:.]/g, "-")}-${options.view}-${options.level === null ? "start" : "all-built-" + options.level}-${options.layout}-${options.width}x${options.height}${options.debug ? "-debug-on" : ""}-${crypto.randomUUID().slice(0, 8)}`;
+  const scenarioId = options.landStage !== null ? `land-stage-${options.landStage}` : options.level === null ? "start" : "all-built-" + options.level;
+  const stem = `${startedAt.replace(/[:.]/g, "-")}-${options.view}-${scenarioId}-${options.layout}-${options.width}x${options.height}${options.debug ? "-debug-on" : ""}-${crypto.randomUUID().slice(0, 8)}`;
   const screenshot = path.join(debug, stem + ".png"), receipt = path.join(debug, stem + ".json");
   const report = { startedAt, options, screenshot, receipt, sourceHashes: initialSources,
-    scenario: options.level === null ? "Fresh isolated starting town" : "Synthetic all-built town; not player progress",
+    scenario: options.landStage !== null ? "Synthetic Town Hall-only locked land-stage check; not player progress" : options.level === null ? "Fresh isolated starting town" : "Synthetic all-built town; not player progress",
     browserClosed: false, serverClosed: false, passed: false };
   try {
     await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
@@ -144,11 +151,11 @@ async function ready() {
     await context.route("**/*", route => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
     assert.equal((await page.goto(base + (options.debug ? "/?debug=1" : "/")))?.status(), 200);
     await ready();
-    if (options.level !== null || options.layout !== "staggered") {
+    if (options.level !== null || options.landStage !== null || options.layout !== "staggered") {
       // Catalogue defines compatible roles; synthetic data exists only in this
       // disposable context, not the Founder's Chrome/localhost/hosted save.
-      report.fixture = await page.evaluate(({ level, layout }) => {
-        const seed = { version: 3, layoutId: "town-23-v1", townName: "Visual test", hallLevel: level || 1,
+      report.fixture = await page.evaluate(({ level, landStage, layout }) => {
+        const seed = { version: 3, layoutId: "town-23-v1", townName: "Visual test", hallLevel: landStage || level || 1,
           plotLayout: layout, resources: { coins: 2400, timber: 760, stone: 540 }, construction: null };
         if (level !== null) {
           const ordinary = window.AzmaraCatalogue.entries.filter(entry => entry.role === "general" && entry.id !== "town-hall");
@@ -161,6 +168,11 @@ async function ready() {
       }, options);
       await page.reload(); await ready();
       if (options.level !== null) assert.equal(await page.locator('#town-core .plot-marker[data-occupied="true"]').count(), 23);
+      if (options.landStage !== null) {
+        assert.equal(await page.locator('#town-core .plot-marker[data-occupied="true"]').count(), 1);
+        const expectedStage = landMilestones.indexOf(options.landStage) + 1;
+        assert.equal(await page.locator("#azmara-land-stage").getAttribute("href"), `assets/land/land-stage-${String(expectedStage).padStart(2, "0")}.png`);
+      }
     }
     if (options.view !== "town") {
       const navigation = options.view === "region" ? "island" : "world";

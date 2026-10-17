@@ -21,15 +21,13 @@
       return { ...JSON.parse(JSON.stringify(p)), sourceArt: art ? JSON.parse(JSON.stringify(art)) : null, artBounds: { x: p.x-bodyWidth/2,y:p.y-bodyHeight/2,width:bodyWidth,height:bodyHeight }, scale };
     });
     if (plots.length !== 23 || new Set(plots.map(p=>p.id)).size !== 23) throw new TypeError("Appearance town comparison retains all23 unique plot IDs");
-    const reserves = (input.decorExclusions || []).map(p => ({ ...p }));
     const hallLevel = Number.isInteger(input.hallLevel) ? input.hallLevel : 1;
     const layoutId = input.layout || "staggered";
-    const oasis = window.AzmaraOasisTown.render(hallLevel,{ desktop: input.desktop === true, layout: layoutId, plots,
-      decorExclusions: reserves, valleyBackdrop: true, bakedStreets: true, comparisonOptions: { enabled: true, purpose: "appearance-scale", artScale: scale } });
-    const wall = plots.find(p=>p.id==="wall-01"), wallLevel = wall?.buildingId ? wall.level : 0;
-    return freeze({ camera: { ...camera }, cssWidth: input.cssWidth || camera.width, cssHeight: input.cssHeight || camera.height, scale, desktop: input.desktop === true, hallLevel, layout: layoutId, plots, oasis,
-      wallLevel, terrain: window.AzmaraTownWall.renderTerrain({desktop:input.desktop===true}), wall: window.AzmaraTownWall.renderBack(wallLevel,{desktop:input.desktop===true,plots}),
-      scenerySourceLevel: oasis?.layout.comparisonSourceLevel, testOnly: true, saved: false });
+    const landFrame = input.landFrame;
+    if (!landFrame || ![landFrame.x,landFrame.y,landFrame.width,landFrame.height].every(Number.isFinite)) throw new TypeError("Appearance comparison needs the locked land frame");
+    const land = window.AzmaraLandStages.forHallLevel(hallLevel);
+    return freeze({ camera: { ...camera }, cssWidth: input.cssWidth || camera.width, cssHeight: input.cssHeight || camera.height, scale, desktop: input.desktop === true, hallLevel, layout: layoutId, plots,
+      landFrame: { ...landFrame }, land: { ...land }, scenerySourceLevel: land.stage, testOnly: true, saved: false });
   }
   function sprite(plot) {
     const art = plot.sourceArt, b = plot.artBounds;
@@ -43,11 +41,11 @@
   }
   function markup(input) {
     const data = input?.testOnly ? input : scene(input), c = data.camera;
-    const pinWidth = 16 * c.width / data.cssWidth, pinHeight = 26 * c.width / data.cssWidth;
-    const bodies = data.plots.filter(p=>p.id!=="wall-01" || !p.buildingId).map(p => p.buildingId
-      ? `<g data-study-building="${xml(p.id)}" data-study-type="${xml(p.buildingId)}" data-study-scale="${data.scale}" data-study-art-bounds="${Object.values(p.artBounds).join(",")}">${sprite(p)}</g>`
-      : `<g data-study-empty="${xml(p.id)}" transform="translate(${p.x} ${p.y})"><svg x="${-pinWidth/2}" y="${-pinHeight*.8}" width="${pinWidth}" height="${pinHeight}" viewBox="0 0 22 34" style="width:${pinWidth}px;height:${pinHeight}px;stroke:none">${pinMarkup().replace(/^<svg[^>]*>|<\/svg>$/g,"")}</svg></g>`).join("");
-    let content = (data.oasis?.markup || "") + window.AzmaraStreetGround.markup(data.layout, { desktop: data.desktop }) + data.terrain + data.wall + bodies;
+    const bodies = data.plots
+      .filter((plot) => plot.buildingId && plot.id !== "general-01" && plot.kind !== "wall")
+      .map((plot) => `<g data-study-building="${xml(plot.id)}" data-study-type="${xml(plot.buildingId)}" data-study-scale="${data.scale}" data-study-art-bounds="${Object.values(plot.artBounds).join(",")}">${sprite(plot)}</g>`)
+      .join("");
+    let content = `<image href="${xml(data.land.src)}" x="${data.landFrame.x}" y="${data.landFrame.y}" width="${data.landFrame.width}" height="${data.landFrame.height}" preserveAspectRatio="xMidYMid meet"/>${bodies}`;
     const prefix = "study-" + Math.round(data.scale*100) + "-";
     content = content.replace(/id="([^"]+)"/g,(_,id)=>`id="${prefix}${id}"`).replace(/url\(#([^)]+)\)/g,(_,id)=>`url(#${prefix}${id})`);
     return `<svg class="comparison-world" xmlns="http://www.w3.org/2000/svg" viewBox="${c.x} ${c.y} ${c.width} ${c.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Temporary ${Math.round(data.scale*100)} percent building-size comparison" data-study-scale="${data.scale}" data-study-camera="${Object.values(c).join(",")}" data-study-scenery-level="${data.scenerySourceLevel}" style="stroke:none;pointer-events:none">${content}</svg>`;
@@ -84,6 +82,34 @@
   // Enclose the full upper reserve sprite at every closer scale (DEC-050).
   const DESKTOP_FRAME = { x: 650, y: 0, width: 3150, height: 2230 };
   const desktopQuery = matchMedia("(min-width: 1024px) and (min-height: 600px)");
+  const LAND_WIDTHS = Object.freeze({ desktop: 4200, compact: 2800 });
+  const LAND_HALL_ANCHORS = Object.freeze({
+    desktop: Object.freeze({ x: 2100, y: 1150 }),
+    compact: Object.freeze({ x: CORE.x + 680, y: CORE.y + 640 })
+  });
+  function landFrame(desktop = desktopQuery.matches) {
+    const profile = desktop ? "desktop" : "compact";
+    const width = LAND_WIDTHS[profile];
+    const height = width * window.AzmaraLandStages.height / window.AzmaraLandStages.width;
+    const hall = window.AzmaraLandStages.boxes.townHall.normalized;
+    const anchor = LAND_HALL_ANCHORS[profile];
+    return Object.freeze({
+      x: anchor.x - (hall.left + hall.width / 2) * width,
+      y: anchor.y - (hall.top + hall.height / 2) * height,
+      width,
+      height
+    });
+  }
+  function paintedControl(kind, desktop = desktopQuery.matches) {
+    const frame = landFrame(desktop);
+    const box = window.AzmaraLandStages.boxes[kind === "hall" ? "townHall" : "townWall"].normalized;
+    return Object.freeze({
+      x: frame.x + (box.left + box.width / 2) * frame.width,
+      y: frame.y + (box.top + box.height / 2) * frame.height,
+      width: box.width * frame.width,
+      height: box.height * frame.height
+    });
+  }
   // DEC-050: a larger, staggered civilian field uses the upper clearing.
   // Hall is its geometric centre; the dedicated river-port sites stay separate.
   // Compact anchors and saved plot identities remain unchanged.
@@ -117,8 +143,8 @@
   // to fill the site; the same enlarged bounds protect roads and HUD clearance.
   const DEFAULT_BUILDING_SCALE = .55;
   const PLOT_ART = { get width() { return (desktopQuery.matches ? 320 : 220) * DEFAULT_BUILDING_SCALE; }, get height() { return (desktopQuery.matches ? 270 : 190) * DEFAULT_BUILDING_SCALE; } };
-  const HALL_ART = { get width() { return (desktopQuery.matches ? 460 : 320) * DEFAULT_BUILDING_SCALE; }, get height() { return this.width * 1024 / 1536; } };
-  const WALL_ART = { width: 340, height: 145 };
+  const HALL_ART = { get width() { return paintedControl("hall").width; }, get height() { return paintedControl("hall").height; } };
+  const WALL_ART = { get width() { return paintedControl("wall").width; }, get height() { return paintedControl("wall").height; } };
   const footprintFor = (plot) => plot.id === "general-01" ? HALL_ART : plot.kind === "wall" ? WALL_ART : PLOT_ART;
   const MAX_MAP_ZOOM = 2.4;
   const MAP_ZOOM_FACTOR = 1.10;
@@ -229,6 +255,9 @@
   let appearanceScaleFrame = 0;
   let appearanceSelectedPlot = null;
   let appearanceBuildSites = false;
+  // Unsaved Dev-only level projection. This drives the same Town Hall
+  // milestone rule as real progress; it is never written to localStorage.
+  let devHallLevelOverride = null;
   let buildChoice = null;
   let clearConfirmation = null;
   let cancelConfirmation = false;
@@ -248,7 +277,7 @@
   let sidebarOpen = false;
   const townLayout = () => state.plotLayout || "staggered";
   const baseAnchor = (plot, desktop = desktopQuery.matches) => window.AzmaraTownLayouts.anchor(plot.id, townLayout(), { desktop }) || (desktop ? desktopAnchors[plot.id] : { x: CORE.x + plot.x, y: CORE.y + plot.y });
-  const activeCore = () => desktopQuery.matches ? DESKTOP_CORE : CORE;
+  const activeCore = () => landFrame();
   const actionsTrigger = () => all('[data-desktop-action="options"]').find((node) => node.getClientRects().length) || sidebarToggle || actionsToggle;
   const mapInteractionBlocked = () => panel.open || actionsMenu.open || sidebarOpen;
   function returnToControl(target) {
@@ -485,6 +514,16 @@
     desktopWallClearanceLimited = !packed.valid;
   }
   function plotPosition(plot, core = activeCore()) {
+    // The two locked controls are registered to source-picture fractions so
+    // a later higher-resolution master can replace this one without drift.
+    if (plot.id === HALL_ID) {
+      const control = paintedControl("hall");
+      return { x: control.x, y: control.y };
+    }
+    if (plot.kind === "wall") {
+      const control = paintedControl("wall");
+      return { x: control.x, y: control.y };
+    }
     // The baked street layer and every building/pin must share one coordinate
     // source. Responsive packing used to move controls away from their saved
     // layout anchors, leaving painted streets pointing at empty ground. The
@@ -684,6 +723,10 @@
   const hasHall = () => state.hallPlaced !== false;
   const buildingFor = (plotId) => buildingIn(state, plotId);
   function shownBuildingFor(plotId) {
+    if (previewMode === "dev" && plotId === HALL_ID && devHallLevelOverride !== null) {
+      const hall = buildingFor(plotId);
+      return hall ? { ...hall, level: devHallLevelOverride } : null;
+    }
     if (previewMode !== "dev" || idealTownLevel === null) return buildingFor(plotId);
     const plot = byId[plotId];
     const existing = buildingFor(plotId);
@@ -692,7 +735,7 @@
     return { typeId, level: idealTownLevel };
   }
   const shownPlotName = (plot) => shownBuildingFor(plot.id) ? metadataFor(shownBuildingFor(plot.id).typeId).name : plotName(plot);
-  const shownLevelLabel = (id) => shownBuildingFor(id) ? `Level ${shownBuildingFor(id).level}${idealTownLevel !== null ? " · temporary ideal preview" : ""}` : levelLabel(id);
+  const shownLevelLabel = (id) => shownBuildingFor(id) ? `Level ${shownBuildingFor(id).level}${id === HALL_ID && devHallLevelOverride !== null ? " · temporary Dev preview" : idealTownLevel !== null ? " · temporary ideal preview" : ""}` : levelLabel(id);
   const occupied = (plot) => Boolean(buildingFor(plot.id));
   const occupiedCount = () => plots.filter(occupied).length;
   const plotName = (plot) => buildingFor(plot.id) ? metadataFor(buildingFor(plot.id).typeId).name : plot.id === HALL_ID ? "Town Hall plot" : plot.name;
@@ -743,67 +786,19 @@
         height: (bottom - top) / fit.scale / art.height * native.height }];
     }));
   }
-  function appearanceFor(level = idealTownLevel ?? (appearanceType === "town-hall" ? appearanceLevel ?? actualHallLevel() : actualHallLevel()), desktop = desktopQuery.matches) {
-    const art = desktop ? DESKTOP_ART : TERRAIN_ART;
-    const native = desktop ? { width: 1672, height: 941 } : { width: 1254, height: 1254 };
-    const fit = fitArea();
-    const fitScale = fit.scale;
-    // Scenery follows the same responsive anchors as the actual targets.
-    // Protect their full Fit footprints, which also encloses closer artwork.
-    const worldPlots = plots.map((plot) => {
-      const position = plotPosition(plot);
-      const footprint = footprintFor(plot);
-      const building = shownBuildingFor(plot.id);
-      // Art review may display a different source stage from the saved level.
-      // Entrances must bind to that visible source; local quality still uses
-      // the actual/ideal level below and never changes saved buildings.
-      const visibleLevel = idealTownLevel ?? (building && appearanceType === building.typeId && appearanceLevel !== null
-        ? appearanceLevel : building?.level);
-      return {
-        id: plot.id,
-        level: building?.level || 1,
-        buildingId: building?.typeId || null,
-        sourceArt: building ? window.AzmaraBuildingArt.forBuilding(building.typeId, visibleLevel) : null,
-        x: position.x, y: position.y,
-        width: Math.max(footprint.width, 44 / fitScale),
-        height: Math.max(footprint.height, 44 / fitScale)
-      };
-    });
-    const toNative = (rect) => ({ ...rect,
-      x: (rect.x - art.x) / art.width * native.width,
-      y: (rect.y - art.y) / art.height * native.height,
-      width: rect.width / art.width * native.width,
-      height: rect.height / art.height * native.height });
-    const protectedPlots = worldPlots.map(toNative);
+  function effectiveHallLevel() {
+    return devHallLevelOverride ?? idealTownLevel ??
+      (appearanceType === "town-hall" ? appearanceLevel ?? actualHallLevel() : actualHallLevel());
+  }
+  function appearanceFor(level = effectiveHallLevel()) {
+    const land = window.AzmaraLandStages.forHallLevel(level);
     const wall = shownBuildingFor("wall-01");
-    const wallLevel = wall ? appearanceType === "town-wall" && appearanceLevel !== null && idealTownLevel === null ? appearanceLevel : wall.level : 0;
-    // Wall geometry is world-space; progression scenery retains its existing
-    // native-art plane. Convert reserves once, never stretch the wall itself.
-    const wallScene = window.AzmaraTownWall?.layout(wallLevel, { desktop, plots: worldPlots });
-    const wallDecor = wallPresentationEnvelope(desktop, worldPlots).decorExclusions.map(toNative);
-    const terrainDecor = (window.AzmaraTownWall?.terrainLayout?.({ desktop }).decorExclusions || []).map(toNative);
-    const decorExclusions = sceneryHudExclusions(desktop, fit, art, native).concat(wallDecor, terrainDecor);
-    // Bounded Oasis art pilot: one layout/profile and two endpoints. Its floor
-    // uses the live world anchors, not independently painted plot positions.
-    // Everything outside that gate retains the historical renderer unchanged.
-    const toWorld = (rect) => ({ ...rect,
-      x: rect.x / native.width * art.width + art.x,
-      y: rect.y / native.height * art.height + art.y,
-      width: rect.width / native.width * art.width,
-      height: rect.height / native.height * art.height });
-    const oasisPilot = window.AzmaraOasisTown?.render(level, {
-      desktop, layout: townLayout(), plots: worldPlots, valleyBackdrop: true, bakedStreets: true,
-      decorExclusions: decorExclusions.map(toWorld)
-    }) || null;
-    const progression = window.AzmaraProgression.forLevel(level, { desktop, plots: protectedPlots, decorExclusions, scenery: !oasisPilot });
-    return { ...progression, oasisPilot, streetGround: window.AzmaraStreetGround.asset(townLayout(), { desktop }),
-      terrainOverlay: oasisPilot ? null : progression.terrainOverlay,
-      terrainDecor: oasisPilot ? "" : progression.terrainDecor,
-      terrainAsset: window.AzmaraOasisTown?.assets.start || "assets/oasis-pilot/ground-start-v1.png",
-      valleyTerrain: window.AzmaraTownWall?.renderTerrain?.({ desktop, wallLevel }) || "",
-      wallLevel, wallBack: window.AzmaraTownWall?.renderBack?.(wallLevel, { desktop, plots: worldPlots }) || "",
-      wallFront: window.AzmaraTownWall?.renderFront?.(wallLevel, { desktop, plots: worldPlots }) || "",
-      wallApproach: "" };
+    return Object.freeze({
+      ...land,
+      minLevel: land.minLevel,
+      terrainAsset: land.src,
+      wallLevel: wall?.level || 0
+    });
   }
   function buildingVisual(typeId, level, preview = true) {
     const visualLevel = preview && idealTownLevel !== null ? idealTownLevel : preview && appearanceType === typeId && appearanceLevel !== null ? appearanceLevel : level;
@@ -825,28 +820,22 @@
   }
   function syncAppearance() {
     const visual = appearanceFor();
-    const townPreview = idealTownLevel !== null || appearanceLevel !== null && appearanceType === "town-hall";
+    const townPreview = devHallLevelOverride !== null || idealTownLevel !== null || appearanceLevel !== null && appearanceType === "town-hall";
+    document.body.dataset.landStages = "on";
     document.body.dataset.townStage = String(visual.stage);
-    document.body.dataset.townStageSource = townPreview ? "preview" : "actual";
+    document.body.dataset.townStageSource = devHallLevelOverride !== null ? "dev" : townPreview ? "preview" : "actual";
     document.body.dataset.townLevel = String(actualHallLevel());
     document.body.dataset.appearanceType = appearanceType;
-    document.body.dataset.oasisPilot = visual.oasisPilot ? "on" : "off";
-    document.body.dataset.oasisBand = visual.oasisPilot?.band || "";
     all(".plot-marker").forEach((marker) => {
       const building = shownBuildingFor(marker.dataset.plot);
+      const painted = marker.dataset.plot === HALL_ID || marker.dataset.kind === "wall";
       marker.dataset.buildingLevel = String(building?.level || 0);
       marker.dataset.buildingType = building?.typeId || "";
       marker.dataset.buildingStageSource = idealTownLevel !== null ? "ideal" : building && appearanceType === building.typeId && appearanceLevel !== null ? "preview" : "actual";
       marker.dataset.buildingStage = building ? String(buildingVisual(building.typeId, building.level).stage) : "0";
-      if (!building) {
-        const kind = marker.dataset.kind;
-        const pinArt = window.AzmaraStreetGround?.pinMarkup(marker.dataset.plot, kind);
-        const pilotArt = pinArt || visual.oasisPilot?.markerMarkup(marker.dataset.plot, kind);
-        const key = pinArt ? `street-pin:${kind}` : pilotArt ? `oasis-empty:${kind}:${visual.oasisPilot.band}` : `empty:${kind}`;
-        if (marker.dataset.renderedArt !== key) {
-          marker.querySelector(".marker").innerHTML = pilotArt || `<img class="empty-plot-art ${kind}-reserve-art" src="assets/${kind === "freighter" ? "freight-yard-reserve-v2.svg" : kind === "wall" ? "wall-earth-reserve-v2.svg" : "azmara-empty-plot-v4.png"}" alt="" draggable="false">`;
-          marker.dataset.renderedArt = key;
-        }
+      if (!building || painted) {
+        marker.querySelector(".marker").replaceChildren();
+        marker.dataset.renderedArt = painted ? `painted:${marker.dataset.kind}` : "painted-empty-site";
         return;
       }
       const key = `${building.typeId}:${buildingVisual(building.typeId, building.level).minLevel}`;
@@ -856,60 +845,9 @@
         marker.dataset.renderedArt = key;
       }
     });
-    const terrain = $("#town-terrain-art");
-    if (terrain && terrain.getAttribute("href") !== visual.terrainAsset) terrain.setAttribute("href", visual.terrainAsset);
-    const overlay = $("#town-terrain-overlay");
-    let pilotLayer = $("#town-oasis-pilot");
-    if (!pilotLayer && overlay) {
-      pilotLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      pilotLayer.id = "town-oasis-pilot";
-      pilotLayer.setAttribute("aria-hidden", "true");
-      pilotLayer.style.pointerEvents = "none";
-      landscape.insertBefore(pilotLayer, overlay);
-    }
-    if (pilotLayer) {
-      const markup = visual.oasisPilot?.markup || "";
-      if (pilotLayer.innerHTML !== markup) pilotLayer.innerHTML = markup;
-      pilotLayer.style.display = visual.oasisPilot ? "" : "none";
-    }
-    // All fallback profiles use the same quiet sampled soil, never a stretched
-    // photograph or a hard-ended mountain painting. Oasis owns its floor only.
-    if (terrain) terrain.style.display = "none";
-    landscape.querySelectorAll(".painted-margin").forEach((node) => { node.style.display = ""; });
-    if (overlay) {
-      overlay.style.display = visual.terrainOverlay ? "" : "none";
-      if (visual.terrainOverlay) overlay.setAttribute("href", visual.terrainOverlay);
-      else overlay.removeAttribute("href");
-    }
-    const street = $("#town-street-ground"), streetAsset = visual.streetGround;
-    if (street && streetAsset) {
-      street.setAttribute("href", streetAsset.src);
-      for (const key of ["x", "y", "width", "height"]) street.setAttribute(key, String(streetAsset[key]));
-      street.dataset.streetLayout = `${streetAsset.id}-${streetAsset.profile}`;
-    }
-    // Decorative raster sprites share the exact native road coordinate plane.
-    // Inline SVG keeps their local asset references usable, without duplicating
-    // a large atlas inside every cached data-image road overlay.
-    const decor = $("#town-scenery-decor");
-    if (decor) {
-      const markup = visual.terrainDecor || "";
-      if (decor.innerHTML !== markup) decor.innerHTML = markup;
-    }
-    const valley = $("#town-valley-terrain");
-    if (valley && valley.innerHTML !== visual.valleyTerrain) valley.innerHTML = visual.valleyTerrain;
-    const perimeter = $("#town-wall-perimeter");
-    const front = $("#town-wall-front"), approach = $("#town-wall-approach");
-    for (const [node, markup] of [[perimeter, visual.wallBack], [front, visual.wallFront], [approach, visual.wallApproach]]) {
-      if (!node) continue;
-      if (node.innerHTML !== markup) node.innerHTML = markup;
-      node.dataset.wallLevel = String(visual.wallLevel);
-      node.dataset.wallSource = idealTownLevel !== null ? "ideal" : appearanceType === "town-wall" && appearanceLevel !== null && visual.wallLevel ? "preview" : "actual";
-    }
-    syncWallPixelRegistration();
-    all(".painted-margin-art").forEach((image) => {
-      if (image.getAttribute("href") !== visual.terrainAsset) image.setAttribute("href", visual.terrainAsset);
-    });
-    landscape.setAttribute("aria-label", `Original illustrated town terrain, appearance stage ${visual.minLevel}${townPreview ? ", temporary Dev artwork review" : ""}.`);
+    const land = $("#azmara-land-stage");
+    if (land && land.getAttribute("href") !== visual.src) land.setAttribute("href", visual.src);
+    landscape.setAttribute("aria-label", `Locked illustrated town land stage ${visual.stage}, from completed Town Hall level ${visual.minLevel}${townPreview ? ", temporary Dev review" : ""}.`);
     if ($("#appearance-review-status")) $("#appearance-review-status").textContent = idealTownLevel !== null ? `Ideal town at level ${idealTownLevel}: 23 temporary compatible samples. Your saved town and construction are unchanged.` : appearanceLevel === null ? "Showing actual saved appearance where built; this illustration does not place a building." : `Temporary ${metadataFor(appearanceType).name} level ${appearanceLevel} artwork review. Actual levels, occupied plots and resources are unchanged; nothing is saved.`;
     if ($("#appearance-milestones")) $("#appearance-milestones").textContent = `Stable visual milestones for ${metadataFor(appearanceType).name}: ${window.AzmaraBuildingArt.milestonesFor(appearanceType).join(" · ")}. Levels in between retain the last completed design.`;
     const preview = $("#appearance-art-container");
@@ -953,12 +891,11 @@
       const isOccupied = Boolean(building);
       const markerClass = !building ? "empty-hotspot" : plot.id === HALL_ID ? "occupied-hotspot" : "built-hotspot";
       const artClass = !building ? "empty-plot-art" : plot.id === HALL_ID ? "town-hall-art" : "building-art";
-      const pin = window.AzmaraStreetGround?.pinMarkup(plot.id, plot.kind);
-      const art = building ? buildingArtMarkup(building.typeId, building.level, `${artClass} ${plot.kind}-reserve-art`) : pin || `<img class="${artClass} ${plot.kind}-reserve-art" src="assets/${plot.kind === "freighter" ? "freight-yard-reserve-v2.svg" : plot.kind === "wall" ? "wall-earth-reserve-v2.svg" : "azmara-empty-plot-v4.png"}" alt="" draggable="false">`;
-      const renderedArt = building ? `${building.typeId}:${buildingVisual(building.typeId, building.level).minLevel}` : "";
+      const painted = plot.id === HALL_ID || plot.kind === "wall";
+      const art = building && !painted ? buildingArtMarkup(building.typeId, building.level, `${artClass} ${plot.kind}-reserve-art`) : "";
+      const renderedArt = painted ? `painted:${plot.kind}` : building ? `${building.typeId}:${buildingVisual(building.typeId, building.level).minLevel}` : "painted-empty-site";
       return `<button class="building-hotspot plot-marker ${markerClass}" data-plot="${plot.id}" data-building="${plot.id}" data-kind="${plot.kind}" data-occupied="${isOccupied}" data-building-type="${building?.typeId || ""}" data-building-level="${building?.level || 0}" data-building-stage="${building ? buildingVisual(building.typeId, building.level).stage : 0}" data-rendered-art="${renderedArt}" data-x="${plot.x}" data-y="${plot.y}" data-label-edge="${plot.x < 200 ? "left" : plot.x > 1200 ? "right" : "center"}" style="--x:${plot.x / CORE.width * 100}%;--y:${plot.y / CORE.height * 100}%" aria-label="Open ${escapeHtml(shownPlotName(plot))}, ${shownLevelLabel(plot.id)}"><span class="marker">${art}</span><span class="hotspot-label"><span class="hotspot-title">${escapeHtml(shownPlotName(plot))}</span><span class="compact-title" aria-hidden="true">${building ? escapeHtml(plot.id === HALL_ID ? "Hall" : shownPlotName(plot)) : plot.short}</span><small>${building?.level || "Empty"}</small></span></button>`;
-    }).join("") + `<svg class="town-wall-front-layer" id="town-wall-front-layer" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g id="town-wall-front"></g></svg>`;
-    if (mapMetrics) syncWallCanvas(mapMetrics, mapMetrics.width, mapMetrics.height, activeCore(), mapMetrics.scale);
+    }).join("");
     if (returnPlot) returnFocus = $(`.plot-marker[data-plot="${returnPlot}"]`);
   }
 
@@ -1000,7 +937,7 @@
 
   function openPanel(view, trigger = document.activeElement) {
     const type = typeof view === "string" ? view : view.type;
-    if (previewMode !== "dev" && ["catalogue", "appearance", "reset"].includes(type)) return;
+    if (previewMode !== "dev" && ["catalogue", "appearance", "dev-tools", "reset"].includes(type)) return;
     if (type === "appearance" && atlas.currentView() !== "town") switchMapView("town");
     const drawerTrigger = sidebarOpen && sidebar?.contains(trigger);
     closeSidebar(false);
@@ -1044,7 +981,7 @@
       return { ...plot,level:visibleLevel || 1,buildingId:building?.typeId || null,name:building ? metadataFor(building.typeId).name : plot.name,
         sourceArt:building ? window.AzmaraBuildingArt.forBuilding(building.typeId,visibleLevel) : null };
     });
-    return { ...appearanceCamera,scale,plots:worldPlots,hallLevel:idealTownLevel ?? (appearanceType === "town-hall" ? appearanceLevel ?? actualHallLevel() : actualHallLevel()),
+    return { ...appearanceCamera,scale,plots:worldPlots,landFrame: { ...landFrame(appearanceCamera.desktop) },hallLevel:idealTownLevel ?? (appearanceType === "town-hall" ? appearanceLevel ?? actualHallLevel() : actualHallLevel()),
       decorExclusions: wallPresentationEnvelope(appearanceCamera.desktop,worldPlots).decorExclusions.concat(window.AzmaraTownWall.terrainLayout({desktop:appearanceCamera.desktop}).decorExclusions) };
   }
   function comparisonToolMarkup() {
@@ -1131,7 +1068,12 @@
     const drawerTrigger = sidebarOpen && sidebar?.contains(trigger);
     closeSidebar(false);
     previewMode = mode;
-    if (mode === "gameplay") restoreAppearance();
+    if (mode === "gameplay") {
+      devHallLevelOverride = null;
+      restoreAppearance();
+      renderMarkers();
+      layoutMap();
+    }
     cancelConfirmation = false;
     clearConfirmation = null;
     buildChoice = null;
@@ -1208,6 +1150,11 @@
     $("#panel-kicker").textContent = openView.type === "building" ? "Your town · Plot" : previewMode === "dev" ? "Town design preview" : "Your town";
     if (openView.type === "building") {
       renderBuilding(openView.buildingId);
+    } else if (openView.type === "dev-tools") {
+      const actual = actualHallLevel();
+      const selected = devHallLevelOverride ?? actual;
+      const blocked = Boolean(state.construction) || !hasHall();
+      content.innerHTML = `${panelHeading("Dev workbench", "town", "Temporary local tests")}<p class="panel-description">Preview each locked land stage through the Town Hall's real visual milestone rule.</p><section class="land-stage-picker" data-dev-only><h3>Land stage</h3><p>Current test Town Hall level: <strong>${selected}</strong>${devHallLevelOverride === null ? " · actual" : " · temporary"}</p><div class="land-stage-buttons" role="group" aria-label="Temporary Town Hall test level">${window.AzmaraLandStages.milestones.map((level) => `<button class="secondary-button" data-land-stage-level="${level}" aria-pressed="${selected === level}" ${blocked ? "disabled" : ""}>${level}</button>`).join("")}</div><button class="secondary-button" id="reset-land-stage" ${devHallLevelOverride === null ? "disabled" : ""}>Reset to actual level ${actual}</button><p class="panel-note">Unsaved and Dev-only. It changes the land through the same completed Town Hall look rule as normal progress. ${blocked ? !hasHall() ? "Build the Town Hall before testing its land stages." : "Finish or cancel the active construction first." : "Gameplay mode and reload restore the actual level."}</p></section><div class="panel-divider"></div><button class="secondary-button" data-panel="appearance">Appearance review</button><button class="secondary-button" data-panel="catalogue">Building catalogue</button><button class="secondary-button" id="refill-test-supplies">Refill test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
     } else if (openView.type === "catalogue") {
       content.innerHTML = window.AzmaraCatalogue.render(catalogueLevel);
       content.querySelector(".catalogue-notice p").textContent = "Gallery level changes only these illustrations. Use a compatible empty plot in Dev to build a local sample. Economic, civic, trade and military effects are not simulated.";
@@ -1301,7 +1248,7 @@
     saveState();
     renderMarkers();
     layoutMap();
-    if (panel.open && ["building", "buildings", "overview", "catalogue", "appearance"].includes(openView?.type)) {
+    if (panel.open && ["building", "buildings", "overview", "catalogue", "appearance", "dev-tools"].includes(openView?.type)) {
       const focusId = document.activeElement?.id;
       renderPanel();
       const focusTarget = focusId && document.getElementById(focusId);
@@ -1433,49 +1380,18 @@
   }
   function renderLandscape(bounds) {
     const { x, y, width, height } = bounds;
-    const terrainAsset = appearanceFor().terrainAsset;
+    const visual = appearanceFor();
+    const frame = landFrame();
     landscape.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
-    // Keep decoded art and SVG nodes alive through camera animation. Only the
-    // viewBox/margin rectangle changes, rather than rebuilding images per frame.
-    const profile = desktopQuery.matches ? "desktop" : "compact";
-    if (landscapeProfile === profile) {
-      const margin = landscape.querySelector(".painted-margin");
-      if (margin) Object.entries(bounds).forEach(([key, value]) => margin.setAttribute(key, value));
-      // Register the one-picture foundation to the actual Fit surface, which
-      // can be wider than the fixed 4200-unit desktop art board. Keep that
-      // registration while zooming and panning so scenery does not drift.
-      if (fitMap) syncOasisFoundationBounds(bounds);
-      all(".terrain-plot").forEach((pad) => {
-        const position = plotPosition(byId[pad.dataset.terrainPlot]);
-        pad.setAttribute("transform", `translate(${position.x} ${position.y})`);
-      });
-      syncAppearance();
-      return;
+    const key = `${desktopQuery.matches ? "desktop" : "compact"}:${visual.stage}`;
+    const image = $("#azmara-land-stage");
+    if (landscapeProfile !== key || !image) {
+      landscapeProfile = key;
+      landscape.innerHTML = `<image id="azmara-land-stage" href="${visual.src}" x="${frame.x}" y="${frame.y}" width="${frame.width}" height="${frame.height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"/>`;
+    } else {
+      if (image.getAttribute("href") !== visual.src) image.setAttribute("href", visual.src);
+      for (const [name, value] of Object.entries(frame)) image.setAttribute(name, String(value));
     }
-    landscapeProfile = profile;
-    const pads = plots.map((plot) => {
-      const position = plotPosition(plot);
-      return `<g class="terrain-plot" data-terrain-plot="${plot.id}" transform="translate(${position.x} ${position.y})"><ellipse cx="7" cy="28" rx="82" ry="27" fill="#705c37" opacity=".035"/></g>`;
-    }).join("");
-    if (desktopQuery.matches) {
-      // Floors/roads first; the original valley terrain and one rear wall are
-      // behind the live DOM buildings. There is no painted front/ring return.
-      landscape.innerHTML = `${sampledSoilBackdrop(bounds, terrainAsset)}<image id="azmara-oasis-foundation" href="assets/azmara-oasis-foundation-v1.png" x="${x}" y="${y}" width="${width}" height="${height}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"/><image id="town-terrain-overlay" x="${DESKTOP_ART.x}" y="${DESKTOP_ART.y}" width="${DESKTOP_ART.width}" height="${DESKTOP_ART.height}" preserveAspectRatio="none" style="display:none"/><image id="town-street-ground" aria-hidden="true" preserveAspectRatio="none"/><g id="town-wall-approach" aria-hidden="true"></g><g id="town-scenery-decor" transform="translate(${DESKTOP_ART.x} ${DESKTOP_ART.y}) scale(${DESKTOP_ART.width / 1672} ${DESKTOP_ART.height / 941})" aria-hidden="true"></g><g id="town-valley-terrain" aria-hidden="true"></g><g id="town-wall-perimeter" aria-hidden="true"></g>${pads}`;
-      syncAppearance();
-      return;
-    }
-    landscape.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
-    landscape.innerHTML = `${sampledSoilBackdrop(bounds, terrainAsset)}<defs>
-      <filter id="worn-earth-edge" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7" result="soil-noise"/><feDisplacementMap in="SourceGraphic" in2="soil-noise" scale="6" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="2.4"/></filter>
-    </defs>
-    <image id="azmara-oasis-foundation" href="assets/azmara-oasis-foundation-v1.png" x="${x}" y="${y}" width="${width}" height="${height}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"/>
-    <image id="town-terrain-overlay" x="${TERRAIN_ART.x}" y="${TERRAIN_ART.y}" width="${TERRAIN_ART.width}" height="${TERRAIN_ART.height}" preserveAspectRatio="none" style="display:none"/>
-    <image id="town-street-ground" aria-hidden="true" preserveAspectRatio="none"/>
-    <g id="town-wall-approach" aria-hidden="true"></g>
-    <g id="town-scenery-decor" transform="translate(${TERRAIN_ART.x} ${TERRAIN_ART.y}) scale(${TERRAIN_ART.width / 1254} ${TERRAIN_ART.height / 1254})" aria-hidden="true"></g>
-    <g id="town-valley-terrain" aria-hidden="true"></g>
-    <g id="town-wall-perimeter" aria-hidden="true"></g>
-    ${pads}`;
     syncAppearance();
   }
 
@@ -1492,26 +1408,10 @@
   }
 
   function syncWallPixelRegistration() {
-    const gate = window.AzmaraTownWall?.layout(50, { desktop: desktopQuery.matches }).gate;
-    const matrix = landscape.getScreenCTM();
-    if (!gate || !matrix || !matrix.a || !matrix.d) return;
-    const point = new DOMPoint(gate.x, gate.y).matrixTransform(matrix);
-    const cssX = Math.round(point.x) - point.x, cssY = Math.round(point.y) - point.y;
-    const worldX = cssX / matrix.a, worldY = cssY / matrix.d;
-    // One shared subpixel correction for both depth layers keeps the raster
-    // join/gate pixel-registered, without rounding independent plot anchors.
-    for (const node of [$("#town-wall-perimeter"), $("#town-wall-front"), $("#town-wall-approach")]) {
-      node?.setAttribute("transform", `translate(${worldX} ${worldY})`);
-    }
     const control = $('.plot-marker[data-plot="wall-01"]');
     if (control) {
       control.style.setProperty("--wall-snap-x", "0px");
       control.style.setProperty("--wall-snap-y", "0px");
-      const box = control.getBoundingClientRect();
-      // DOM percentage positioning is quantised differently from the SVG
-      // CTM. Correct the real control centre, not a parallel approximation.
-      control.style.setProperty("--wall-snap-x", `${Math.round(point.x) - box.x - box.width / 2}px`);
-      control.style.setProperty("--wall-snap-y", `${Math.round(point.y) - box.y - box.height / 2}px`);
     }
   }
 
@@ -1534,6 +1434,12 @@
   }
 
   function initialFitArea() {
+    const lockedFrame = landFrame();
+    const lockedWidth = viewport.clientWidth;
+    const lockedHeight = viewport.clientHeight;
+    return { scale: Math.max(lockedWidth / lockedFrame.width, lockedHeight / lockedFrame.height),
+      centerX: lockedWidth / 2, centerY: lockedHeight / 2 };
+    /* istanbul ignore next -- retained rollback algorithm, unreachable while DEC-100 is active */
     const width = viewport.clientWidth;
     const height = viewport.clientHeight;
     const usable = townUsableArea();
@@ -1561,6 +1467,14 @@
   }
 
   function fitArea() {
+    const lockedWidth = viewport.clientWidth, lockedHeight = viewport.clientHeight;
+    if ((!lockedWidth || !lockedHeight) && completeTownFit?.value) return completeTownFit.value;
+    const lockedKey = `${lockedWidth}:${lockedHeight}:${desktopQuery.matches}:land-v1`;
+    if (completeTownFit?.key === lockedKey) return completeTownFit.value;
+    const lockedValue = { ...initialFitArea(), wallBounds: null, packingRetries: 0, packingLimited: false };
+    completeTownFit = { key: lockedKey, value: lockedValue };
+    return lockedValue;
+    /* istanbul ignore next -- retained rollback algorithm, unreachable while DEC-100 is active */
     const width = viewport.clientWidth, height = viewport.clientHeight;
     // Atlas hides this DOM viewport. HUD/gallery updates must retain the last
     // real Town registration, not turn 44px targets into infinite world units.
@@ -1631,6 +1545,8 @@
   }
 
   function completeTownFrame(desktop, fit) {
+    return landFrame(desktop);
+    /* istanbul ignore next -- retained rollback algorithm, unreachable while DEC-100 is active */
     const frame = desktop ? DESKTOP_FRAME : TOWN_FRAME, wall = fit.wallBounds;
     if (!wall) return frame;
     const x = Math.min(frame.x, wall.x - 12), y = Math.min(frame.y, wall.y - 12);
@@ -1663,8 +1579,10 @@
     const coverScale = Math.max(viewportWidth / core.width, viewportHeight / core.height);
     const fit = fitArea();
     const frame = completeTownFrame(desktop, fit);
-    if (desktop) updateDesktopNorthInset(viewportWidth, viewportHeight, fit);
-    else updateCompactAnchors(fit);
+    // DEC-100 uses one locked picture plane. Presentation packing must not
+    // move controls or grow a synthetic world outside that picture.
+    projectedAnchors = {};
+    compactProjectedAnchors = {};
     townMap.dataset.northInset = String(desktop ? desktopNorthInset : 0);
     townMap.dataset.hallOutset = String(desktop ? desktopHallOutset : 0);
     townMap.dataset.edgeInset = String(desktop ? desktopEdgeInset : 0);
@@ -1674,18 +1592,17 @@
     if (closeMap && !fitMap) mapZoom = closeZoom();
     mapZoom = fitMap ? minimumZoom : Math.max(minimumZoom, Math.min(MAX_MAP_ZOOM, mapZoom));
     const scale = coverScale * mapZoom;
-    const target = fitMap ? { x: core.x + core.width / 2, y: core.y + core.height / 2 } : focus;
+    const target = fitMap ? plotPosition(byId[HALL_ID], core) : focus;
     // At gentle desktop zoom the whole settlement still fits the viewport.
     // Allow a small scenic pan margin instead of making that view feel locked;
     // it is always bounded by the existing painting, never new outer terrain.
-    const panAllowance = desktop && !fitMap ? Math.min(1, (scale / fit.scale - 1) / 0.5) : 0;
-    const worldWidth = Math.max(frame.width, viewportWidth / scale + (desktop ? core.width * 0.24 * panAllowance : 0));
-    const worldHeight = Math.max(frame.height, viewportHeight / scale + (desktop ? core.height * 0.24 * panAllowance : 0));
+    const worldWidth = frame.width;
+    const worldHeight = frame.height;
     // Larger screen-ratio margins have no scroll range along that axis.
     // Fit aligns the core below the compact title without stretching the art.
     const bounds = {
-      x: worldWidth > frame.width ? core.x + core.width / 2 - (fitMap ? fit.centerX / scale : worldWidth / 2) : frame.x,
-      y: worldHeight > frame.height ? core.y + core.height / 2 - (fitMap ? fit.centerY / scale : worldHeight / 2) : frame.y,
+      x: frame.x,
+      y: frame.y,
       width: worldWidth, height: worldHeight
     };
     if (desktop && !fitMap) {
@@ -1814,9 +1731,9 @@
       return;
     }
     const fit = fitArea();
-    const core = activeCore();
+    const hall = plotPosition(byId[HALL_ID]);
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    viewport.scrollTo({ left: (core.x + core.width / 2 - mapMetrics.x) * mapMetrics.scale - viewport.clientWidth / 2, top: (core.y + core.height / 2 - mapMetrics.y) * mapMetrics.scale - (fitMap ? fit.centerY : viewport.clientHeight / 2), behavior: animate && !reducedMotion ? "smooth" : "instant" });
+    viewport.scrollTo({ left: (hall.x - mapMetrics.x) * mapMetrics.scale - viewport.clientWidth / 2, top: (hall.y - mapMetrics.y) * mapMetrics.scale - (fitMap ? fit.centerY : viewport.clientHeight / 2), behavior: animate && !reducedMotion ? "smooth" : "instant" });
   }
 
   function useMapView(close) {
@@ -1977,6 +1894,29 @@
         renderAppearanceComparison(); return;
       }
     }
+    const landStageButton = event.target.closest("[data-land-stage-level]");
+    if (landStageButton && previewMode === "dev" && openView?.type === "dev-tools" && !state.construction && hasHall()) {
+      const level = Number(landStageButton.dataset.landStageLevel);
+      if (!window.AzmaraLandStages.milestones.includes(level)) return;
+      devHallLevelOverride = level;
+      renderMarkers();
+      updateHud();
+      layoutMap();
+      renderPanel();
+      content.querySelector(`[data-land-stage-level="${level}"]`)?.focus();
+      announce(`Temporary Town Hall level ${level}; locked land stage ${appearanceFor().stage}. Nothing was saved.`);
+      return;
+    }
+    if (event.target.closest("#reset-land-stage") && previewMode === "dev" && openView?.type === "dev-tools") {
+      devHallLevelOverride = null;
+      renderMarkers();
+      updateHud();
+      layoutMap();
+      renderPanel();
+      $("#reset-land-stage")?.focus();
+      announce(`Land restored to the actual completed Town Hall level ${actualHallLevel()}.`);
+      return;
+    }
     if (event.target.closest("#apply-town-layout") && openView?.type === "overview") {
       const choice = $("#town-layout")?.value;
       if (!window.AzmaraTownLayouts.valid(choice) || choice === townLayout()) return;
@@ -2035,6 +1975,7 @@
     if (event.target.closest("#confirm-reset") && openView?.type === "reset") {
       const selectedLayout = state.plotLayout;
       state = { ...defaultState(state.townName), hallPlaced: false };
+      devHallLevelOverride = null;
       if (selectedLayout) state.plotLayout = selectedLayout;
       restoreAppearance();
       cancelConfirmation = false;

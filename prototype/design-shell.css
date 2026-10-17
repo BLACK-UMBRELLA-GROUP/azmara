@@ -44,7 +44,7 @@
   left: var(--azmara-townbar-left);
   display: flex;
   align-items: stretch;
-  width: min(1040px, calc(100vw - 28px));
+  width: min(1040px, calc(100vw - 96px));
   height: var(--azmara-townbar-height);
   padding: 3px;
   border-radius: 17px;
@@ -255,13 +255,16 @@ body[data-azmara-dock-collapsed="true"] .azmara-dock-reveal { display: block; }
 
 .azmara-phone-dock { display: none; }
 
-/* Replace the old flat pilot paint with the approved one-picture foundation.
-   The current layered wall and live building sprites remain above it. */
+/* Locked land stages own the entire ground plane. Retired layers remain in the
+   repository for rollback but can never paint over the current master. */
 #town-terrain-overlay,
 #town-street-ground,
 #town-scenery-decor,
-#town-wall-approach { display: none !important; }
-#azmara-oasis-foundation { display: block; }
+#town-wall-approach,
+#town-valley-terrain,
+#town-wall-perimeter,
+#town-wall-front-layer,
+#azmara-oasis-foundation { display: none !important; }
 
 /* Content panels open beside the dock rather than replacing the game. */
 @media (min-width: 700px) {
@@ -292,6 +295,18 @@ body[data-azmara-dock-collapsed="true"] .azmara-dock-reveal { display: block; }
   .azmara-map-switcher button { width: 62px; }
   .azmara-population-chip { width: 84px; }
   .azmara-resource-chip { min-width: 61px; }
+}
+
+/* Computer town bars show the complete information row at once. The six
+   resources share the remaining width; sideways scrolling stays phone-only. */
+@media (min-width: 1024px) {
+  .azmara-resource-ribbon { overflow-x: hidden; }
+  .azmara-resource-chip {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 3px;
+    padding-inline: 4px;
+  }
 }
 
 @media (max-width: 699px) {
