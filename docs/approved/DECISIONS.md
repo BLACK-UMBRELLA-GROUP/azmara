@@ -1993,4 +1993,30 @@ unselected.
   and unlocked; preparing and signing the exact app does not authorize data
   removal or a substitute install path.
 
-Next unused decision identifier: `DEC-102`.
+## DEC-102 — Simplify the local Dev workbench
+
+- Date: 18 October 2026 (Europe/London).
+- Source: the Owner explicitly replies `LOCK` to this exact scope.
+- Locked wording: “remove the saved Academy; Dev defaults temporarily to Land
+  Stage 1; Land Stage becomes a dropdown; remove Appearance Review; add the
+  21-building dropdown with no artwork or levels yet; Test Supplies gets manual
+  Coins/Timber/Clay inputs accepting whole numbers from 1–1,000,000; Reset
+  Plots stays unchanged; build locally only and change nothing else.”
+- The 21 display-only building choices are the latest named catalogue from the
+  withdrawn look-ladder draft: Garrison, Cavalry Yard, Hospital, Armoury, Town
+  Wall, Caravan Yard, Haulage Yard, Trading Post, Vault, Town Hall, Royal
+  Palace, Royal Lodge, University, School, Library, Bazaar, Prayer Garden,
+  Courtyard Homes, Toolmaker, Architect's Office and Warehouse. This approves
+  those names only for the Dev dropdown; it does not approve artwork, levels,
+  gameplay effects, plot placement, migration aliases or the withdrawn
+  twelve-look schedule.
+- Land Stage remains an unsaved Dev projection governed by the real completed
+  Town Hall milestone rule. Opening Dev begins temporarily at Level 1; Reset
+  returns the projection to that temporary Level 1 default. Gameplay mode and
+  reload still restore real progress.
+- Academy removal is a narrow saved-preview cleanup. Preserve the Town Hall,
+  every other building, resources, town name, layouts and any unrelated queue.
+- Do not publish this local implementation or update the native app. Preserve
+  the Dev button position, Gameplay mode and every control outside this scope.
+
+Next unused decision identifier: `DEC-103`.
