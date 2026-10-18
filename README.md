@@ -47,13 +47,12 @@ app; build, installation and device verification are tracked in the status.
 
 ## Try the prototype
 
-**Current delivery, private web30 (DEC-100/DEC-101):** all eleven locked land
-stages are live. Town, Region and World fill the browser viewport edge-to-edge
-with no outer game border; compact Region/World locations remain reachable
-below the floating town bar, and phone More/Options state is repaired. The Site
-remains owner-only and is not connected to auto-deploy. Refresh manually at
-[azmara.app](https://azmara.app). See the
-[web delivery](docs/implemented/WEB_PUBLICATION_30.md).
+**Current delivery, private web31 (DEC-102–104):** all eleven locked land stages
+remain live. The simplified Dev workbench and midpoint-centred cover camera are
+now published; Town, Region and World remain edge-to-edge with no outer game
+border. The Site remains owner-only and is not connected to auto-deploy.
+Refresh manually at [azmara.app](https://azmara.app). See the
+[web delivery](docs/implemented/WEB_PUBLICATION_31.md).
 
 **Prepared iPhone build, AZMARA 0.1.0 (3):** the signed app contains the same
 current runtime and supports the current save/construction schema. It is ready
@@ -61,9 +60,9 @@ for an in-place installation when the paired iPhone is available and unlocked;
 the phone was not modified while unavailable. See
 [native build 3](docs/implemented/NATIVE_BUILD_3.md).
 
-**Previous delivery, private web29 (DEC-100/DEC-101):** the exact locked land
-stages first went live with the full-viewport shell. It is the immediate web
-rollback. See [delivery](docs/implemented/WEB_PUBLICATION_29.md).
+**Previous delivery, private web30 (DEC-100/DEC-101):** the exact locked land
+stages and full-viewport shell remain the immediate web rollback. See
+[delivery](docs/implemented/WEB_PUBLICATION_30.md).
 
 **Previous delivery, private web28 (DEC-097):** the oasis foundation first
 filled the complete desktop playfield with a centred cover crop. It is the

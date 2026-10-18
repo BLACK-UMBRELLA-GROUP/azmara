@@ -2,11 +2,11 @@
 
 ## Current private delivery
 
-Private web30 is live at [azmara.app](https://azmara.app/). It uses the eleven
-locked land masters and fills Town, Region and World edge-to-edge on desktop
-and phone with no outer game border. Compact atlas targets sit below the
-floating town bar, and phone More/Options state is synchronised. See
-[`WEB_PUBLICATION_30.md`](../docs/implemented/WEB_PUBLICATION_30.md).
+Private web31 is live at [azmara.app](https://azmara.app/). It uses the eleven
+locked land masters, the simplified Dev workbench and the midpoint-centred
+cover camera. Town, Region and World remain edge-to-edge on desktop and phone
+with no outer game border. See
+[`WEB_PUBLICATION_31.md`](../docs/implemented/WEB_PUBLICATION_31.md).
 
 ## Current local pilot — not published
 

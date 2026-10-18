@@ -1,10 +1,10 @@
 # What actually exists
 
-As of: 18 October 2026. Phase: **DEC-102/103 local; web30 remains live; native build 3 unchanged**.
-Current authority: `DEC-011` through `DEC-103`. Foundation records below
+As of: 18 October 2026. Phase: **private web31 live; native build 3 unchanged**.
+Current authority: `DEC-011` through `DEC-104`. Foundation records below
 describe earlier delivery stages.
 
-## Current local work — midpoint land camera
+## Current delivery — simplified Dev workbench and midpoint land camera
 
 DEC-103 replaces Town Hall-centred Fit with the exact midpoint of the approved
 land picture. The start view now uses the true cover/minimum scale, so a wide
@@ -25,25 +25,24 @@ bottom palms are now visible; the remaining cover crop is shared between cliff
 tops and a thin lower strip, with no margin or stretch. The capture browser and
 loopback server closed successfully. Evidence:
 `prototype/debug/2026-10-18T09-11-29-413Z-town-land-stage-1-staggered-3420x2069-f811bab6.png`
-and its adjacent JSON receipt. Nothing in this local round is published or
-copied to the native app.
+and its adjacent JSON receipt. DEC-102/103 are now live in private web31; the
+native app remains unchanged.
 
-## Current delivery — full-screen private web30 and native build 3
+## Current private web31 and native build 3
 
-DEC-100's exact eleven land masters are live in private web30. The completed
+DEC-100's exact eleven land masters remain live in private web31. The completed
 Town Hall look selects the land at levels 1, 5, 8, 12, 17, 22, 28, 34, 41, 45
-and 50; the Dev picker uses the same rule without saving its override. The old
-foundation/scenery layers no longer sit over the master. Other plot targets
-remain deliberately unmoved until the spot map is locked.
+and 50. DEC-102 removes the saved Academy, starts each temporary Dev session at
+Stage 1, replaces the old Dev surface with separate dropdowns and bounded test
+supplies, and removes Appearance Review. DEC-103 centres the minimum-cover town
+camera on the picture midpoint and lets panning reach all image edges.
 
 The official Sites workflow pushed
-`38385508a478049c7a9ef7b25430f7bf87707193` and delivered a terminal-success
-77-file archive. Fresh live headless checks pass desktop and phone Town, Region
-and World full-viewport geometry with zero outer borders or browser errors.
-Compact Region/World targets now remain below the floating bar and every
-Options/More trigger reports dialog state correctly.
-The custom domain and one-owner/no-group/no-external audience are unchanged;
-there is no auto-deploy. See [web30 delivery](WEB_PUBLICATION_30.md).
+`2af1191ff6084172f9478d7a9708e92459a648ae` and delivered a terminal-success
+77-file archive as Site version 31. The custom domain and one-owner/no-viewer/
+no-group/no-external audience are unchanged; there is no auto-deploy or Site
+automation. No publication browser was opened; the Owner will refresh manually.
+See [web31 delivery](WEB_PUBLICATION_31.md).
 
 The independent iPhone wrapper is prepared and signed as AZMARA `0.1.0 (3)`.
 Its exact 77-file embedded runtime and updated save/startup bridge pass 14 Node
@@ -54,6 +53,11 @@ artifact is ready but not installed; existing phone data was not touched. See
 that exact artifact in place once the paired phone is available and unlocked;
 it is forbidden from uninstalling, clearing data, rebuilding or substituting a
 different install path.
+
+## Previous delivery — full-screen private web30
+
+Web30 delivered the locked land stages with the complete full-screen shell and
+is the immediate rollback for web31; see [web30 delivery](WEB_PUBLICATION_30.md).
 
 ## Previous delivery — locked land stages private web29
 
