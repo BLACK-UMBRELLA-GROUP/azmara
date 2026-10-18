@@ -1,6 +1,6 @@
 "use strict";
 
-// DEC-100 publication staging. Build the hosted runtime from the canonical,
+// DEC-104 publication staging. Build the hosted runtime from the canonical,
 // audited allowlist so stale previews cannot leak into the live bundle.
 const assert = require("node:assert/strict");
 const crypto = require("node:crypto");
@@ -11,7 +11,7 @@ const root = fs.realpathSync(path.resolve(__dirname, "../.."));
 const prototype = path.join(root, "prototype");
 const site = path.join(root, "sites/azmara-private-preview");
 const dist = path.join(site, "dist");
-const evidence = path.join(root, "evidence/2026-10-17-land-stages");
+const evidence = path.join(root, "evidence/2026-10-18-web31-publication");
 const hostingPath = path.join(site, ".openai/hosting.json");
 const manifestPath = path.join(prototype, "runtime-manifest.txt");
 const projectId = "appgprj_6ac7643d3f588191ba2157dfe1972c3d";
@@ -80,7 +80,7 @@ for (const relative of files) {
 
 const after = walk(dist).sort();
 assert.deepEqual(after, [...files].sort(), "Hosted runtime must exactly match the allowlist");
-assert.equal(totalBytes, 122235513, "Audited runtime byte total changed");
+assert.equal(totalBytes, 122212481, "Audited runtime byte total changed");
 for (let stage = 1; stage <= 11; stage += 1) {
   const id = String(stage).padStart(2, "0");
   assert(allowed.has(`assets/land/land-stage-${id}.png`));
@@ -89,7 +89,7 @@ assert(allowed.has("assets/progression/azmara-shipyard-stages-v2.png"), "Legacy 
 
 fs.mkdirSync(evidence, { recursive: true });
 fs.writeFileSync(path.join(evidence, "publication-source-receipt.json"), `${JSON.stringify({
-  decision: "DEC-100",
+  decision: "DEC-104",
   projectId,
   manifest: "prototype/runtime-manifest.txt",
   runtimeFiles: after.length,

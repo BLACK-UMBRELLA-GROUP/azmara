@@ -2038,4 +2038,17 @@ unselected.
 - Build locally only. Do not publish or update the native app. Fresh Owner
   permission is still required before the DEC-084 screenshot run.
 
-Next unused decision identifier: `DEC-104`.
+## DEC-104 — Publish the simplified Dev workbench and midpoint camera
+
+- Date: 18 October 2026 (Europe/London).
+- Source: after the local DEC-102/103 implementation and authorised visual
+  check, the Owner explicitly instructs Codex: “PUBLISH IT”.
+- Publish the exact verified DEC-102/103 browser runtime to the existing
+  owner-private AZMARA Site at `azmara.app`. Preserve the custom audience of
+  one owner, no groups and no external visitors, and keep deployment manual
+  with no Site automation or auto-deploy.
+- Do not modify the locked land pictures, game artwork, saves, queues, plot
+  IDs, layouts, native app or native build. Preserve private web30 as the
+  immediate rollback version and do not open visible or headless Chrome.
+
+Next unused decision identifier: `DEC-105`.
