@@ -2011,9 +2011,10 @@ unselected.
   gameplay effects, plot placement, migration aliases or the withdrawn
   twelve-look schedule.
 - Land Stage remains an unsaved Dev projection governed by the real completed
-  Town Hall milestone rule. Opening Dev begins temporarily at Level 1; Reset
-  returns the projection to that temporary Level 1 default. Gameplay mode and
-  reload still restore real progress.
+  Town Hall milestone rule. Opening or re-entering Dev begins temporarily at
+  Level 1. The existing Land Stage reset still returns to the real completed
+  Town Hall level, and Gameplay mode restores real progress. Reload starts a
+  fresh temporary Dev session at Level 1 without changing saved progress.
 - Academy removal is a narrow saved-preview cleanup. Preserve the Town Hall,
   every other building, resources, town name, layouts and any unrelated queue.
 - Do not publish this local implementation or update the native app. Preserve

@@ -1,67 +1,5 @@
 "use strict";
 
-// Pure, unsaved Appearance study renderer. It accepts a captured live camera
-// and registered plot/art metadata; it never owns packing, input or storage.
-(() => {
-  const xml = value => String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c]);
-  const scales = Object.freeze([1, .8, .65]);
-  const scaleBounds = Object.freeze({ min: .01, max: 1 });
-  const normalizedScale = value => Number.isFinite(Number(value)) ? Math.max(scaleBounds.min, Math.min(scaleBounds.max, Number(value))) : 1;
-  const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.values(value).forEach(freeze); Object.freeze(value); } return value; };
-  function scene(input = {}) {
-    const camera = input.camera;
-    if (!camera || ![camera.x,camera.y,camera.width,camera.height].every(Number.isFinite) || camera.width <= 0 || camera.height <= 0) throw new TypeError("Appearance comparison needs the captured live world view");
-    const scale = normalizedScale(input.scale);
-    const plots = (input.plots || []).map(p => {
-      if (![p.x,p.y,p.width,p.height].every(Number.isFinite) || p.width <= 0 || p.height <= 0) throw new TypeError("Comparison plot geometry must be finite");
-      const art = p.buildingId ? p.sourceArt || window.AzmaraBuildingArt.forBuilding(p.buildingId,p.level) : null;
-      const width = p.width * scale, height = p.height * scale;
-      const aspect = art?.cellAspect || (p.buildingId === "town-hall" ? 1.5 : width / height);
-      const bodyWidth = Math.min(width,height * aspect), bodyHeight = Math.min(height,width / aspect);
-      return { ...JSON.parse(JSON.stringify(p)), sourceArt: art ? JSON.parse(JSON.stringify(art)) : null, artBounds: { x: p.x-bodyWidth/2,y:p.y-bodyHeight/2,width:bodyWidth,height:bodyHeight }, scale };
-    });
-    if (plots.length !== 23 || new Set(plots.map(p=>p.id)).size !== 23) throw new TypeError("Appearance town comparison retains all23 unique plot IDs");
-    const hallLevel = Number.isInteger(input.hallLevel) ? input.hallLevel : 1;
-    const layoutId = input.layout || "staggered";
-    const landFrame = input.landFrame;
-    if (!landFrame || ![landFrame.x,landFrame.y,landFrame.width,landFrame.height].every(Number.isFinite)) throw new TypeError("Appearance comparison needs the locked land frame");
-    const land = window.AzmaraLandStages.forHallLevel(hallLevel);
-    return freeze({ camera: { ...camera }, cssWidth: input.cssWidth || camera.width, cssHeight: input.cssHeight || camera.height, scale, desktop: input.desktop === true, hallLevel, layout: layoutId, plots,
-      landFrame: { ...landFrame }, land: { ...land }, scenerySourceLevel: land.stage, testOnly: true, saved: false });
-  }
-  function sprite(plot) {
-    const art = plot.sourceArt, b = plot.artBounds;
-    if (!art) return "";
-    if (!art.atlas) return `<image href="${xml(art.src)}" x="${b.x}" y="${b.y}" width="${b.width}" height="${b.height}" preserveAspectRatio="xMidYMid meet"/>`;
-    const [x,y,width,height] = art.rect;
-    return `<svg x="${b.x}" y="${b.y}" width="${b.width}" height="${b.height}" viewBox="${x} ${y} ${width} ${height}" overflow="hidden" style="width:${b.width}px;height:${b.height}px;overflow:hidden;stroke:none"><image href="${xml(art.src)}" width="${art.atlasWidth}" height="${art.atlasHeight}"/></svg>`;
-  }
-  function pinMarkup() {
-    return '<svg class="comparison-pin-art" viewBox="0 0 22 34" aria-hidden="true" focusable="false"><ellipse cx="12" cy="30" rx="8" ry="2.4" fill="#745837" opacity=".2"/><path d="M8 3l3-1 1 28-3 2Z" fill="#81603c"/><path d="M8 3l2-2 2 1-1 2Z" fill="#d3ac6a"/><path d="M11 5q6-3 10 0l-3 5 3 5q-5-3-10 0Z" fill="#3a7770" stroke="#ebd69d" stroke-width=".8"/><path d="M13 7l4 1-3 3" fill="none" stroke="#ecd8ab" stroke-width=".8"/></svg>';
-  }
-  function markup(input) {
-    const data = input?.testOnly ? input : scene(input), c = data.camera;
-    const bodies = data.plots
-      .filter((plot) => plot.buildingId && plot.id !== "general-01" && plot.kind !== "wall")
-      .map((plot) => `<g data-study-building="${xml(plot.id)}" data-study-type="${xml(plot.buildingId)}" data-study-scale="${data.scale}" data-study-art-bounds="${Object.values(plot.artBounds).join(",")}">${sprite(plot)}</g>`)
-      .join("");
-    let content = `<image href="${xml(data.land.src)}" x="${data.landFrame.x}" y="${data.landFrame.y}" width="${data.landFrame.width}" height="${data.landFrame.height}" preserveAspectRatio="xMidYMid meet"/>${bodies}`;
-    const prefix = "study-" + Math.round(data.scale*100) + "-";
-    content = content.replace(/id="([^"]+)"/g,(_,id)=>`id="${prefix}${id}"`).replace(/url\(#([^)]+)\)/g,(_,id)=>`url(#${prefix}${id})`);
-    return `<svg class="comparison-world" xmlns="http://www.w3.org/2000/svg" viewBox="${c.x} ${c.y} ${c.width} ${c.height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Temporary ${Math.round(data.scale*100)} percent building-size comparison" data-study-scale="${data.scale}" data-study-camera="${Object.values(c).join(",")}" data-study-scenery-level="${data.scenerySourceLevel}" style="stroke:none;pointer-events:none">${content}</svg>`;
-  }
-  function contactSheet(level = 50, scale = .8) {
-    const entries = window.AzmaraCatalogue.entries;
-    return entries.map(entry => {
-      const wall = entry.id === "town-wall" ? window.AzmaraTownWall.layout(Math.max(1,level),{desktop:true}) : null;
-      return { id: entry.id,name: entry.name,level,scale,
-        sourceArt: wall ? { ...wall.image,rect:Object.values(wall.sourceCrop),artLevel:wall.artLevel,activeWall:true } : window.AzmaraBuildingArt.forBuilding(entry.id,level),
-        markup: wall ? window.AzmaraTownWall.renderPreview(level,"study-type-art") : window.AzmaraBuildingArt.render(entry.id,level,"study-type-art") };
-    });
-  }
-  window.AzmaraAppearanceStudy = Object.freeze({ scales, scaleBounds, scene, markup, pinMarkup, contactSheet });
-})();
-
 (() => {
   const STORAGE_KEY = "azmara-town-layout-v3";
   const LEGACY_KEY = "azmara-town-design-v1";
@@ -70,8 +8,31 @@
   const CONSTRUCTION_MS = 120000;
   const FREE_CANCEL_MS = 60000;
   const MAX_TEST_LEVEL = 50;
-  const MAX_RESOURCE = 100000;
-  const ART_MILESTONES = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+  const MAX_RESOURCE = 1_000_000;
+  const DEV_LAND_STAGE_DEFAULT = 1;
+  const DEV_BUILDING_OPTIONS = Object.freeze([
+    { id: "garrison", name: "Garrison" },
+    { id: "cavalry-yard", name: "Cavalry Yard" },
+    { id: "hospital", name: "Hospital" },
+    { id: "armoury", name: "Armoury" },
+    { id: "town-wall", name: "Town Wall" },
+    { id: "caravan-yard", name: "Caravan Yard" },
+    { id: "haulage-yard", name: "Haulage Yard" },
+    { id: "trading-post", name: "Trading Post" },
+    { id: "vault", name: "Vault" },
+    { id: "town-hall", name: "Town Hall" },
+    { id: "royal-palace", name: "Royal Palace" },
+    { id: "royal-lodge", name: "Royal Lodge" },
+    { id: "university", name: "University" },
+    { id: "school", name: "School" },
+    { id: "library", name: "Library" },
+    { id: "bazaar", name: "Bazaar" },
+    { id: "prayer-garden", name: "Prayer Garden" },
+    { id: "courtyard-homes", name: "Courtyard Homes" },
+    { id: "toolmaker", name: "Toolmaker" },
+    { id: "architects-office", name: "Architect's Office" },
+    { id: "warehouse", name: "Warehouse" }
+  ]);
   const CORE = { x: 2300, y: 1740, width: 1400, height: 1320 };
   // Only the settlement and a small scenic border are explorable. Screen-ratio
   // padding fills the viewport but must not create additional camera travel.
@@ -245,19 +206,11 @@
   let mapDrag = null;
   let suppressMapClickUntil = 0;
   let landscapeProfile = null;
-  let appearanceLevel = null;
-  let appearanceType = "town-hall";
-  let idealTownLevel = null;
   let catalogueLevel = 1;
-  let appearanceCamera = null;
-  let appearanceComparisonScale = .55;
-  let appearanceComparisonSolo = false;
-  let appearanceScaleFrame = 0;
-  let appearanceSelectedPlot = null;
-  let appearanceBuildSites = false;
   // Unsaved Dev-only level projection. This drives the same Town Hall
   // milestone rule as real progress; it is never written to localStorage.
-  let devHallLevelOverride = null;
+  let devHallLevelOverride = DEV_LAND_STAGE_DEFAULT;
+  let devBuildingChoice = DEV_BUILDING_OPTIONS[0].id;
   let buildChoice = null;
   let clearConfirmation = null;
   let cancelConfirmation = false;
@@ -585,6 +538,37 @@
   }
 
   const isRecord = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+  function parseDevSupplyValue(raw) {
+    if (typeof raw !== "string" || !/^[0-9]+$/.test(raw)) return null;
+    const value = Number(raw);
+    return Number.isSafeInteger(value) && value >= 1 && value <= MAX_RESOURCE ? value : null;
+  }
+  function removeSavedAcademy(saved) {
+    const record = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+    if (!record(saved)) return { state: saved, changed: false };
+    let changed = false;
+    if (record(saved.buildings)) {
+      for (const [plotId, building] of Object.entries(saved.buildings)) {
+        if (building?.typeId !== "academy") continue;
+        delete saved.buildings[plotId];
+        changed = true;
+      }
+      if (Object.keys(saved.buildings).length === 0) delete saved.buildings;
+    }
+    if (saved.construction?.typeId === "academy") {
+      const paidCost = saved.construction.paidCost;
+      if (record(paidCost) && record(saved.resources)) {
+        for (const key of ["coins", "timber", "stone"]) {
+          if (Number.isInteger(paidCost[key]) && Number.isInteger(saved.resources[key])) {
+            saved.resources[key] = Math.min(MAX_RESOURCE, saved.resources[key] + paidCost[key]);
+          }
+        }
+      }
+      saved.construction = null;
+      changed = true;
+    }
+    return { state: saved, changed };
+  }
   const metadataFor = (typeId) => window.AzmaraCatalogue.get(typeId);
   function acceptsType(plotId, typeId) {
     if (!Object.hasOwn(byId, plotId)) return false;
@@ -653,10 +637,11 @@
       if (Object.hasOwn(saved, "hallPlaced")) retained.hallPlaced = saved.hallPlaced;
       if (Object.hasOwn(saved, "buildings")) retained.buildings = saved.buildings;
       if (Object.hasOwn(saved, "plotLayout") && window.AzmaraTownLayouts.valid(saved.plotLayout)) retained.plotLayout = saved.plotLayout;
-      // Remember the validated semantic state, not its whitespace or key order.
-      // Read-only startup/review must leave the original storage bytes intact.
-      lastSavedState = JSON.stringify(retained);
-      return retained;
+      const academyCleanup = removeSavedAcademy(retained);
+      // A repaired save must be written by the normal startup saveState call.
+      // Otherwise read-only startup keeps the original validated bytes intact.
+      lastSavedState = academyCleanup.changed ? null : JSON.stringify(academyCleanup.state);
+      return academyCleanup.state;
     } catch {
       return defaultState();
     }
@@ -727,15 +712,10 @@
       const hall = buildingFor(plotId);
       return hall ? { ...hall, level: devHallLevelOverride } : null;
     }
-    if (previewMode !== "dev" || idealTownLevel === null) return buildingFor(plotId);
-    const plot = byId[plotId];
-    const existing = buildingFor(plotId);
-    const ordinary = window.AzmaraCatalogue.entries.filter((entry) => entry.role === "general" && entry.id !== "town-hall");
-    const typeId = existing?.typeId || (plotId === HALL_ID ? "town-hall" : plot.kind === "wall" ? "town-wall" : plot.kind === "harbour" ? "trading-port" : plot.kind === "freighter" ? "dockyard" : ordinary[(Number(plotId.slice(-2)) - 2) % ordinary.length].id);
-    return { typeId, level: idealTownLevel };
+    return buildingFor(plotId);
   }
   const shownPlotName = (plot) => shownBuildingFor(plot.id) ? metadataFor(shownBuildingFor(plot.id).typeId).name : plotName(plot);
-  const shownLevelLabel = (id) => shownBuildingFor(id) ? `Level ${shownBuildingFor(id).level}${id === HALL_ID && devHallLevelOverride !== null ? " · temporary Dev preview" : idealTownLevel !== null ? " · temporary ideal preview" : ""}` : levelLabel(id);
+  const shownLevelLabel = (id) => shownBuildingFor(id) ? `Level ${shownBuildingFor(id).level}${id === HALL_ID && devHallLevelOverride !== null ? " · temporary Dev preview" : ""}` : levelLabel(id);
   const occupied = (plot) => Boolean(buildingFor(plot.id));
   const occupiedCount = () => plots.filter(occupied).length;
   const plotName = (plot) => buildingFor(plot.id) ? metadataFor(buildingFor(plot.id).typeId).name : plot.id === HALL_ID ? "Town Hall plot" : plot.name;
@@ -787,8 +767,7 @@
     }));
   }
   function effectiveHallLevel() {
-    return devHallLevelOverride ?? idealTownLevel ??
-      (appearanceType === "town-hall" ? appearanceLevel ?? actualHallLevel() : actualHallLevel());
+    return devHallLevelOverride ?? actualHallLevel();
   }
   function appearanceFor(level = effectiveHallLevel()) {
     const land = window.AzmaraLandStages.forHallLevel(level);
@@ -800,38 +779,32 @@
       wallLevel: wall?.level || 0
     });
   }
-  function buildingVisual(typeId, level, preview = true) {
-    const visualLevel = preview && idealTownLevel !== null ? idealTownLevel : preview && appearanceType === typeId && appearanceLevel !== null ? appearanceLevel : level;
+  function buildingVisual(typeId, level) {
+    const visualLevel = level;
     if (typeId === "town-hall") {
       const visual = window.AzmaraBuildingArt.forBuilding(typeId, visualLevel);
       return { stage: visual.stage, minLevel: visual.minLevel, src: visual.src };
     }
     return window.AzmaraBuildingArt.forBuilding(typeId, visualLevel);
   }
-  function buildingArtMarkup(typeId, level, className, preview = true) {
-    const visualLevel = preview && idealTownLevel !== null ? idealTownLevel : preview && appearanceType === typeId && appearanceLevel !== null ? appearanceLevel : level;
+  function buildingArtMarkup(typeId, level, className) {
+    const visualLevel = level;
     if (typeId === "town-wall" && window.AzmaraTownWall?.renderPreview) return window.AzmaraTownWall.renderPreview(visualLevel, className);
     return window.AzmaraBuildingArt.render(typeId, visualLevel, className);
   }
-  function reviewLevel() {
-    if (appearanceLevel !== null) return appearanceLevel;
-    if (appearanceType === "town-hall") return actualHallLevel() || 1;
-    return plots.map((plot) => buildingFor(plot.id)).find((building) => building?.typeId === appearanceType)?.level || 1;
-  }
   function syncAppearance() {
     const visual = appearanceFor();
-    const townPreview = devHallLevelOverride !== null || idealTownLevel !== null || appearanceLevel !== null && appearanceType === "town-hall";
+    const townPreview = devHallLevelOverride !== null;
     document.body.dataset.landStages = "on";
     document.body.dataset.townStage = String(visual.stage);
-    document.body.dataset.townStageSource = devHallLevelOverride !== null ? "dev" : townPreview ? "preview" : "actual";
+    document.body.dataset.townStageSource = devHallLevelOverride !== null ? "dev" : "actual";
     document.body.dataset.townLevel = String(actualHallLevel());
-    document.body.dataset.appearanceType = appearanceType;
     all(".plot-marker").forEach((marker) => {
       const building = shownBuildingFor(marker.dataset.plot);
       const painted = marker.dataset.plot === HALL_ID || marker.dataset.kind === "wall";
       marker.dataset.buildingLevel = String(building?.level || 0);
       marker.dataset.buildingType = building?.typeId || "";
-      marker.dataset.buildingStageSource = idealTownLevel !== null ? "ideal" : building && appearanceType === building.typeId && appearanceLevel !== null ? "preview" : "actual";
+      marker.dataset.buildingStageSource = "actual";
       marker.dataset.buildingStage = building ? String(buildingVisual(building.typeId, building.level).stage) : "0";
       if (!building || painted) {
         marker.querySelector(".marker").replaceChildren();
@@ -848,37 +821,6 @@
     const land = $("#azmara-land-stage");
     if (land && land.getAttribute("href") !== visual.src) land.setAttribute("href", visual.src);
     landscape.setAttribute("aria-label", `Locked illustrated town land stage ${visual.stage}, from completed Town Hall level ${visual.minLevel}${townPreview ? ", temporary Dev review" : ""}.`);
-    if ($("#appearance-review-status")) $("#appearance-review-status").textContent = idealTownLevel !== null ? `Ideal town at level ${idealTownLevel}: 23 temporary compatible samples. Your saved town and construction are unchanged.` : appearanceLevel === null ? "Showing actual saved appearance where built; this illustration does not place a building." : `Temporary ${metadataFor(appearanceType).name} level ${appearanceLevel} artwork review. Actual levels, occupied plots and resources are unchanged; nothing is saved.`;
-    if ($("#appearance-milestones")) $("#appearance-milestones").textContent = `Stable visual milestones for ${metadataFor(appearanceType).name}: ${window.AzmaraBuildingArt.milestonesFor(appearanceType).join(" · ")}. Levels in between retain the last completed design.`;
-    const preview = $("#appearance-art-container");
-    if (preview) {
-      const key = `${appearanceType}:${buildingVisual(appearanceType, reviewLevel(), false).minLevel}`;
-      if (preview.dataset.renderedArt !== key) {
-        preview.innerHTML = buildingArtMarkup(appearanceType, reviewLevel(), "appearance-art", false);
-        preview.firstElementChild.id = "appearance-hall-preview";
-        preview.dataset.renderedArt = key;
-      }
-      const art = preview.firstElementChild;
-      const label = `${metadataFor(appearanceType).name} artwork at level ${reviewLevel()}`;
-      art.removeAttribute("aria-hidden");
-      if (art.tagName === "IMG") art.setAttribute("alt", label);
-      else { art.setAttribute("role", "img"); art.setAttribute("aria-label", label); }
-    }
-    renderAppearanceComparison();
-  }
-  function restoreAppearance() {
-    const ideal = idealTownLevel !== null;
-    const changed = ideal || appearanceLevel !== null || appearanceType !== "town-hall";
-    idealTownLevel = null;
-    appearanceLevel = null;
-    appearanceType = "town-hall";
-    appearanceCamera = null;
-    appearanceComparisonSolo = false;
-    appearanceSelectedPlot = null;
-    appearanceBuildSites = false;
-    panel.classList.remove("appearance-tool", "appearance-solo");
-    if (ideal) { renderMarkers(); layoutMap(); }
-    if (changed) syncAppearance();
   }
   function levelLabel(id) { return buildingFor(id) ? `Level ${buildingFor(id).level}` : "Empty · reserved plot"; }
   function costForHall() { return illustrativeCost(hasHall() ? state.hallLevel : 0); }
@@ -937,21 +879,14 @@
 
   function openPanel(view, trigger = document.activeElement) {
     const type = typeof view === "string" ? view : view.type;
-    if (previewMode !== "dev" && ["catalogue", "appearance", "dev-tools", "reset"].includes(type)) return;
-    if (type === "appearance" && atlas.currentView() !== "town") switchMapView("town");
+    if (previewMode !== "dev" && ["catalogue", "dev-tools", "reset", "supplies"].includes(type)) return;
     const drawerTrigger = sidebarOpen && sidebar?.contains(trigger);
     closeSidebar(false);
-    if (type !== "appearance") restoreAppearance();
-    else {
-      restoreAppearance();
-      appearanceType = metadataFor(view?.reviewType) ? view.reviewType : "town-hall";
-    }
     buildChoice = null;
     clearConfirmation = null;
     cancelConfirmation = false;
     stopCameraAnimation();
     endMapDrag();
-    if (type === "appearance") captureAppearanceCamera();
     if (!panel.open) returnFocus = drawerTrigger ? sidebarToggle : actionsMenu.contains(trigger) ? actionsTrigger() : trigger;
     if (actionsMenu.open) actionsMenu.close();
     openView = typeof view === "string" ? { type: view } : view;
@@ -963,95 +898,6 @@
     if (openView.type === "rename") $("#town-name-input").focus();
     else $("#close-panel").focus();
   }
-  function captureAppearanceCamera() {
-    const matrix = landscape.getScreenCTM(), box = viewport.getBoundingClientRect();
-    if (!matrix || !matrix.a || !matrix.d || !box.width || !box.height) return;
-    const origin = new DOMPoint(box.left,box.top).matrixTransform(matrix.inverse());
-    appearanceCamera = { camera: { x: origin.x,y:origin.y,width:viewport.clientWidth/matrix.a,height:viewport.clientHeight/matrix.d },
-      cssWidth: viewport.clientWidth,cssHeight: viewport.clientHeight,desktop:desktopQuery.matches,layout:townLayout(),
-      plots: plots.map(plot => { const p = plotPosition(plot), f = footprintFor(plot), marker = $(`.plot-marker[data-plot="${plot.id}"]`), painted = marker?.getBoundingClientRect(), basis = plot.kind === "wall" ? 1 : DEFAULT_BUILDING_SCALE;
-        return { id:plot.id,kind:plot.kind,name:plot.name,x:p.x,y:p.y,width:painted?.width/matrix.a/basis || Math.max(f.width/basis,44/matrix.a),
-          height:painted?.height/matrix.d/basis || Math.max(f.height/basis,44/matrix.d) }; }) };
-  }
-  function appearanceComparisonInput(scale) {
-    if (!appearanceCamera) captureAppearanceCamera();
-    if (!appearanceCamera) return null;
-    const worldPlots = appearanceCamera.plots.map(plot => {
-      const building = shownBuildingFor(plot.id), visibleLevel = building && appearanceType === building.typeId && appearanceLevel !== null && idealTownLevel === null ? appearanceLevel : building?.level;
-      return { ...plot,level:visibleLevel || 1,buildingId:building?.typeId || null,name:building ? metadataFor(building.typeId).name : plot.name,
-        sourceArt:building ? window.AzmaraBuildingArt.forBuilding(building.typeId,visibleLevel) : null };
-    });
-    return { ...appearanceCamera,scale,plots:worldPlots,landFrame: { ...landFrame(appearanceCamera.desktop) },hallLevel:idealTownLevel ?? (appearanceType === "town-hall" ? appearanceLevel ?? actualHallLevel() : actualHallLevel()),
-      decorExclusions: wallPresentationEnvelope(appearanceCamera.desktop,worldPlots).decorExclusions.concat(window.AzmaraTownWall.terrainLayout({desktop:appearanceCamera.desktop}).decorExclusions) };
-  }
-  function comparisonToolMarkup() {
-    return `<section class="appearance-comparison" id="appearance-comparison" data-dev-only><div class="comparison-toolbar"><strong>Building size · test only</strong><label class="comparison-size-slider" for="comparison-size-slider"><span>Custom size</span><input id="comparison-size-slider" type="range" min="1" max="100" step="1" value="${Math.round(appearanceComparisonScale*100)}"><output id="comparison-size-value" for="comparison-size-slider">${Math.round(appearanceComparisonScale*100)}%</output></label><nav aria-label="Choose a full-size comparison frame">${[100,80,65].map(percent=>`<button data-comparison-solo="${percent}" id="comparison-solo-${percent}">${percent}%</button>`).join("")}<button data-comparison-solo="0" id="comparison-show-all">Compare all</button><button id="comparison-toggle-sites" aria-pressed="false">Sites</button><button id="comparison-return-town">Return to town</button></nav></div><p class="panel-note comparison-explanation">The town now uses 55% artwork by default. This unsaved slider still tests every whole size from 1% to 100%; the 100% / 80% / 65% presets remain available for comparison. Saves, queues and plot positions stay untouched. Plot controls retain a 44px minimum target even when the artwork is smaller.</p><label class="comparison-build-choice"><input type="checkbox" id="comparison-build-chooser"> Show empty build-site outlines</label><output id="comparison-selection" aria-live="polite">Choose a pin in an inspected frame.</output><div class="comparison-grid">${[100,80,65].map(percent=>`<article class="comparison-card" data-comparison-percent="${percent}"><h3>${percent}% size</h3><div class="comparison-stage"><div class="comparison-paint"></div><div class="comparison-targets"></div></div></article>`).join("")}<article class="comparison-card comparison-card-custom" data-comparison-custom="true" data-comparison-percent="${Math.round(appearanceComparisonScale*100)}"><h3>Current default · ${Math.round(appearanceComparisonScale*100)}%</h3><div class="comparison-stage"><div class="comparison-paint"></div><div class="comparison-targets"></div></div></article></div><details class="comparison-identities"><summary>Check all 30 building identities</summary><div id="comparison-contact-sheet"></div></details></section>`;
-  }
-  function renderAppearanceComparison() {
-    if (previewMode !== "dev" || openView?.type !== "appearance" || !panel.open || !appearanceCamera || !$("#appearance-comparison")) return;
-    panel.classList.add("appearance-tool");
-    panel.classList.toggle("appearance-solo",appearanceComparisonSolo);
-    const stage = $("#appearance-comparison"), input = appearanceComparisonInput(1);
-    if (!input) return;
-    stage.style.setProperty("--study-aspect",String(input.cssWidth/input.cssHeight));
-    const key = JSON.stringify([input.camera,input.plots,input.hallLevel,input.layout]);
-    const customPercent = Math.round(appearanceComparisonScale*100);
-    const customCard = stage.querySelector("[data-comparison-custom]");
-    if (customCard) {
-      customCard.dataset.comparisonPercent = String(customPercent);
-      customCard.querySelector("h3").textContent = `Custom ${customPercent}% size`;
-    }
-    for (const card of stage.querySelectorAll(".comparison-card")) {
-      const scale = Number(card.dataset.comparisonPercent)/100;
-      const renderKey = `${key}:${scale}`;
-      if (card.dataset.sceneKey !== renderKey) {
-        card.dataset.sceneKey = renderKey;
-        const data = window.AzmaraAppearanceStudy.scene({ ...input,scale });
-        card.querySelector(".comparison-paint").innerHTML = window.AzmaraAppearanceStudy.markup(data);
-        card.dataset.sceneryLevel = String(data.scenerySourceLevel);
-        card.querySelector(".comparison-targets").innerHTML = data.plots.map(p=>`<button class="comparison-hit" data-comparison-plot="${p.id}" data-empty="${!p.buildingId}" aria-label="Select ${escapeHtml(p.name)} in ${Math.round(scale*100)} percent test"><svg class="comparison-outline" viewBox="0 0 320 270" aria-hidden="true"><path d="${p.kind==='wall'?'M30 125L250 80L294 144L70 195Z':'M28 150L151 82L293 148L155 219Z'}"/></svg></button>`).join("");
-      }
-    }
-    if (stage.dataset.sceneKey !== key) {
-      stage.dataset.sceneKey = key;
-      const level = idealTownLevel ?? reviewLevel();
-      $("#comparison-contact-sheet").innerHTML = window.AzmaraAppearanceStudy.contactSheet(level,appearanceComparisonScale).map(entry=>`<figure data-study-identity="${entry.id}"><div class="study-type-frame" style="--study-size:${appearanceComparisonScale}">${entry.markup}</div><figcaption>${escapeHtml(entry.name)}</figcaption></figure>`).join("");
-    }
-    const presetScale = window.AzmaraAppearanceStudy.scales.includes(appearanceComparisonScale);
-    for (const card of stage.querySelectorAll(".comparison-card")) {
-      const custom = card.dataset.comparisonCustom === "true";
-      const active = Number(card.dataset.comparisonPercent)/100 === appearanceComparisonScale && (custom ? !presetScale : true);
-      card.dataset.active = String(active);
-      card.hidden = custom && !appearanceComparisonSolo && desktopQuery.matches;
-      card.querySelector(".comparison-targets").inert = !appearanceComparisonSolo || !active;
-      card.querySelector(".comparison-targets").setAttribute("aria-hidden",String(!appearanceComparisonSolo || !active));
-    }
-    $("#comparison-show-all").textContent = desktopQuery.matches ? "Compare all" : "Controls";
-    stage.dataset.chooseBuild = String(appearanceBuildSites);
-    $("#comparison-toggle-sites")?.setAttribute("aria-pressed",String(appearanceBuildSites));
-    stage.querySelectorAll(".study-type-frame").forEach(node=>node.style.setProperty("--study-size",String(appearanceComparisonScale)));
-    const sizeSlider = $("#comparison-size-slider"), sizeValue = $("#comparison-size-value");
-    if (sizeSlider && document.activeElement !== sizeSlider) sizeSlider.value = String(customPercent);
-    if (sizeValue) sizeValue.textContent = `${customPercent}%`;
-    stage.querySelectorAll(".comparison-hit").forEach(button=>{ button.classList.toggle("selected",button.dataset.comparisonPlot===appearanceSelectedPlot); button.setAttribute("aria-pressed",String(button.dataset.comparisonPlot===appearanceSelectedPlot)); });
-    stage.querySelectorAll("[data-comparison-solo]").forEach(button=>button.setAttribute("aria-pressed",String(Number(button.dataset.comparisonSolo)/100===appearanceComparisonScale && (appearanceComparisonSolo || !desktopQuery.matches))));
-    requestAnimationFrame(positionComparisonTargets);
-  }
-  function positionComparisonTargets() {
-    if (previewMode !== "dev" || openView?.type !== "appearance" || !panel.open || !appearanceCamera) return;
-    for (const card of content.querySelectorAll(".comparison-card")) {
-      const svg = card.querySelector(".comparison-world"), matrix = svg?.getScreenCTM(), stage = card.querySelector(".comparison-stage");
-      if (!matrix || !matrix.a || !matrix.d || !stage.getBoundingClientRect().width || !appearanceCamera) continue;
-      const box = stage.getBoundingClientRect();
-      for (const button of card.querySelectorAll(".comparison-hit")) {
-        const plot = appearanceCamera.plots.find(p=>p.id===button.dataset.comparisonPlot), point = new DOMPoint(plot.x,plot.y).matrixTransform(matrix);
-        button.style.left = `${point.x-box.left}px`; button.style.top = `${point.y-box.top}px`;
-        button.style.width = `${Math.max(44,plot.width*matrix.a)}px`; button.style.height = `${Math.max(44,plot.height*matrix.d)}px`;
-      }
-    }
-  }
-  window.AzmaraAppearanceReview = Object.freeze({ frameInput: scale => previewMode === "dev" && openView?.type === "appearance" ? appearanceComparisonInput(scale) : null });
-
   function closePanel() { if (panel.open) panel.close(); }
   function syncModeControls() {
     document.body.dataset.previewMode = previewMode;
@@ -1070,7 +916,10 @@
     previewMode = mode;
     if (mode === "gameplay") {
       devHallLevelOverride = null;
-      restoreAppearance();
+      renderMarkers();
+      layoutMap();
+    } else if (mode === "dev") {
+      devHallLevelOverride = DEV_LAND_STAGE_DEFAULT;
       renderMarkers();
       layoutMap();
     }
@@ -1114,7 +963,7 @@
         : `${panelHeading(plotName(plot), plot.icon, "Empty plot")}<div class="empty-plot-card">${icon(plot.icon)}<span>Open ground</span></div><h3 class="panel-subheading">${id === HALL_ID ? "Town Hall site" : plotUses[plot.kind].title}</h3><p class="panel-description">This site is reserved for ${id === HALL_ID ? "your Town Hall" : plot.kind === "general" ? "an ordinary town building" : plot.kind === "wall" ? "your town wall" : plot.kind === "harbour" ? "a Caravan Station" : "a Freight Depot"}. Building choices are not available yet.</p><button class="secondary-button" data-panel="buildings">${icon("plot")} Town plots</button>`;
       return;
     }
-    const eligible = window.AzmaraCatalogue.entries.filter((entry) => acceptsType(id, entry.id));
+    const eligible = window.AzmaraCatalogue.entries.filter((entry) => entry.id !== "academy" && acceptsType(id, entry.id));
     const queuedHere = state.construction?.buildingId === id;
     const chosenId = building?.typeId || (queuedHere ? jobType() : buildChoice?.plotId === id && acceptsType(id, buildChoice.typeId) ? buildChoice.typeId : eligible[0].id);
     const entry = metadataFor(chosenId);
@@ -1132,7 +981,7 @@
     }
     const directLevel = building ? `<section class="dev-level-tools" data-dev-only><label class="rename-label" for="test-building-level">Exact Dev test level</label><select id="test-building-level" ${state.construction ? "disabled" : ""}>${Array.from({ length: MAX_TEST_LEVEL }, (_, index) => index + 1).map((value) => `<option value="${value}" ${value === level ? "selected" : ""}>Level ${value}</option>`).join("")}</select><button class="secondary-button" id="set-test-level" data-target-plot="${id}" ${state.construction ? "disabled" : ""}>Apply test level · Dev bypass</button><p class="panel-note">No cost or timer. Disabled while any project is pending.</p>${id !== HALL_ID ? `<button class="secondary-button dev-reset-control" id="request-clear-plot" data-target-plot="${id}" ${state.construction ? "disabled" : ""}>Clear this test plot</button><div class="reset-confirm" id="clear-plot-confirm" ${clearConfirmation === id ? "" : "hidden"}><p>Remove this ${escapeHtml(entry.name)} sample with no resource refund? Other plots stay unchanged.</p><button class="danger-button" id="confirm-clear-plot" data-target-plot="${id}">Clear this plot · No refund</button><button class="secondary-button" id="keep-plot">Keep this building</button></div>` : ""}</section>` : "";
     const purpose = chosenId === "town-wall" ? "A dimensional gate wall across the rear valley pass between sandstone cliffs. It develops from timber to adobe and sandstone with its own completed level. Defensive effects remain future work." : entry.purpose;
-    content.innerHTML = `${panelHeading(building ? entry.name : plotName(plot), plot.icon, `${plotRoleLabels[plot.kind]} plot · ${levelLabel(id)}`)}<p class="panel-description">${escapeHtml(purpose)}</p>${buildingArtMarkup(chosenId, level || 1, "building-panel-preview", false)}${action}${directLevel}<button class="secondary-button" id="refill-test-supplies" data-dev-only>Refill test supplies</button><p class="panel-note">Dev draft: levels 1–50, one 2-minute illustrative project at a time. Cancel before 60 seconds for 100% of paid resources; afterwards confirm a 30% refund, rounded down per resource. Skip settles once without refund or recharge. Costs are common test prices, not final balance. Older ten-second Hall queues retain their deadline. No production, civic, trade or combat effects are simulated.<br>${storageAvailable ? "Progress is saved only in this browser." : "Browser storage is unavailable; progress lasts for this visit."}</p><div class="panel-divider"></div><button class="secondary-button" data-panel="appearance" data-review-type="${chosenId}" data-dev-only>Review appearance stages</button><button class="secondary-button" data-panel="buildings">${icon("buildings")} All 23 plots</button>`;
+    content.innerHTML = `${panelHeading(building ? entry.name : plotName(plot), plot.icon, `${plotRoleLabels[plot.kind]} plot · ${levelLabel(id)}`)}<p class="panel-description">${escapeHtml(purpose)}</p>${buildingArtMarkup(chosenId, level || 1, "building-panel-preview", false)}${action}${directLevel}<button class="secondary-button" data-panel="supplies" data-dev-only>Test supplies</button><p class="panel-note">Dev draft: levels 1–50, one 2-minute illustrative project at a time. Cancel before 60 seconds for 100% of paid resources; afterwards confirm a 30% refund, rounded down per resource. Skip settles once without refund or recharge. Costs are common test prices, not final balance. Older ten-second Hall queues retain their deadline. No production, civic, trade or combat effects are simulated.<br>${storageAvailable ? "Progress is saved only in this browser." : "Browser storage is unavailable; progress lasts for this visit."}</p><div class="panel-divider"></div><button class="secondary-button" data-panel="buildings">${icon("buildings")} All 23 plots</button>`;
     const panelArt = content.querySelector(".building-panel-preview");
     panelArt.removeAttribute("aria-hidden");
     if (panelArt.tagName === "IMG") panelArt.setAttribute("alt", `${entry.name} first-draft artwork`);
@@ -1153,31 +1002,16 @@
     } else if (openView.type === "dev-tools") {
       const actual = actualHallLevel();
       const selected = devHallLevelOverride ?? actual;
-      // The land-stage picker is an unsaved visual projection. An unrelated
-      // construction job must not disable it or make its options appear dead.
-      const blocked = !hasHall();
-      content.innerHTML = `${panelHeading("Dev workbench", "town", "Temporary local tests")}<p class="panel-description">Preview each locked land stage through the Town Hall's real visual milestone rule.</p><section class="land-stage-picker" data-dev-only><h3>Land stage</h3><p>Current test Town Hall level: <strong>${selected}</strong>${devHallLevelOverride === null ? " · actual" : " · temporary"}</p><div class="land-stage-buttons" role="group" aria-label="Temporary Town Hall test level">${window.AzmaraLandStages.milestones.map((level) => `<button class="secondary-button" data-land-stage-level="${level}" aria-pressed="${selected === level}" ${blocked ? "disabled" : ""}>${level}</button>`).join("")}</div><button class="secondary-button" id="reset-land-stage" ${devHallLevelOverride === null ? "disabled" : ""}>Reset to actual level ${actual}</button><p class="panel-note">Unsaved and Dev-only. It changes the land through the same completed Town Hall look rule as normal progress. ${blocked ? "Build the Town Hall before testing its land stages." : "Gameplay mode and reload restore the actual level."}</p></section><div class="panel-divider"></div><button class="secondary-button" data-panel="appearance">Appearance review</button><button class="secondary-button" data-panel="catalogue">Building catalogue</button><button class="secondary-button" id="refill-test-supplies">Refill test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
+      content.innerHTML = `${panelHeading("Dev workbench", "town", "Temporary local tests")}<p class="panel-description">Each option is separate and unsaved. Nothing here adds artwork, levels or gameplay rules.</p><section class="land-stage-picker" data-dev-only><h3>Land stage</h3><label class="rename-label" for="dev-land-stage">Temporary Town Hall test level</label><select id="dev-land-stage"><option value="actual" ${devHallLevelOverride === null ? "selected" : ""}>Actual level ${actual}</option>${window.AzmaraLandStages.milestones.map((level) => `<option value="${level}" ${devHallLevelOverride !== null && selected === level ? "selected" : ""}>Level ${level} · Land Stage ${window.AzmaraLandStages.forHallLevel(level).stage}</option>`).join("")}</select><button class="secondary-button" id="reset-land-stage" ${devHallLevelOverride === null ? "disabled" : ""}>Reset to actual level ${actual}</button><p class="panel-note">Dev opens temporarily at Level 1. This dropdown uses the real completed Town Hall milestone rule and never changes saved progress.</p></section><div class="panel-divider"></div><section data-dev-only><h3>Building</h3><label class="rename-label" for="dev-building-choice">Approved building list</label><select id="dev-building-choice">${DEV_BUILDING_OPTIONS.map((entry) => `<option value="${entry.id}" ${devBuildingChoice === entry.id ? "selected" : ""}>${escapeHtml(entry.name)}</option>`).join("")}</select><p class="panel-note">Names only. Artwork, levels, placement and gameplay are pending.</p></section><div class="panel-divider"></div><button class="secondary-button" data-panel="supplies">Test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
     } else if (openView.type === "catalogue") {
       content.innerHTML = window.AzmaraCatalogue.render(catalogueLevel);
       content.querySelector(".catalogue-notice p").textContent = "Gallery level changes only these illustrations. Use a compatible empty plot in Dev to build a local sample. Economic, civic, trade and military effects are not simulated.";
       content.querySelector(".catalogue-final-note").textContent = `Illustrations are design proposals, not completed structures, historical claims or final rules. Your actual town has ${occupiedCount()} occupied and ${23 - occupiedCount()} empty plots.`;
+    } else if (openView.type === "supplies") {
+      const disabled = Boolean(state.construction);
+      content.innerHTML = `${panelHeading("Test supplies", "inventory", "Dev tool · This browser only")}<p class="panel-description">Enter the exact test amount for each resource.</p><form id="test-supplies-form" data-dev-only><label class="rename-label" for="dev-supply-coins">Coins</label><input class="rename-input" id="dev-supply-coins" name="coins" type="text" inputmode="numeric" pattern="[0-9]*" value="${state.resources.coins}" required ${disabled ? "disabled" : ""}><label class="rename-label" for="dev-supply-timber">Timber</label><input class="rename-input" id="dev-supply-timber" name="timber" type="text" inputmode="numeric" pattern="[0-9]*" value="${state.resources.timber}" required ${disabled ? "disabled" : ""}><label class="rename-label" for="dev-supply-clay">Clay</label><input class="rename-input" id="dev-supply-clay" name="clay" type="text" inputmode="numeric" pattern="[0-9]*" value="${state.resources.stone}" required ${disabled ? "disabled" : ""}><p class="rename-help">Whole numbers only · 1 to 1,000,000</p><button class="primary-button" id="apply-test-supplies" type="submit" ${disabled ? "disabled" : ""}>Apply test supplies</button></form><p class="panel-note">${disabled ? "Finish or cancel the current construction test before changing supplies, so its paid-resource receipt remains exact." : "Only Coins, Timber and Clay change. No production is simulated."}</p>`;
     } else if (openView.type === "reset") {
       content.innerHTML = `${panelHeading("Reset all plots", "plot", "Dev tool · This browser only")}<div class="reset-confirm" id="reset-confirm" data-dev-only><p>Clear all 23 plots, including the Town Hall, and stop any construction? Your town name stays the same. Demo resources return to their starting amounts. This cannot be undone; the separate historical preview is not changed.</p><button class="danger-button" id="confirm-reset">Clear all 23 plots</button><button class="secondary-button" id="cancel-reset">Keep my progress</button></div>`;
-    } else if (openView.type === "appearance") {
-      const visual = buildingVisual(appearanceType, reviewLevel(), false);
-      content.innerHTML = `<div class="appearance-controls">${panelHeading("Appearance review", "town", "Dev tool · Temporary artwork only")}<p class="panel-description">Review all 30 original first-draft building types at every level 1–50, with eleven stable uneven visual milestones. Early timber construction gains richer materials and role-specific details. Town Hall review changes the scenery; Ideal town fills every plot temporarily.</p><label class="rename-label" for="appearance-type">Building type</label><select id="appearance-type">${window.AzmaraCatalogue.entries.map((entry) => `<option value="${entry.id}" ${appearanceType === entry.id ? "selected" : ""}>${escapeHtml(entry.name)}</option>`).join("")}</select><label class="rename-label" for="appearance-level">Artwork stage</label><select id="appearance-level">${ART_MILESTONES.map((level) => `<option value="${level}" ${visual.minLevel === level ? "selected" : ""}>Level ${level} appearance</option>`).join("")}</select><p class="appearance-preview-note" id="appearance-review-status"></p><div id="appearance-art-container">${buildingArtMarkup(appearanceType, reviewLevel(), "appearance-art", false)}</div><p class="panel-note">Existing buildings of the selected type show the temporary stage; empty plots stay empty. Actual levels, resources and construction do not change. Close or switch to Gameplay to restore all actual artwork.</p><button class="secondary-button" id="finish-appearance-review">Return to actual town</button></div>${comparisonToolMarkup()}`;
-      syncAppearance();
-      const levelSelector = $("#appearance-level");
-      const typeSelector = $("#appearance-type");
-      if (metadataFor(appearanceType)?.retired) typeSelector.insertAdjacentHTML("afterbegin", `<option value="${appearanceType}" selected>${escapeHtml(metadataFor(appearanceType).name)} · saved compatibility sample</option>`);
-      levelSelector.innerHTML = Array.from({ length: 50 }, (_, i) => i + 1).map((level) => `<option value="${level}" ${reviewLevel() === level ? "selected" : ""}>Level ${level}</option>`).join("");
-      levelSelector.insertAdjacentHTML("afterend", '<p class="panel-note" id="appearance-milestones"></p>');
-      const ideal = document.createElement("section");
-      ideal.className = "ideal-town-controls";
-      ideal.setAttribute("data-dev-only", "");
-      ideal.innerHTML = `<h3>Ideal town · every level</h3><label class="ideal-toggle"><input id="ideal-town-enabled" type="checkbox" ${idealTownLevel !== null ? "checked" : ""}> Fill all 23 plots temporarily</label><label class="rename-label" for="ideal-town-level">Development level · <output id="ideal-town-value">Level ${idealTownLevel ?? reviewLevel()}</output></label><input id="ideal-town-level" type="range" min="1" max="50" step="1" value="${idealTownLevel ?? reviewLevel()}"><p class="panel-note">A complete example using compatible building types, not your actual town. All 30 designs can be compared in the catalogue. Closing this review restores your buildings; no levels, resources or timers are saved.</p>`;
-      levelSelector.closest("#panel-content").querySelector('label[for="appearance-type"]').before(ideal);
-      syncAppearance();
     } else if (openView.type === "buildings") {
       content.innerHTML = `${panelHeading("Town plots", "buildings")}<p class="panel-description">23 plots: 19 general (including the exclusive central Hall site), one wall, two caravan and one freight-depot plot. ${occupiedCount()} occupied; ${23 - occupiedCount()} empty.</p>${["general", "wall", "harbour", "freighter"].map((kind) => `<h3 class="panel-subheading plot-group-heading">${kind === "general" ? "General plots · 19" : kind === "wall" ? "Town wall · 1" : kind === "harbour" ? "Caravan Station plots · 2" : "Freight Depot plot · 1"}</h3><div class="building-list">${plots.filter((plot) => plot.kind === kind).map((plot) => `<button class="building-list-button" data-building="${plot.id}" data-plot="${plot.id}">${icon(plot.icon)}<div><strong>${escapeHtml(plotName(plot))}</strong><small>${state.construction?.buildingId === plot.id ? previewMode === "dev" ? "Construction test in progress" : "Construction in progress" : levelLabel(plot.id)}</small></div>${icon("chevron")}</button>`).join("")}</div>`).join("")}<p class="panel-note">${previewMode === "dev" ? "All 30 catalogue types can be tested in their compatible roles, through level 50. Dev Skip, exact levels and clear-plot tools are illustrative bypasses." : "Building updates are not available yet."} Economic, civic and military effects remain future work.</p>`;
     } else if (openView.type === "overview") {
@@ -1187,7 +1021,7 @@
         content.insertAdjacentHTML("beforeend", townLayoutControls());
         return;
       }
-      content.innerHTML = `${panelHeading("Town overview", "overview")}<p class="panel-description">${hasHall() ? "Your civic courtyard, with room for a town to grow." : occupiedCount() ? "A developing town with its central Hall site still empty." : "All 23 plots are open ground after the Dev reset."}</p><dl class="overview-facts"><div><dt>Your town</dt><dd id="overview-town-name"></dd></div><div><dt>Total plots</dt><dd>23</dd></div><div><dt>Occupied / empty</dt><dd>${occupiedCount()} / ${23 - occupiedCount()}</dd></div><div><dt>Town Hall</dt><dd>${hasHall() ? `Level ${state.hallLevel}` : "Not built"}</dd></div><div><dt>Construction test</dt><dd>${state.construction ? "In progress" : "Ready"}</dd></div><div><dt>Saved progress</dt><dd>${storageAvailable ? "This browser only" : "This visit only"}</dd></div></dl><section class="preview-guide" aria-labelledby="guide-title"><h3 id="guide-title">Try this preview</h3><ol><li><strong>Explore the plots.</strong> Choose any of the 23 sites. Fit shows the complete town; Inspect supports dragging, wheel zoom and swiping. Region and World open the shared-area and world previews; no other players are connected.</li><li><strong>Build and update.</strong> Test all 30 catalogue types in compatible plots, through level 50. New jobs take 2 minutes, or choose Skip. Cancel before 60 seconds for a full refund; afterwards confirmation returns 30% of paid resources.</li><li><strong>Change a test level.</strong> On a built plot, apply an exact level from 1 to 50 with no cost or timer while no project is pending. Supplies refills illustrative stocks. Clear an individual non-Hall test plot after confirmation, without a refund.</li><li><strong>Review the designs.</strong> Appearance review temporarily shows any type at every level 1–50, with eleven stable uneven visual milestones without changing saved progress. Hall review also changes the playfield; Ideal town shows a complete temporary settlement.</li><li><strong>Start with empty ground.</strong> Reset plots clears all 23 sites, including the Hall, after confirmation. Your town name and the earlier demo are preserved; test resources return to their starting amounts.</li></ol></section><aside class="progress-warning" aria-labelledby="progress-title"><h3 id="progress-title">About your progress</h3><p>${storageAvailable ? "Progress is saved only in this browser at this preview address. A phone or another browser has its own preview. Clearing browser data removes saved progress." : "Browser storage is unavailable. Changes last only for this visit and may be lost on reload."} The earlier six-building preview is retained separately and is not changed by these tools.</p></aside><p class="design-note">A local visual prototype, not a production economy. Silver, Grain and Iron are not simulated; Coins and all building prices are illustrative. Production, population, satisfaction, research, transport and military effects are not implemented. A completed wall crosses the rear valley pass between two cliff shoulders; its appearance is cosmetic, with no defensive simulation. There is no multiplayer or connected server.</p><div class="panel-divider"></div><button class="secondary-button" data-panel="appearance" data-dev-only>Appearance review</button><button class="secondary-button" id="refill-test-supplies" data-dev-only>Refill test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
+      content.innerHTML = `${panelHeading("Town overview", "overview")}<p class="panel-description">${hasHall() ? "Your civic courtyard, with room for a town to grow." : occupiedCount() ? "A developing town with its central Hall site still empty." : "All 23 plots are open ground after the Dev reset."}</p><dl class="overview-facts"><div><dt>Your town</dt><dd id="overview-town-name"></dd></div><div><dt>Total plots</dt><dd>23</dd></div><div><dt>Occupied / empty</dt><dd>${occupiedCount()} / ${23 - occupiedCount()}</dd></div><div><dt>Town Hall</dt><dd>${hasHall() ? `Level ${state.hallLevel}` : "Not built"}</dd></div><div><dt>Construction test</dt><dd>${state.construction ? "In progress" : "Ready"}</dd></div><div><dt>Saved progress</dt><dd>${storageAvailable ? "This browser only" : "This visit only"}</dd></div></dl><section class="preview-guide" aria-labelledby="guide-title"><h3 id="guide-title">Try this preview</h3><ol><li><strong>Explore the plots.</strong> Choose any of the 23 sites. Fit shows the complete town; Inspect supports dragging, wheel zoom and swiping. Region and World open the shared-area and world previews; no other players are connected.</li><li><strong>Build and update.</strong> Existing local test buildings can be updated through level 50. New jobs take 2 minutes, or choose Skip. Cancel before 60 seconds for a full refund; afterwards confirmation returns 30% of paid resources.</li><li><strong>Change a test level.</strong> On a built plot, apply an exact level from 1 to 50 with no cost or timer while no project is pending. Test Supplies accepts exact Coins, Timber and Clay amounts. Clear an individual non-Hall test plot after confirmation, without a refund.</li><li><strong>Use the Dev workbench.</strong> Preview the locked land stages and inspect the approved 21-building name list. The building list has no artwork, levels, placement or gameplay attached yet.</li><li><strong>Start with empty ground.</strong> Reset plots clears all 23 sites, including the Hall, after confirmation. Your town name and the earlier demo are preserved; test resources return to their starting amounts.</li></ol></section><aside class="progress-warning" aria-labelledby="progress-title"><h3 id="progress-title">About your progress</h3><p>${storageAvailable ? "Progress is saved only in this browser at this preview address. A phone or another browser has its own preview. Clearing browser data removes saved progress." : "Browser storage is unavailable. Changes last only for this visit and may be lost on reload."} The earlier six-building preview is retained separately and is not changed by these tools.</p></aside><p class="design-note">A local visual prototype, not a production economy. Silver, Grain and Iron are not simulated; Coins and all building prices are illustrative. Production, population, satisfaction, research, transport and military effects are not implemented. A completed wall crosses the rear valley pass between two cliff shoulders; its appearance is cosmetic, with no defensive simulation. There is no multiplayer or connected server.</p><div class="panel-divider"></div><button class="secondary-button" data-panel="supplies" data-dev-only>Test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
       $("#overview-town-name").textContent = state.townName;
       content.insertAdjacentHTML("beforeend", townLayoutControls());
       const catalogueEntry = document.createElement("button");
@@ -1205,7 +1039,7 @@
       const detail = hudNotes[openView.type] || openView.detail;
       content.innerHTML = `${panelHeading(detail.title, detail.icon, previewMode === "dev" ? "Design preview" : "")}<p class="panel-description">${escapeHtml(previewMode === "dev" ? detail.description : detail.playerDescription || detail.description)}</p><p class="design-note">${escapeHtml(previewMode === "dev" ? detail.note : detail.playerNote || playerAvailability[openView.type] || "This feature is not available yet.")}</p>`;
     }
-    content.querySelectorAll('[data-panel="catalogue"], [data-panel="appearance"], #request-reset, #reset-confirm, .preview-guide').forEach((node) => node.setAttribute("data-dev-only", ""));
+    content.querySelectorAll('[data-panel="catalogue"], [data-panel="supplies"], #request-reset, #reset-confirm, .preview-guide').forEach((node) => node.setAttribute("data-dev-only", ""));
     updateCountdown();
   }
 
@@ -1221,7 +1055,7 @@
   function startConstruction(id, typeId, expectedLevel) {
     if (previewMode !== "dev") return;
     finishConstruction();
-    if (!Object.hasOwn(byId, id) || !acceptsType(id, typeId)) return;
+    if (typeId === "academy" || !Object.hasOwn(byId, id) || !acceptsType(id, typeId)) return;
     const building = buildingFor(id);
     if (!building && metadataFor(typeId)?.retired) return;
     const level = building?.level || 0;
@@ -1250,7 +1084,7 @@
     saveState();
     renderMarkers();
     layoutMap();
-    if (panel.open && ["building", "buildings", "overview", "catalogue", "appearance", "dev-tools"].includes(openView?.type)) {
+    if (panel.open && ["building", "buildings", "overview", "catalogue", "supplies", "dev-tools"].includes(openView?.type)) {
       const focusId = document.activeElement?.id;
       renderPanel();
       const focusTarget = focusId && document.getElementById(focusId);
@@ -1261,16 +1095,6 @@
     return true;
   }
 
-  function refillTestSupplies() {
-    if (previewMode !== "dev") return;
-    finishConstruction();
-    const receipt = state.construction ? state.construction.paidCost || costForHall() : { coins: 0, timber: 0, stone: 0 };
-    Object.keys(state.resources).forEach((key) => { state.resources[key] = MAX_RESOURCE - receipt[key]; });
-    saveState();
-    if (panel.open) renderPanel();
-    updateHud();
-    announce("Dev test supplies refilled. Paid receipts retain room for their exact cancellation refund; no production was simulated.", true);
-  }
   function matchesBuildingControl(button) {
     const id = button?.dataset.targetPlot;
     const building = Object.hasOwn(byId, id || "") ? buildingFor(id) : null;
@@ -1779,7 +1603,7 @@
     const devAction = event.target.closest("[data-dev-action]");
     if (devAction) {
       if (previewMode === "dev" && devAction.dataset.devAction === "reset") openPanel("reset", devAction);
-      if (previewMode === "dev" && devAction.dataset.devAction === "refill") refillTestSupplies();
+      if (previewMode === "dev" && devAction.dataset.devAction === "supplies") openPanel("supplies", devAction);
       return;
     }
     const buildingButton = event.target.closest("[data-building]");
@@ -1788,7 +1612,7 @@
       return;
     }
     const panelButton = event.target.closest("[data-panel]");
-    if (panelButton) { openPanel(panelButton.dataset.panel === "appearance" ? { type: "appearance", reviewType: panelButton.dataset.reviewType } : panelButton.dataset.panel, panelButton); return; }
+    if (panelButton) { openPanel(panelButton.dataset.panel, panelButton); return; }
     const mapNavigation = event.target.closest("[data-map-navigation]");
     if (mapNavigation) { switchMapView(mapNavigation.dataset.mapNavigation); return; }
     const hudAction = event.target.closest("[data-action]");
@@ -1810,7 +1634,6 @@
   $("#close-panel").addEventListener("click", closePanel);
   panel.addEventListener("click", (event) => { if (event.target === panel) { const box = panel.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) closePanel(); } });
   panel.addEventListener("close", () => {
-    restoreAppearance();
     cancelConfirmation = false;
     clearConfirmation = null;
     buildChoice = null;
@@ -1884,41 +1707,6 @@
     }
   });
   content.addEventListener("click", (event) => {
-    if (previewMode === "dev" && openView?.type === "appearance") {
-      if (event.target.closest("#comparison-toggle-sites")) {
-        appearanceBuildSites = !appearanceBuildSites;
-        $("#comparison-build-chooser").checked = appearanceBuildSites;
-        renderAppearanceComparison(); return;
-      }
-      const size = event.target.closest("[data-comparison-solo]");
-      if (size) {
-        const percent = Number(size.dataset.comparisonSolo);
-        appearanceComparisonSolo = percent !== 0;
-        if (percent) appearanceComparisonScale = percent/100;
-        renderAppearanceComparison(); panel.scrollTop = 0; return;
-      }
-      const pin = event.target.closest("[data-comparison-plot]");
-      if (pin && appearanceComparisonSolo) {
-        appearanceSelectedPlot = pin.dataset.comparisonPlot;
-        const plot = byId[appearanceSelectedPlot];
-        $("#comparison-selection").textContent = `${shownPlotName(plot)} · ${shownLevelLabel(plot.id)} · test selection only`;
-        announce($("#comparison-selection").textContent);
-        renderAppearanceComparison(); return;
-      }
-    }
-    const landStageButton = event.target.closest("[data-land-stage-level]");
-    if (landStageButton && previewMode === "dev" && openView?.type === "dev-tools" && hasHall()) {
-      const level = Number(landStageButton.dataset.landStageLevel);
-      if (!window.AzmaraLandStages.milestones.includes(level)) return;
-      devHallLevelOverride = level;
-      renderMarkers();
-      updateHud();
-      layoutMap();
-      renderPanel();
-      content.querySelector(`[data-land-stage-level="${level}"]`)?.focus();
-      announce(`Temporary Town Hall level ${level}; locked land stage ${appearanceFor().stage}. Nothing was saved.`);
-      return;
-    }
     if (event.target.closest("#reset-land-stage") && previewMode === "dev" && openView?.type === "dev-tools") {
       devHallLevelOverride = null;
       renderMarkers();
@@ -1957,7 +1745,6 @@
     if (confirmCancelButton && matchesJobControl(confirmCancelButton)) cancelConstruction(true);
     const setLevelButton = event.target.closest("#set-test-level");
     if (setLevelButton) applyTestLevel(setLevelButton);
-    if (event.target.closest("#refill-test-supplies")) refillTestSupplies();
     const clearButton = event.target.closest("#request-clear-plot");
     if (clearButton && matchesBuildingControl(clearButton) && !state.construction && clearButton.dataset.targetPlot !== HALL_ID) {
       clearConfirmation = clearButton.dataset.targetPlot;
@@ -1977,7 +1764,6 @@
       renderPanel();
       $("#request-cancel-construction")?.focus();
     }
-    if (event.target.closest("#finish-appearance-review, #comparison-return-town")) closePanel();
     if (event.target.closest("#request-reset")) {
       openPanel("reset", event.target.closest("#request-reset"));
     }
@@ -1989,7 +1775,6 @@
       state = { ...defaultState(state.townName), hallPlaced: false };
       devHallLevelOverride = null;
       if (selectedLayout) state.plotLayout = selectedLayout;
-      restoreAppearance();
       cancelConfirmation = false;
       clearConfirmation = null;
       buildChoice = null;
@@ -2002,55 +1787,67 @@
     }
   });
   content.addEventListener("change", (event) => {
-    if (event.target.id === "comparison-size-slider" && previewMode === "dev" && openView?.type === "appearance") {
-      const percent = Number(event.target.value);
-      if (!Number.isInteger(percent) || percent < 1 || percent > 100) return;
-      announce(`Temporary building size ${percent} percent. Plot positions and saved progress are unchanged.`);
-      return;
-    }
-    if (event.target.id === "comparison-build-chooser" && previewMode === "dev" && openView?.type === "appearance") {
-      appearanceBuildSites = event.target.checked; renderAppearanceComparison(); return;
-    }
     if (event.target.id === "town-layout" && openView?.type === "overview" && window.AzmaraTownLayouts.valid(event.target.value)) {
       $("#town-layout-description").textContent = window.AzmaraTownLayouts.get(event.target.value).description;
       return;
     }
     if (previewMode !== "dev") return;
-    if (event.target.id === "catalogue-level" && openView?.type === "catalogue") {
+    if (event.target.id === "dev-land-stage" && openView?.type === "dev-tools") {
+      const value = event.target.value;
+      const level = value === "actual" ? null : Number(value);
+      if (level !== null && !window.AzmaraLandStages.milestones.includes(level)) return;
+      devHallLevelOverride = level;
+      renderMarkers();
+      updateHud();
+      layoutMap();
+      renderPanel();
+      $("#dev-land-stage")?.focus();
+      announce(level === null
+        ? `Land restored to the actual completed Town Hall level ${actualHallLevel()}.`
+        : `Temporary Town Hall level ${level}; locked Land Stage ${appearanceFor().stage}. Nothing was saved.`);
+    } else if (event.target.id === "dev-building-choice" && openView?.type === "dev-tools") {
+      const entry = DEV_BUILDING_OPTIONS.find((candidate) => candidate.id === event.target.value);
+      if (!entry) return;
+      devBuildingChoice = entry.id;
+      announce(`${entry.name} selected as a name-only Dev placeholder. No artwork, level or town progress changed.`);
+    } else if (event.target.id === "catalogue-level" && openView?.type === "catalogue") {
       const level = Number(event.target.value);
       if (!Number.isInteger(level) || level < 1 || level > 50) return;
       catalogueLevel = level;
       renderPanel();
       $("#catalogue-level")?.focus();
     } else if (event.target.id === "building-type" && openView?.type === "building" && !state.construction && !buildingFor(openView.buildingId)) {
-      if (!acceptsType(openView.buildingId, event.target.value)) return;
+      if (event.target.value === "academy" || !acceptsType(openView.buildingId, event.target.value)) return;
       buildChoice = { plotId: openView.buildingId, typeId: event.target.value };
       renderPanel();
       $("#building-type")?.focus();
-    } else if (event.target.id === "appearance-type" && openView?.type === "appearance") {
-      if (!metadataFor(event.target.value)) return;
-      const level = Number($("#appearance-level")?.value);
-      appearanceType = event.target.value;
-      appearanceLevel = Number.isInteger(level) && level >= 1 && level <= 50 ? level : 1;
-      renderPanel();
-      $("#appearance-type")?.focus();
-      announce(`Temporary ${metadataFor(appearanceType).name} artwork review. Nothing is saved.`);
-    } else if (event.target.id === "appearance-level" && openView?.type === "appearance") {
-      const level = Number(event.target.value);
-      if (!Number.isInteger(level) || level < 1 || level > 50) return;
-      appearanceLevel = level;
-      syncAppearance();
-      announce(`Temporary ${metadataFor(appearanceType).name} level ${level} artwork review. Your actual town progress is unchanged.`);
-    } else if (event.target.id === "ideal-town-enabled" && openView?.type === "appearance") {
-      idealTownLevel = event.target.checked ? Number($("#ideal-town-level").value) : null;
-      if (idealTownLevel === null) { appearanceLevel = null; $("#appearance-level").value = String(reviewLevel()); }
-      renderMarkers();
-      updateHud();
-      layoutMap();
-      announce(idealTownLevel === null ? "Actual saved town restored." : `Ideal town at level ${idealTownLevel}. Temporary compatible buildings fill all 23 plots; nothing is saved.`);
     }
   });
   content.addEventListener("submit", (event) => {
+    if (event.target.id === "test-supplies-form") {
+      event.preventDefault();
+      if (previewMode !== "dev" || openView?.type !== "supplies" || state.construction) return;
+      const fields = [
+        [$("#dev-supply-coins"), "coins"],
+        [$("#dev-supply-timber"), "timber"],
+        [$("#dev-supply-clay"), "stone"]
+      ];
+      const values = {};
+      let invalid = null;
+      fields.forEach(([input, key]) => {
+        const value = parseDevSupplyValue(input.value);
+        input.setCustomValidity(value === null ? "Enter a whole number from 1 to 1,000,000." : "");
+        if (value === null && !invalid) invalid = input;
+        else if (value !== null) values[key] = value;
+      });
+      if (invalid) { invalid.reportValidity(); invalid.focus(); return; }
+      state.resources = { coins: values.coins, timber: values.timber, stone: values.stone };
+      saveState();
+      updateHud();
+      closePanel();
+      announce(`Test supplies set to ${number(values.coins)} Coins, ${number(values.timber)} Timber and ${number(values.stone)} Clay.`, true);
+      return;
+    }
     if (event.target.id !== "rename-form") return;
     event.preventDefault();
     const input = $("#town-name-input");
@@ -2064,26 +1861,7 @@
   });
   content.addEventListener("input", (event) => {
     if (event.target.id === "town-name-input") event.target.setCustomValidity("");
-    if (event.target.id === "comparison-size-slider" && previewMode === "dev" && openView?.type === "appearance") {
-      const percent = Number(event.target.value);
-      if (!Number.isInteger(percent) || percent < 1 || percent > 100) return;
-      appearanceComparisonScale = percent/100;
-      appearanceComparisonSolo = true;
-      $("#comparison-size-value").textContent = `${percent}%`;
-      cancelAnimationFrame(appearanceScaleFrame);
-      appearanceScaleFrame = requestAnimationFrame(() => { appearanceScaleFrame = 0; renderAppearanceComparison(); });
-      return;
-    }
-    if (event.target.id === "ideal-town-level" && previewMode === "dev" && openView?.type === "appearance") {
-      const level = Number(event.target.value);
-      if (!Number.isInteger(level) || level < 1 || level > 50) return;
-      $("#ideal-town-value").textContent = `Level ${level}`;
-      if (!$("#ideal-town-enabled").checked) return;
-      idealTownLevel = level;
-      renderMarkers();
-      updateHud();
-      layoutMap();
-    }
+    if (["dev-supply-coins", "dev-supply-timber", "dev-supply-clay"].includes(event.target.id)) event.target.setCustomValidity("");
   });
   viewport.addEventListener("keydown", (event) => {
     suppressMapClickUntil = 0;
@@ -2167,7 +1945,7 @@
     mapFocus = currentMapFocus();
     syncWallPixelRegistration();
   }, { passive: true });
-  new ResizeObserver(() => { stopCameraAnimation(); endMapDrag(); layoutMap(); positionComparisonTargets(); }).observe(viewport);
+  new ResizeObserver(() => { stopCameraAnimation(); endMapDrag(); layoutMap(); }).observe(viewport);
   reducedMotionQuery.addEventListener("change", () => {
     if (reducedMotionQuery.matches && cameraAnimation) {
       const target = cameraAnimation;

@@ -42,10 +42,9 @@ for (const legacy of ["azmara-oasis-foundation", "town-terrain-overlay", "town-s
   assert(!landscape.includes(legacy), `Active landscape still creates ${legacy}`);
 }
 
-const appearance = section(app, "function effectiveHallLevel(", "function buildingVisual(");
-assert.match(appearance, /devHallLevelOverride \?\? idealTownLevel/);
-assert.match(appearance, /appearanceLevel \?\? actualHallLevel\(\)/);
-assert.match(appearance, /AzmaraLandStages\.forHallLevel\(level\)/);
+const landAppearance = section(app, "function effectiveHallLevel(", "function buildingVisual(");
+assert.match(landAppearance, /devHallLevelOverride \?\? actualHallLevel\(\)/);
+assert.match(landAppearance, /AzmaraLandStages\.forHallLevel\(level\)/);
 
 // Hall and Wall remain interactive but their art is painted into the land.
 // Empty sites likewise draw no extra pin or flag.
@@ -58,15 +57,15 @@ assert(!markers.includes("pinMarkup"), "Active marker renderer must not add site
 assert(!markers.includes("town-wall-front-layer"), "Active marker renderer must not add the old wall layer");
 assert.match(styles, /body\[data-land-stages="on"\] \.plot-marker\[data-occupied="true"\] \.marker::before \{ display: none; \}/);
 
-// Appearance review uses the same locked land and does not reconstruct the
-// retired foundation, streets, scenery or wall stack.
-const appearanceStudy = section(app, "function scene(input = {})", "function sprite(");
-assert.match(appearanceStudy, /AzmaraLandStages\.forHallLevel\(hallLevel\)/);
-const appearanceMarkup = section(app, "function markup(input)", "function contactSheet(");
-assert.match(appearanceMarkup, /href="\$\{xml\(data\.land\.src\)\}"/);
-assert.match(appearanceMarkup, /plot\.id !== "general-01" && plot\.kind !== "wall"/);
-for (const legacy of ["OasisFoundation", "StreetGround", "SceneryDecor", "TownWallLayers"]) {
-  assert(!appearanceMarkup.includes(legacy), `Appearance review still creates ${legacy}`);
+// DEC-102 removes the old Appearance Review surface and its public API.
+for (const retired of [
+  'data-panel="appearance"',
+  'id="appearance-type"',
+  'id="appearance-level"',
+  "window.AzmaraAppearanceReview"
+]) {
+  assert(!app.includes(retired), `Appearance Review runtime remains: ${retired}`);
+  assert(!index.includes(retired), `Appearance Review entry remains in HTML: ${retired}`);
 }
 
 // Cover is the minimum zoom, the locked picture is the only pan boundary,
@@ -88,22 +87,29 @@ assert.match(layout, /y: frame\.y/);
 
 // Dev projection is transient: picker levels use real Town Hall milestones,
 // saveState cannot persist the override, and Gameplay/reset restore reality.
-assert.match(app, /let devHallLevelOverride = null/);
+assert.match(app, /const DEV_LAND_STAGE_DEFAULT = 1/);
+assert.match(app, /let devHallLevelOverride = DEV_LAND_STAGE_DEFAULT/);
 assert.match(app, /AzmaraLandStages\.milestones\.map/);
-assert.match(app, /data-land-stage-level/);
+assert.match(app, /<select[^>]+id="dev-land-stage"/);
+assert(!app.includes("data-land-stage-level"), "Retired land-stage buttons remain");
 assert.match(app, /id="reset-land-stage"/);
 const save = section(app, "function saveState(", "function announce(");
 assert(!save.includes("devHallLevelOverride"), "Dev land-stage override leaked into saved progress");
 const mode = section(app, "function setPreviewMode(", "function panelHeading(");
 assert.match(mode, /mode === "gameplay"[\s\S]*devHallLevelOverride = null/);
-const picker = section(app, "const landStageButton =", 'if (event.target.closest("#apply-town-layout")');
+assert.match(mode, /mode === "dev"[\s\S]*devHallLevelOverride = DEV_LAND_STAGE_DEFAULT/);
+const changeHandlers = section(app, 'content.addEventListener("change"', 'content.addEventListener("submit"');
+const picker = section(changeHandlers, 'event.target.id === "dev-land-stage"', 'event.target.id === "dev-building-choice"');
+assert.match(picker, /event\.target\.id === "dev-land-stage"/);
 assert.match(picker, /AzmaraLandStages\.milestones\.includes\(level\)/);
 assert.match(picker, /devHallLevelOverride = level/);
-assert.match(picker, /devHallLevelOverride = null/);
 assert(!picker.includes("saveState()"), "Dev stage picker must not save its projection");
 assert(!picker.includes("!state.construction"), "An active construction must not disable the unsaved Dev land preview");
-const devPanel = section(app, '} else if (openView.type === "dev-tools") {', '} else if (openView.type === "catalogue") {');
-assert.match(devPanel, /const blocked = !hasHall\(\)/);
+const clickHandlers = section(app, 'content.addEventListener("click"', 'content.addEventListener("change"');
+const resetLand = section(clickHandlers, 'event.target.closest("#reset-land-stage")', 'event.target.closest("#apply-town-layout")');
+assert.match(resetLand, /devHallLevelOverride = null/);
+assert(!resetLand.includes("saveState()"), "Reset-to-actual must not save the Dev projection");
+const devPanel = section(app, '} else if (openView.type === "dev-tools") {', '} else if (openView.type === "supplies") {');
 assert(!devPanel.includes("Boolean(state.construction)"), "Construction must not render land-stage options disabled");
 assert(!devPanel.includes("Finish or cancel the active construction first."), "Dev copy must not claim construction blocks land stages");
 assert.match(index, /class="azmara-dev-button[^"]*" data-panel="dev-tools"/);
