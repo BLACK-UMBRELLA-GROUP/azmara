@@ -101,6 +101,11 @@ assert.match(picker, /AzmaraLandStages\.milestones\.includes\(level\)/);
 assert.match(picker, /devHallLevelOverride = level/);
 assert.match(picker, /devHallLevelOverride = null/);
 assert(!picker.includes("saveState()"), "Dev stage picker must not save its projection");
+assert(!picker.includes("!state.construction"), "An active construction must not disable the unsaved Dev land preview");
+const devPanel = section(app, '} else if (openView.type === "dev-tools") {', '} else if (openView.type === "catalogue") {');
+assert.match(devPanel, /const blocked = !hasHall\(\)/);
+assert(!devPanel.includes("Boolean(state.construction)"), "Construction must not render land-stage options disabled");
+assert(!devPanel.includes("Finish or cancel the active construction first."), "Dev copy must not claim construction blocks land stages");
 assert.match(index, /class="azmara-dev-button[^"]*" data-panel="dev-tools"/);
 
 // Queuing leaves the completed Hall level unchanged. The level is written

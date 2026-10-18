@@ -1153,8 +1153,10 @@
     } else if (openView.type === "dev-tools") {
       const actual = actualHallLevel();
       const selected = devHallLevelOverride ?? actual;
-      const blocked = Boolean(state.construction) || !hasHall();
-      content.innerHTML = `${panelHeading("Dev workbench", "town", "Temporary local tests")}<p class="panel-description">Preview each locked land stage through the Town Hall's real visual milestone rule.</p><section class="land-stage-picker" data-dev-only><h3>Land stage</h3><p>Current test Town Hall level: <strong>${selected}</strong>${devHallLevelOverride === null ? " · actual" : " · temporary"}</p><div class="land-stage-buttons" role="group" aria-label="Temporary Town Hall test level">${window.AzmaraLandStages.milestones.map((level) => `<button class="secondary-button" data-land-stage-level="${level}" aria-pressed="${selected === level}" ${blocked ? "disabled" : ""}>${level}</button>`).join("")}</div><button class="secondary-button" id="reset-land-stage" ${devHallLevelOverride === null ? "disabled" : ""}>Reset to actual level ${actual}</button><p class="panel-note">Unsaved and Dev-only. It changes the land through the same completed Town Hall look rule as normal progress. ${blocked ? !hasHall() ? "Build the Town Hall before testing its land stages." : "Finish or cancel the active construction first." : "Gameplay mode and reload restore the actual level."}</p></section><div class="panel-divider"></div><button class="secondary-button" data-panel="appearance">Appearance review</button><button class="secondary-button" data-panel="catalogue">Building catalogue</button><button class="secondary-button" id="refill-test-supplies">Refill test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
+      // The land-stage picker is an unsaved visual projection. An unrelated
+      // construction job must not disable it or make its options appear dead.
+      const blocked = !hasHall();
+      content.innerHTML = `${panelHeading("Dev workbench", "town", "Temporary local tests")}<p class="panel-description">Preview each locked land stage through the Town Hall's real visual milestone rule.</p><section class="land-stage-picker" data-dev-only><h3>Land stage</h3><p>Current test Town Hall level: <strong>${selected}</strong>${devHallLevelOverride === null ? " · actual" : " · temporary"}</p><div class="land-stage-buttons" role="group" aria-label="Temporary Town Hall test level">${window.AzmaraLandStages.milestones.map((level) => `<button class="secondary-button" data-land-stage-level="${level}" aria-pressed="${selected === level}" ${blocked ? "disabled" : ""}>${level}</button>`).join("")}</div><button class="secondary-button" id="reset-land-stage" ${devHallLevelOverride === null ? "disabled" : ""}>Reset to actual level ${actual}</button><p class="panel-note">Unsaved and Dev-only. It changes the land through the same completed Town Hall look rule as normal progress. ${blocked ? "Build the Town Hall before testing its land stages." : "Gameplay mode and reload restore the actual level."}</p></section><div class="panel-divider"></div><button class="secondary-button" data-panel="appearance">Appearance review</button><button class="secondary-button" data-panel="catalogue">Building catalogue</button><button class="secondary-button" id="refill-test-supplies">Refill test supplies</button><button class="secondary-button dev-reset-control" id="request-reset">Reset plots</button>`;
     } else if (openView.type === "catalogue") {
       content.innerHTML = window.AzmaraCatalogue.render(catalogueLevel);
       content.querySelector(".catalogue-notice p").textContent = "Gallery level changes only these illustrations. Use a compatible empty plot in Dev to build a local sample. Economic, civic, trade and military effects are not simulated.";
@@ -1905,7 +1907,7 @@
       }
     }
     const landStageButton = event.target.closest("[data-land-stage-level]");
-    if (landStageButton && previewMode === "dev" && openView?.type === "dev-tools" && !state.construction && hasHall()) {
+    if (landStageButton && previewMode === "dev" && openView?.type === "dev-tools" && hasHall()) {
       const level = Number(landStageButton.dataset.landStageLevel);
       if (!window.AzmaraLandStages.milestones.includes(level)) return;
       devHallLevelOverride = level;
