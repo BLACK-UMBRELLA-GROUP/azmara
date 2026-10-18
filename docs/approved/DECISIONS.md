@@ -1962,7 +1962,8 @@ unselected.
   finest, for the swamp look to clear from Town Hall 22, and for the pool's
   stone edge and the avenue shrubs to be removed, then said "OK lets lock it
   all in".
-- Locked specification: `docs/approved/LAND_STAGES_CURRENT_VERSION_V1.md`,
+- Locked specification, updated by DEC-103: `docs/approved/LAND_STAGES_CURRENT_VERSION_V2.md`.
+  The byte-preserved original is `docs/approved/LAND_STAGES_2026-10-18_V1.md`,
   with stage 1 = `docs/approved/art/TOWN_MASTER_CURRENT_VERSION_V3.png` and
   stages 2–11 in `docs/approved/art/land/`.
 - Rule: land stage k shows while the Town Hall's completed look is k. The
@@ -2020,4 +2021,21 @@ unselected.
 - Do not publish this local implementation or update the native app. Preserve
   the Dev button position, Gameplay mode and every control outside this scope.
 
-Next unused decision identifier: `DEC-103`.
+## DEC-103 — Centre the town start view on the land picture
+
+- Date: 18 October 2026 (Europe/London).
+- Source: the Owner corrects the camera rule after finding that Town Hall-centred
+  cover placed all unavoidable desktop cropping at the bottom of the land.
+- Locked wording: “The town view starts centred on the middle of the land
+  picture, so any cut is split between top and bottom.”
+- Start at the ordinary cover/minimum zoom and the picture midpoint. On phones,
+  fill the height and start at the same midpoint so the player can drag sideways.
+- At every zoom, dragging can reach all four picture edges without exposing a
+  margin beyond the image. Keep full-screen fill, aspect ratio, pictures and all
+  other presentation unchanged.
+- Land sizing remains metadata-driven so a later approved wider picture can add
+  land at both sides while keeping the current scene centred and at the same scale.
+- Build locally only. Do not publish or update the native app. Fresh Owner
+  permission is still required before the DEC-084 screenshot run.
+
+Next unused decision identifier: `DEC-104`.

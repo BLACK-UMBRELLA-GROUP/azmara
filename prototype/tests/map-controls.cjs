@@ -210,8 +210,7 @@ async function zoomToBound(target, direction) {
 }
 
 function assertFits(value) {
-  assert(value.core.width <= value.clientWidth + 2 && value.core.height <= value.clientHeight + 2, "Minimum zoom does not fit the whole 23-plot core");
-  assert(value.core.x >= value.viewport.x - 2 && value.core.y >= value.viewport.y - 2 && value.core.right <= value.viewport.right + 2 && value.core.bottom <= value.viewport.bottom + 2, "Fitted town core lies outside the viewport");
+  assert(value.fit, "Minimum zoom is not the picture-centred Fit state");
   assertCoverage(value);
 }
 
@@ -321,18 +320,15 @@ async function coverageAtExtremes(target) {
     await settle(target);
     const value = await assertGeometry(target);
     assertCoverage(value);
-    if (original.fit) assertPose(value, original, "Fit corner scroll escaped the stored view");
-    else {
-      assert(Math.abs(value.left - x * (value.scrollWidth - value.clientWidth)) <= 2, "Horizontal pan edge is unreachable");
-      assert(Math.abs(value.top - y * (value.scrollHeight - value.clientHeight)) <= 2, "Vertical pan edge is unreachable");
-      const { core, frame } = presentationProfile(value);
-      const scale = value.core.width / core.width;
-      const visibleX = value.worldViewBox.x + value.left / scale;
-      const visibleY = value.worldViewBox.y + value.top / scale;
-      const reachable = presentationProfile(value).desktop ? value.worldViewBox : frame;
-      if (value.scrollWidth > value.clientWidth + 2) assert(visibleX >= reachable.x - 2 && visibleX + value.clientWidth / scale <= reachable.x + reachable.width + 2, "Horizontal pan reaches off-town coordinates");
-      if (value.scrollHeight > value.clientHeight + 2) assert(visibleY >= reachable.y - 2 && visibleY + value.clientHeight / scale <= reachable.y + reachable.height + 2, "Vertical pan reaches off-town coordinates");
-    }
+    assert(Math.abs(value.left - x * (value.scrollWidth - value.clientWidth)) <= 2, "Horizontal pan edge is unreachable");
+    assert(Math.abs(value.top - y * (value.scrollHeight - value.clientHeight)) <= 2, "Vertical pan edge is unreachable");
+    const { core, frame } = presentationProfile(value);
+    const scale = value.core.width / core.width;
+    const visibleX = value.worldViewBox.x + value.left / scale;
+    const visibleY = value.worldViewBox.y + value.top / scale;
+    const reachable = presentationProfile(value).desktop ? value.worldViewBox : frame;
+    if (value.scrollWidth > value.clientWidth + 2) assert(visibleX >= reachable.x - 2 && visibleX + value.clientWidth / scale <= reachable.x + reachable.width + 2, "Horizontal pan reaches off-town coordinates");
+    if (value.scrollHeight > value.clientHeight + 2) assert(visibleY >= reachable.y - 2 && visibleY + value.clientHeight / scale <= reachable.y + reachable.height + 2, "Vertical pan reaches off-town coordinates");
   }
   await target.locator("#map-viewport").evaluate((viewport, point) => viewport.scrollTo({ left: point.x, top: point.y, behavior: "instant" }), { x: original.left, y: original.top });
   await settle(target);
@@ -503,7 +499,6 @@ async function assertVisibleGround(page, points) {
 
 async function fitMarkerHits(page) {
   await clearPlotHover(page);
-  const fitPose = await metrics(page);
   assert.equal(await page.locator("#town-core .empty-slot-plus, #town-core .plot-plus").count(), 0, "Town empty plots retain removed plus-symbol overlays");
   const ground = await emptyPoints(page);
   assert.deepEqual(ground.map((point) => point.id).sort(), expectedPlots.filter(([id]) => id !== "general-01").map(([id]) => id).sort(), "Each of the 22 empty plots must draw its neutral ground or dedicated reserve");
@@ -518,18 +513,15 @@ async function fitMarkerHits(page) {
   const view = (await metrics(page)).viewport;
   for (const box of boxes) {
     assert(box.width >= 44 && box.height >= 44, `${box.id} Fit target is undersized`);
-    assert(box.x >= view.x - 1 && box.y >= view.y - 1 && box.right <= view.right + 1 && box.bottom <= view.bottom + 1, `${box.id} Fit target is clipped by the map viewport`);
   }
   for (let a = 0; a < boxes.length; a += 1) for (let b = a + 1; b < boxes.length; b += 1) {
     assert(!(Math.min(boxes[a].right, boxes[b].right) - Math.max(boxes[a].x, boxes[b].x) > 0.5 && Math.min(boxes[a].bottom, boxes[b].bottom) - Math.max(boxes[a].y, boxes[b].y) > 0.5), `${boxes[a].id} and ${boxes[b].id} Fit targets overlap`);
   }
-  const exposed = boxes.filter((box) => box.exposed);
-  assert.equal(exposed.length, 23, `Fit markers intercepted by fixed UI: ${boxes.filter((box) => !box.exposed).map((box) => box.id).join(", ")}`);
-  const exposedGround = ground.filter((point) => point.exposed);
-  assert.equal(exposedGround.length, 22, `Ground/reserve art intercepted by fixed UI: ${ground.filter((point) => !point.exposed).map((point) => point.id).join(", ")}`);
+  const exposed = boxes.filter((box) => box.exposed && box.x >= view.x && box.y >= view.y && box.right <= view.right && box.bottom <= view.bottom);
+  assert(exposed.length > 0, "Picture-centred Fit exposes no interactive plot target");
+  const exposedGround = ground.filter((point) => point.exposed && point.x >= view.x && point.x <= view.right && point.y >= view.y && point.y <= view.bottom);
   await assertVisibleGround(page, exposedGround);
-  console.log(`CHECK actual Fit marker exposure: ${exposed.length}/23 (all required)`);
-  console.log(`CHECK actual painted ground/reserve exposure: ${exposedGround.length}/22`);
+  console.log(`CHECK picture-centred Fit exposes ${exposed.length}/23 plot targets; cropped targets remain reachable by panning`);
   for (const { id } of boxes.filter((box) => box.id === "general-01" ? box.exposed : ground.find((point) => point.id === box.id).exposed)) {
     await clearPlotHover(page);
     const hotspot = page.locator(`.building-hotspot[data-plot="${id}"]`);
@@ -551,7 +543,6 @@ async function fitMarkerHits(page) {
     if (id === "general-01") assert.equal(title, "Town Hall");
     else assert.equal(await page.locator("#upgrade-building").count(), 0, `${id} empty plot invents a construction action`);
     await closeWithEscape(page, page, id);
-    assertPose(await metrics(page), fitPose, `${id} dialog focus restoration moved the locked Fit view`);
   }
 }
 
@@ -603,43 +594,32 @@ async function swipe(page, context, axis, expectMovement = true) {
   assert.equal(await page.locator("#detail-panel").evaluate((dialog) => dialog.open), false, "A pan gesture accidentally selected a building");
 }
 
-async function assertFitLocked(page, context) {
+async function assertFitEdgesAndRelease(page, context) {
   await clearPlotHover(page);
   const before = await metrics(page);
-  assert(before.fit && before.overflow === "hidden", "Fit does not disable native map traversal");
+  assert(before.fit && before.overflow !== "hidden", "Fit does not expose the finite picture for panning");
+  assert(Math.abs(before.left - (before.scrollWidth - before.clientWidth) / 2) <= 2, "Fit is not horizontally centred on the picture");
+  assert(Math.abs(before.top - (before.scrollHeight - before.clientHeight) / 2) <= 2, "Fit is not vertically centred on the picture");
   await coverageAtExtremes(page);
   await page.locator("#map-viewport").focus();
-  for (const key of ["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "PageDown", "PageUp", "End", "Home"]) await page.keyboard.press(key);
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowDown");
   await settle(page);
-  assertPose(await metrics(page), before, "Keyboard scrolling escaped Fit");
-  const point = await page.locator("#map-viewport").evaluate((viewport) => {
-    const box = viewport.getBoundingClientRect();
-    for (const y of [0.5, 0.65, 0.8]) for (const x of [0.5, 0.7, 0.3]) {
-      const point = { x: box.x + box.width * x, y: box.y + box.height * y };
-      if (document.elementFromPoint(point.x, point.y)?.closest("#map-viewport")) return point;
-    }
-    return null;
-  });
-  assert(point, "No map point available for a Fit wheel gesture");
-  await page.mouse.move(point.x, point.y);
-  await page.mouse.wheel(200, 200);
-  await page.waitForTimeout(80);
-  await settle(page);
-  assertPose(await metrics(page), before, "Wheel scrolling escaped Fit");
-  await swipe(page, context, "x", false);
-  await swipe(page, context, "y", false);
-  await page.locator("#map-viewport").focus();
-  for (const [id] of expectedPlots) {
-    await page.keyboard.press("Tab");
-    await settle(page);
-    assert.equal(await page.evaluate(() => document.activeElement.dataset.plot), id, "Fit tab traversal lost a plot");
-    assertPose(await metrics(page), before, "Plot focus scrolled the locked Fit camera");
+  const keyboard = await metrics(page);
+  assert(!keyboard.fit, "Arrow-key panning did not release Fit");
+  if (before.scrollWidth - before.clientWidth > 2 || before.scrollHeight - before.clientHeight > 2) {
+    assert(Math.abs(keyboard.left - before.left) > 2 || Math.abs(keyboard.top - before.top) > 2, "Arrow keys did not move along the cropped picture axis");
   }
-  for (let index = 0; index < 23; index += 1) await page.keyboard.press("Shift+Tab");
-  await settle(page);
-  assertPose(await metrics(page), before, "Reverse plot focus scrolled the locked Fit camera");
+  await menuAction(page, page.locator("#toggle-map-view"));
+  const restored = await metrics(page);
+  assert(restored.fit, "Fit control did not restore the midpoint view");
+  assert(Math.abs(restored.left - before.left) <= 2 && Math.abs(restored.top - before.top) <= 2, "Fit control did not restore picture midpoint");
+  const touchAxis = before.scrollWidth - before.clientWidth > 2 ? "x" : "y";
+  await swipe(page, context, touchAxis, true);
+  assert(!(await metrics(page)).fit, "Touch panning did not release Fit");
+  await menuAction(page, page.locator("#toggle-map-view"));
   await clearPlotHover(page);
-  console.log("CHECK stable Fit after corner scrolls, keyboard, wheel, both touch gestures and every plot focus");
+  console.log("CHECK picture-centred Fit, all four picture edges, and keyboard/touch release at cover zoom");
 }
 
 async function load(page) {
@@ -665,7 +645,7 @@ async function load(page) {
         const storedBefore = await page.evaluate((storageKey) => localStorage.getItem(storageKey), key);
         const legacyBefore = await page.evaluate((storageKey) => localStorage.getItem(storageKey), legacyKey);
         assertFits(await zoomToBound(page, "out"));
-        await assertFitLocked(page, context);
+        await assertFitEdgesAndRelease(page, context);
         await keyboardZoomBound(page, page, "out");
         const fittedWidth = (await metrics(page)).core.width;
         await page.keyboard.press("+");
@@ -750,8 +730,8 @@ async function load(page) {
         const hall = page.locator('.plot-marker[data-plot="general-01"]');
         const initialHall = await hall.boundingBox();
         const toggle = page.locator("#toggle-map-view");
-        assert.equal(await toggle.getAttribute("aria-label"), "Use closer town view");
-        assert.equal((await toggle.textContent()).trim(), "Close");
+        assert.equal(await toggle.getAttribute("aria-label"), "Inspect town detail");
+        assert.equal((await toggle.textContent()).trim(), "Inspect");
         await clearPlotHover(page);
         if (screenshotDirectory) {
           await page.screenshot({ path: path.join(screenshotDirectory, `current-${width}x${height}-fit.png`), scale: "css" });
@@ -767,7 +747,7 @@ async function load(page) {
         assert(closer.core.width > before.core.width * 1.35, "Close view does not materially enlarge the town");
         await coverageAtExtremes(page);
         await assertRegistration(page);
-        assert.equal(await toggle.getAttribute("aria-label"), "Fit all 23 plots");
+        assert.equal(await toggle.getAttribute("aria-label"), "Fit land picture");
         assert.equal((await toggle.textContent()).trim(), "Fit");
         const closerHall = await hall.boundingBox();
         assert(closerHall.width > initialHall.width * 1.35, "Close view did not enlarge the Hall artwork");
@@ -784,14 +764,14 @@ async function load(page) {
         for (const field of ["left", "top"]) assert(Math.abs(restored[field] - before[field]) <= 2, "Fit failed to restore the original safe-area camera " + field);
         assert(Math.abs(restored.core.width - before.core.width) <= 1, "Fit failed to restore the original town scale");
         assert.equal(await visibleLabels(page), 23, "Close/Fit erased the explicit label preference");
-        assert.equal(await toggle.getAttribute("aria-label"), "Use closer town view");
+        assert.equal(await toggle.getAttribute("aria-label"), "Inspect town detail");
         await actions(page, true);
         await toggle.scrollIntoViewIfNeeded();
         await toggle.focus();
         await page.keyboard.press("Enter");
         await settle(page);
         assert.equal(await page.locator("#actions-menu").evaluate((dialog) => dialog.open), false, "Keyboard map action did not close the menu");
-        assert.equal(await toggle.getAttribute("aria-label"), "Fit all 23 plots", "Keyboard did not activate Close view");
+        assert.equal(await toggle.getAttribute("aria-label"), "Fit land picture", "Keyboard did not activate Inspect view");
         await actions(page, true);
         await toggle.scrollIntoViewIfNeeded();
         await toggle.focus();

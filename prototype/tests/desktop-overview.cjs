@@ -171,12 +171,23 @@ async function testCamera(page, captureSnapshot = true) {
   assert(moved[0] > prior[0] + 20 && moved[1] > prior[1] + 20, "Closer desktop camera does not move in both axes");
   await desktopAction(page, "fit");
   samePose(await pose(page), fit, "Fit did not return to its original stable overview");
-  assert.equal(await viewport.getAttribute("data-fit"), "true", "Fit failed to lock the overview");
+  assert.equal(await viewport.getAttribute("data-fit"), "true", "Fit failed to restore the midpoint overview");
   await viewport.focus();
-  for (const arrow of ["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"]) await page.keyboard.press(arrow);
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowDown");
+  await settle(page);
+  assert.equal(await viewport.getAttribute("data-fit"), "false", "First manual pan did not release Fit");
+  const panned = await pose(page);
+  const ranges = await viewport.evaluate((element) => ({ left: element.scrollWidth - element.clientWidth, top: element.scrollHeight - element.clientHeight }));
+  if (ranges.left > 2 || ranges.top > 2) assert(Math.abs(panned[0] - fit[0]) > 2 || Math.abs(panned[1] - fit[1]) > 2,
+    "Picture-centred cover could not pan along its cropped axis");
   await viewport.evaluate((element) => element.scrollTo(10000, 10000));
   await settle(page);
-  samePose(await pose(page), fit, "Fit can escape into unused outer terrain");
+  const maximum = await pose(page);
+  assert(Math.abs(maximum[0] - ranges.left) <= 2 && Math.abs(maximum[1] - ranges.top) <= 2,
+    "Camera cannot reach the picture's lower/right edges at minimum zoom");
+  await desktopAction(page, "fit");
+  samePose(await pose(page), fit, "Fit did not restore its original midpoint framing after panning");
   assert.equal(await raw(page), saved, "Camera controls wrote game progress");
   assert.equal((await page.locator("#desktop-map-zoom-level").textContent()).trim(), "Fit", "Desktop zoom readout is stale");
 }
@@ -275,7 +286,7 @@ async function runCase(browser, name, size, task, fixture) {
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
-    for (const size of desktopSizes) await runCase(browser, "desktop Fit, HUD and all 23 exposed plots " + size.join("x"), size, async (page) => {
+    for (const size of desktopSizes) await runCase(browser, "desktop midpoint Fit, HUD and registered plots " + size.join("x"), size, async (page) => {
       await assertShell(page, true);
       const state = JSON.parse(await raw(page));
       assert.equal(state.hallLevel, 1, "Fresh Hall does not start at level 1");
@@ -297,7 +308,7 @@ async function runCase(browser, name, size, task, fixture) {
       await page.keyboard.press("Escape");
       await page.locator("#actions-menu").waitFor({ state: "hidden" });
     });
-    await runCase(browser, "desktop Close, +, Fit and two-axis keyboard exploration", [1440, 900], testCamera);
+    await runCase(browser, "desktop Close, +, midpoint Fit and two-axis keyboard exploration", [1440, 900], testCamera);
     await runCase(browser, "desktop adviser/navigation panels and modal input gating", [1440, 900], testDesktopPanels);
     await runCase(browser, "desktop safe name, resource synchronisation and reload", [1440, 900], testRename);
     const now = Date.now();

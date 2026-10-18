@@ -119,6 +119,7 @@ async function townCoverage(page, viewport, label) {
       fit: map.dataset.fit,
       zoom: Number(map.dataset.zoom),
       minimumZoom: Number(map.dataset.minZoom),
+      sourceAspect: window.AzmaraLandStages.aspectRatio,
       view: { left: view.left, top: view.top, right: view.right, bottom: view.bottom },
       land: { left: land.left, top: land.top, right: land.right, bottom: land.bottom, width: land.width, height: land.height },
       scroll: { left: scroller.scrollLeft, top: scroller.scrollTop, width: scroller.scrollWidth, height: scroller.scrollHeight, clientWidth: scroller.clientWidth, clientHeight: scroller.clientHeight }
@@ -126,7 +127,7 @@ async function townCoverage(page, viewport, label) {
   });
   assert(state.land.left <= state.view.left + .6 && state.land.top <= state.view.top + .6 && state.land.right >= state.view.right - .6 && state.land.bottom >= state.view.bottom - .6,
     `${label} land leaves a hard edge or letterbox: ${JSON.stringify(state)}`);
-  assert(Math.abs(state.land.width / state.land.height - 1.5) < .002, `${label} land is stretched`);
+  assert(Math.abs(state.land.width / state.land.height - state.sourceAspect) < .002, `${label} land is stretched`);
   assertViewportBox({ ...(await shellGeometry(page, "#map-viewport")) }, viewport, `${label} town viewport`);
   return state;
 }
@@ -198,6 +199,31 @@ async function assertMaximumZoomAndEdges(page, viewport, profile) {
   }
 }
 
+async function assertMinimumZoomMidpointAndEdges(page, viewport, profile) {
+  const start = await townCoverage(page, viewport, `${profile} midpoint Fit`);
+  const maxLeft = start.scroll.width - start.scroll.clientWidth;
+  const maxTop = start.scroll.height - start.scroll.clientHeight;
+  assert(closeEnough(start.scroll.left, maxLeft / 2, 2), `${profile} start is not horizontally centred on the picture`);
+  assert(closeEnough(start.scroll.top, maxTop / 2, 2), `${profile} start is not vertically centred on the picture`);
+  if (profile === "phone") {
+    assert(closeEnough(start.land.height, start.scroll.clientHeight, 2), "Phone cover does not fill the height");
+    assert(maxLeft > 1 && maxTop <= 2, "Phone Fit should pan sideways with the full picture height visible");
+  }
+  for (const point of [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }]) {
+    await page.locator("#map-viewport").evaluate((element, corner) => element.scrollTo({
+      left: corner.x * (element.scrollWidth - element.clientWidth),
+      top: corner.y * (element.scrollHeight - element.clientHeight),
+      behavior: "instant"
+    }), point);
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const edge = await townCoverage(page, viewport, `${profile} minimum zoom corner ${point.x},${point.y}`);
+    assert(closeEnough(edge.scroll.left, point.x * (edge.scroll.width - edge.scroll.clientWidth), 2), `${profile} minimum-zoom horizontal edge is unreachable`);
+    assert(closeEnough(edge.scroll.top, point.y * (edge.scroll.height - edge.scroll.clientHeight), 2), `${profile} minimum-zoom vertical edge is unreachable`);
+  }
+  await page.locator("#map-viewport").evaluate((element, position) => element.scrollTo({ left: position.left, top: position.top, behavior: "instant" }), start.scroll);
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
 (async () => {
   await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
   const base = `http://127.0.0.1:${server.address().port}`;
@@ -221,6 +247,8 @@ async function assertMaximumZoomAndEdges(page, viewport, profile) {
         const fit = await townCoverage(page, viewport, `${profile.name} Fit`);
         assert.equal(fit.fit, "true", `${profile.name} does not start at Fit`);
         assert(Math.abs(fit.zoom - fit.minimumZoom) < .00001, `${profile.name} Fit is below or above the cover floor`);
+        assert(Math.abs(fit.minimumZoom - 1) < .00001, `${profile.name} minimum zoom is not the true cover scale`);
+        await assertMinimumZoomMidpointAndEdges(page, viewport, profile.name);
         await assertOverlayDoesNotResize(page, viewport, profile.name);
         await assertAtlasView(page, viewport, "island");
         await assertAtlasView(page, viewport, "world");

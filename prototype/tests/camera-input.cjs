@@ -300,13 +300,20 @@ async function savedBytes(page, expected) {
         await page.mouse.move(start.x, start.y);
         await page.mouse.down();
         await page.mouse.move(start.x - 110, start.y - 90, { steps: 10 });
-        assert(!(await pose(page)).dragging, "Fit should remain a stable non-draggable overview");
+        assert((await pose(page)).dragging, "First Fit drag did not release the camera for manual panning");
         await page.mouse.up();
         await settle(page);
-        unchangedPose(await pose(page), stableFit, "Dragging moved the locked Fit overview");
+        const pannedFit = await pose(page);
+        assert(!pannedFit.fit, "Manual panning left the camera falsely labelled Fit");
+        const expectedMovement = stableFit.maxLeft > 2 || stableFit.maxTop > 2;
+        if (expectedMovement) assert(Math.abs(pannedFit.left - stableFit.left) > 2 || Math.abs(pannedFit.top - stableFit.top) > 2,
+          "Fit released but the drag did not move along its cropped axis");
+        bounded(pannedFit);
+        await action(page, "fit");
+        unchangedPose(await pose(page), stableFit, "Fit did not restore the picture-centred overview after manual panning");
         unchangedPose(stableFit, fit, "Fit did not restore its original framing after drag extremes");
         await savedBytes(page, bytes);
-        console.log(`PASS reduced motion, gentle Close, x/y mouse drag, both finite boundaries and locked Fit ${width}x${height}`);
+        console.log(`PASS reduced motion, gentle Close, x/y mouse drag, Fit release, both finite boundaries and midpoint restore ${width}x${height}`);
         groups += 1;
       } finally { await context.close(); }
     }

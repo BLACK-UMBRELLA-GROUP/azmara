@@ -43,15 +43,19 @@
   // Enclose the full upper reserve sprite at every closer scale (DEC-050).
   const DESKTOP_FRAME = { x: 650, y: 0, width: 3150, height: 2230 };
   const desktopQuery = matchMedia("(min-width: 1024px) and (min-height: 600px)");
-  const LAND_WIDTHS = Object.freeze({ desktop: 4200, compact: 2800 });
+  // Keep the present 3:2 scene at its approved scale. A future wider master
+  // may add land at both sides; its registered aspect then grows the frame
+  // horizontally without shrinking or moving the existing scene in the middle.
+  const LAND_BASE_WIDTHS = Object.freeze({ desktop: 4200, compact: 2800 });
+  const LAND_BASE_ASPECT = 3 / 2;
   const LAND_HALL_ANCHORS = Object.freeze({
     desktop: Object.freeze({ x: 2100, y: 1150 }),
     compact: Object.freeze({ x: CORE.x + 680, y: CORE.y + 640 })
   });
   function landFrame(desktop = desktopQuery.matches) {
     const profile = desktop ? "desktop" : "compact";
-    const width = LAND_WIDTHS[profile];
-    const height = width * window.AzmaraLandStages.height / window.AzmaraLandStages.width;
+    const height = LAND_BASE_WIDTHS[profile] / LAND_BASE_ASPECT;
+    const width = height * window.AzmaraLandStages.aspectRatio;
     const hall = window.AzmaraLandStages.boxes.townHall.normalized;
     const anchor = LAND_HALL_ANCHORS[profile];
     return Object.freeze({
@@ -60,6 +64,10 @@
       width,
       height
     });
+  }
+  function landPictureCenter(desktop = desktopQuery.matches) {
+    const frame = landFrame(desktop);
+    return Object.freeze({ x: frame.x + frame.width / 2, y: frame.y + frame.height / 2 });
   }
   function paintedControl(kind, desktop = desktopQuery.matches) {
     const frame = landFrame(desktop);
@@ -1246,6 +1254,16 @@
     return { x: mapMetrics.x + (viewport.scrollLeft + mapMetrics.viewportWidth / 2) / mapMetrics.scale, y: mapMetrics.y + (viewport.scrollTop + mapMetrics.viewportHeight / 2) / mapMetrics.scale };
   }
 
+  function releaseFitForManualPan() {
+    if (!fitMap || !mapMetrics) return;
+    const focus = currentMapFocus();
+    fitMap = false;
+    closeMap = false;
+    // The scale stays at the true cover floor; only the camera state changes
+    // so a later resize does not pull a manually panned view back to centre.
+    layoutMap(focus);
+  }
+
   function updateMapLabels() {
     const compact = townMap.classList.contains("compact-map");
     const visible = manualMapLabels ?? false;
@@ -1263,18 +1281,10 @@
     const lockedFrame = landFrame();
     const lockedWidth = viewport.clientWidth;
     const lockedHeight = viewport.clientHeight;
-    const lockedHall = paintedControl("hall");
-    const horizontalReach = Math.min(lockedHall.x - lockedFrame.x,
-      lockedFrame.x + lockedFrame.width - lockedHall.x);
-    const verticalReach = Math.min(lockedHall.y - lockedFrame.y,
-      lockedFrame.y + lockedFrame.height - lockedHall.y);
-    // A normal cover scale can run out of picture before this deliberately
-    // off-centre painted Hall reaches the viewport centre. Give the Hall equal
-    // painted reach on both sides, then crop the extra exactly as DEC-100 asks.
+    // DEC-103 starts at the true cover floor and the picture midpoint. Any
+    // unavoidable wide-screen crop is therefore shared by top and bottom.
     const coverScale = Math.max(lockedWidth / lockedFrame.width, lockedHeight / lockedFrame.height);
-    const hallCentredScale = Math.max(lockedWidth / (2 * horizontalReach), lockedHeight / (2 * verticalReach));
-    return { scale: Math.max(coverScale, hallCentredScale),
-      centerX: lockedWidth / 2, centerY: lockedHeight / 2 };
+    return { scale: coverScale, centerX: lockedWidth / 2, centerY: lockedHeight / 2 };
     /* istanbul ignore next -- retained rollback algorithm, unreachable while DEC-100 is active */
     const width = viewport.clientWidth;
     const height = viewport.clientHeight;
@@ -1305,7 +1315,7 @@
   function fitArea() {
     const lockedWidth = viewport.clientWidth, lockedHeight = viewport.clientHeight;
     if ((!lockedWidth || !lockedHeight) && completeTownFit?.value) return completeTownFit.value;
-    const lockedKey = `${lockedWidth}:${lockedHeight}:${desktopQuery.matches}:land-v1`;
+    const lockedKey = `${lockedWidth}:${lockedHeight}:${desktopQuery.matches}:${window.AzmaraLandStages.aspectRatio}:land-v2-center`;
     if (completeTownFit?.key === lockedKey) return completeTownFit.value;
     const lockedValue = { ...initialFitArea(), wallBounds: null, packingRetries: 0, packingLimited: false };
     completeTownFit = { key: lockedKey, value: lockedValue };
@@ -1428,7 +1438,7 @@
     if (closeMap && !fitMap) mapZoom = closeZoom();
     mapZoom = fitMap ? minimumZoom : Math.max(minimumZoom, Math.min(MAX_MAP_ZOOM, mapZoom));
     const scale = coverScale * mapZoom;
-    const target = fitMap ? plotPosition(byId[HALL_ID], core) : focus;
+    const target = fitMap ? landPictureCenter(desktop) : focus;
     // At gentle desktop zoom the whole settlement still fits the viewport.
     // Allow a small scenic pan margin instead of making that view feel locked;
     // it is always bounded by the existing painting, never new outer terrain.
@@ -1501,9 +1511,9 @@
     all('[data-desktop-action="close"]').forEach((control) => { control.setAttribute("aria-pressed", String(closeMap)); });
     const viewButton = $("#toggle-map-view");
     viewButton.textContent = fitMap ? "Inspect" : "Fit";
-    viewButton.setAttribute("aria-label", fitMap ? "Inspect town detail" : "Fit all 23 plots");
+    viewButton.setAttribute("aria-label", fitMap ? "Inspect town detail" : "Fit land picture");
     viewButton.setAttribute("aria-pressed", String(!fitMap));
-    viewButton.title = fitMap ? "Inspect the Town Hall" : "Fit all 23 plots";
+    viewButton.title = fitMap ? "Inspect the Town Hall" : "Fit land picture";
   }
 
   function stopCameraAnimation() {
@@ -1574,8 +1584,9 @@
 
   function useMapView(close) {
     if (!mapMetrics || mapInteractionBlocked()) return;
-    animateCamera(close ? closeZoom() : mapMetrics.minimumZoom, plotPosition(byId[HALL_ID]), !close, close);
-    announce(!close ? "All 23 plots fitted to the town view." : "Inspect town detail. Click and drag, wheel to zoom, swipe or use arrow keys to explore.");
+    animateCamera(close ? closeZoom() : mapMetrics.minimumZoom,
+      close ? plotPosition(byId[HALL_ID]) : landPictureCenter(), !close, close);
+    announce(!close ? "Land fitted to the town view." : "Inspect town detail. Click and drag, wheel to zoom, swipe or use arrow keys to explore.");
   }
 
   function toggleMapLabels() {
@@ -1870,7 +1881,7 @@
     if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
       event.preventDefault();
       stopCameraAnimation();
-      if (fitMap) return;
+      releaseFitForManualPan();
       viewport.scrollBy({ left: event.key === "ArrowLeft" ? -100 : event.key === "ArrowRight" ? 100 : 0, top: event.key === "ArrowUp" ? -100 : event.key === "ArrowDown" ? 100 : 0, behavior: "instant" });
     }
     if (["+", "=", "-"].includes(event.key)) {
@@ -1889,8 +1900,11 @@
   }
   viewport.addEventListener("pointerdown", (event) => {
     suppressMapClickUntil = 0;
-    if (event.pointerType === "touch" || !event.isPrimary || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || mapInteractionBlocked() || fitMap) return;
+    if (!event.isPrimary || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || mapInteractionBlocked()) return;
     stopCameraAnimation();
+    releaseFitForManualPan();
+    // Touch keeps native momentum scrolling after the Fit state is released.
+    if (event.pointerType === "touch") return;
     mapDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, moved: false };
   });
   viewport.addEventListener("pointermove", (event) => {
@@ -1939,9 +1953,6 @@
   }, { passive: false });
   window.addEventListener("blur", endMapDrag);
   viewport.addEventListener("scroll", () => {
-    if (fitMap && mapMetrics && (Math.abs(viewport.scrollLeft - mapMetrics.fitLeft) > 1 || Math.abs(viewport.scrollTop - mapMetrics.fitTop) > 1)) {
-      viewport.scrollTo({ left: mapMetrics.fitLeft, top: mapMetrics.fitTop, behavior: "instant" });
-    }
     mapFocus = currentMapFocus();
     syncWallPixelRegistration();
   }, { passive: true });

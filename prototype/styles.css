@@ -39,7 +39,6 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
 .scene { left: var(--sidebar-inset, 56px); }
 .map-viewport { width: 100%; height: 100%; overflow: auto; scrollbar-width: none; overscroll-behavior: contain; touch-action: pan-x pan-y pinch-zoom; -webkit-overflow-scrolling: touch; }
 .map-viewport::-webkit-scrollbar { display: none; }
-.map-viewport[data-fit="true"] { overflow: hidden; }
 @media (pointer: fine) {
   .map-viewport[data-fit="false"], .map-viewport[data-fit="false"] .plot-marker { cursor: grab; }
   .map-viewport[data-dragging="true"], .map-viewport[data-dragging="true"] .plot-marker { cursor: grabbing; user-select: none; }

@@ -26,7 +26,9 @@ assert(registryScript >= 0 && appScript > registryScript, "land-stages.js must l
 const frameSource = section(app, "function landFrame(", "function paintedControl(");
 const controlSource = section(app, "function paintedControl(", "// DEC-050");
 assert.match(frameSource, /boxes\.townHall\.normalized/);
-assert.match(frameSource, /width \* window\.AzmaraLandStages\.height \/ window\.AzmaraLandStages\.width/);
+assert.match(frameSource, /height \* window\.AzmaraLandStages\.aspectRatio/);
+assert.match(frameSource, /frame\.x \+ frame\.width \/ 2/);
+assert.match(frameSource, /frame\.y \+ frame\.height \/ 2/);
 assert.match(controlSource, /boxes\[kind === "hall" \? "townHall" : "townWall"\]\.normalized/);
 assert.match(controlSource, /box\.left \+ box\.width \/ 2/);
 assert.match(controlSource, /box\.top \+ box\.height \/ 2/);
@@ -69,21 +71,32 @@ for (const retired of [
 }
 
 // Cover is the minimum zoom, the locked picture is the only pan boundary,
-// and Fit targets the registered painted Town Hall.
+// and Fit targets the picture midpoint rather than the painted Town Hall.
 const initialFit = section(app, "function initialFitArea(", "function fitArea(");
 assert.match(initialFit, /const coverScale = Math\.max\(lockedWidth \/ lockedFrame\.width, lockedHeight \/ lockedFrame\.height\)/);
-assert.match(initialFit, /const hallCentredScale = Math\.max\(lockedWidth \/ \(2 \* horizontalReach\), lockedHeight \/ \(2 \* verticalReach\)\)/);
-assert.match(initialFit, /scale: Math\.max\(coverScale, hallCentredScale\)/);
+assert.match(initialFit, /return \{ scale: coverScale/);
+for (const retired of ["paintedControl(\"hall\")", "horizontalReach", "verticalReach", "hallCentredScale"]) {
+  assert(!initialFit.includes(retired), `Retired Hall-centred Fit calculation remains: ${retired}`);
+}
 const completeFrame = section(app, "function completeTownFrame(", "function closeZoom(");
 assert.match(completeFrame, /return landFrame\(desktop\)/);
 const layout = section(app, "function layoutMap(", "function stopCameraAnimation(");
 assert.match(layout, /const coverScale = Math\.max\(viewportWidth \/ core\.width, viewportHeight \/ core\.height\)/);
 assert.match(layout, /const minimumZoom = fit\.scale \/ coverScale/);
-assert.match(layout, /const target = fitMap \? plotPosition\(byId\[HALL_ID\], core\) : focus/);
+assert.match(layout, /const target = fitMap \? landPictureCenter\(desktop\) : focus/);
 assert.match(layout, /const worldWidth = frame\.width/);
 assert.match(layout, /const worldHeight = frame\.height/);
 assert.match(layout, /x: frame\.x/);
 assert.match(layout, /y: frame\.y/);
+assert(!styles.includes('.map-viewport[data-fit="true"] { overflow: hidden; }'), "Fit still disables picture-edge panning");
+const fitPan = section(app, "function releaseFitForManualPan(", "function updateMapLabels(");
+assert.match(fitPan, /fitMap = false/);
+assert.match(fitPan, /layoutMap\(focus\)/);
+const inputHandlers = section(app, 'viewport.addEventListener("keydown"', 'new ResizeObserver(');
+assert.match(inputHandlers, /releaseFitForManualPan\(\)/);
+assert(!inputHandlers.includes("mapInteractionBlocked() || fitMap"), "Pointer drag still rejects Fit");
+assert(!inputHandlers.includes("if (fitMap) return"), "Keyboard pan still rejects Fit");
+assert(!inputHandlers.includes("viewport.scrollTo({ left: mapMetrics.fitLeft"), "Scroll still snaps Fit back to centre");
 
 // Dev projection is transient: picker levels use real Town Hall milestones,
 // saveState cannot persist the override, and Gameplay/reset restore reality.

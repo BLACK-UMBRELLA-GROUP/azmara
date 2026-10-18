@@ -1,8 +1,32 @@
 # What actually exists
 
-As of: 17 October 2026. Phase: **full-screen web30 live; native build 3 ready**.
-Current authority: `DEC-011` through `DEC-101`. Foundation records below
+As of: 18 October 2026. Phase: **DEC-102/103 local; web30 remains live; native build 3 unchanged**.
+Current authority: `DEC-011` through `DEC-103`. Foundation records below
 describe earlier delivery stages.
+
+## Current local work — midpoint land camera
+
+DEC-103 replaces Town Hall-centred Fit with the exact midpoint of the approved
+land picture. The start view now uses the true cover/minimum scale, so a wide
+screen shares unavoidable vertical cropping between the top and bottom. Phone
+cover is height-led and starts at the same midpoint, retaining sideways travel.
+The first manual arrow, mouse drag or touch pan releases Fit without changing
+zoom, after which the exact picture bounds permit reaching every image edge
+without revealing a margin. Frame width comes from registered artwork metadata
+while current scene height/scale stays fixed, ready for a later wider master.
+
+The V1 land specification is byte-preserved as
+`docs/approved/LAND_STAGES_2026-10-18_V1.md`; V2 is current. Runtime changes are
+limited to `prototype/app.js` and `prototype/styles.css`. Static land, Dev-shell,
+JavaScript and pure camera-geometry checks pass. After fresh Owner permission,
+one isolated 3420 × 2069 capture passed and was visually checked against the
+Owner's existing 3420 × 2214 screen image: the oasis, both lower fields and the
+bottom palms are now visible; the remaining cover crop is shared between cliff
+tops and a thin lower strip, with no margin or stretch. The capture browser and
+loopback server closed successfully. Evidence:
+`prototype/debug/2026-10-18T09-11-29-413Z-town-land-stage-1-staggered-3420x2069-f811bab6.png`
+and its adjacent JSON receipt. Nothing in this local round is published or
+copied to the native app.
 
 ## Current delivery — full-screen private web30 and native build 3
 
