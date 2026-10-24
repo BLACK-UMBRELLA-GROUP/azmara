@@ -212,6 +212,7 @@
   let cameraAnimation = null;
   let cameraFrame = 0;
   let mapDrag = null;
+  const activeTouchPointers = new Set();
   let suppressMapClickUntil = 0;
   let landscapeProfile = null;
   let catalogueLevel = 1;
@@ -258,6 +259,109 @@
       return [{ left: Math.max(0, box.left - scene.left), right: Math.min(scene.width, box.right - scene.left),
         top: Math.max(0, box.top - scene.top), bottom: Math.min(scene.height, box.bottom - scene.top) }];
     });
+  }
+  function startViewSafeArea() {
+    const scene = viewport.getBoundingClientRect();
+    const padding = 8;
+    const area = {
+      left: padding,
+      top: padding,
+      right: Math.max(padding, scene.width - padding),
+      bottom: Math.max(padding, scene.height - padding),
+      viewportWidth: scene.width,
+      viewportHeight: scene.height
+    };
+    const visibleBox = (selector) => {
+      const node = $(selector);
+      if (!node || node.hidden || !node.getClientRects().length) return null;
+      const style = getComputedStyle(node);
+      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) return null;
+      const box = node.getBoundingClientRect();
+      const left = Math.max(0, box.left - scene.left);
+      const right = Math.min(scene.width, box.right - scene.left);
+      const top = Math.max(0, box.top - scene.top);
+      const bottom = Math.min(scene.height, box.bottom - scene.top);
+      return right > left && bottom > top ? { left, right, top, bottom } : null;
+    };
+    const townBar = visibleBox(".azmara-town-bar");
+    const sideDock = visibleBox("#azmara-side-dock") || visibleBox("#azmara-dock-reveal");
+    const phoneDock = visibleBox(".azmara-phone-dock");
+    const devButton = previewMode === "dev" ? visibleBox(".azmara-dev-button") : null;
+    if (townBar) area.top = Math.max(area.top, townBar.bottom + padding);
+    if (sideDock) area.left = Math.max(area.left, sideDock.right + padding);
+    if (phoneDock) area.bottom = Math.min(area.bottom, phoneDock.top - padding);
+    // The Dev button is isolated at the upper-right. Reserve its horizontal
+    // lane without pushing the gate down by the button's full phone height.
+    if (devButton) area.right = Math.min(area.right, devButton.left - padding);
+    area.right = Math.max(area.left + 44, area.right);
+    area.bottom = Math.max(area.top + 44, area.bottom);
+    area.width = area.right - area.left;
+    area.height = area.bottom - area.top;
+    return Object.freeze(area);
+  }
+  function protectedStartEnvelope() {
+    const hall = paintedControl("hall");
+    const wall = paintedControl("wall");
+    return Object.freeze({
+      left: Math.min(hall.x - hall.width / 2, wall.x - wall.width / 2),
+      right: Math.max(hall.x + hall.width / 2, wall.x + wall.width / 2),
+      top: Math.min(hall.y - hall.height / 2, wall.y - wall.height / 2),
+      bottom: Math.max(hall.y + hall.height / 2, wall.y + wall.height / 2)
+    });
+  }
+  function protectedStartScale(frame, coverScale, safe) {
+    const envelope = protectedStartEnvelope();
+    const labelSide = 8;
+    const labelBottom = 34;
+    const fromLeft = envelope.left - frame.x;
+    const fromRight = frame.x + frame.width - envelope.right;
+    const fromTop = envelope.top - frame.y;
+    const fromBottom = frame.y + frame.height - envelope.bottom;
+    return Math.max(
+      coverScale,
+      fromLeft > 0 ? (safe.left + labelSide) / fromLeft : coverScale,
+      fromRight > 0 ? (safe.viewportWidth - safe.right + labelSide) / fromRight : coverScale,
+      fromTop > 0 ? safe.top / fromTop : coverScale,
+      fromBottom > 0 ? (safe.viewportHeight - safe.bottom + labelBottom) / fromBottom : coverScale
+    );
+  }
+  function protectedStartCamera(frame, scale, safe) {
+    const envelope = protectedStartEnvelope();
+    const imageWidth = frame.width * scale;
+    const imageHeight = frame.height * scale;
+    const labelSide = 8;
+    const labelBottom = 34;
+    const leftBound = (envelope.left - frame.x) * scale - labelSide;
+    const rightBound = (envelope.right - frame.x) * scale + labelSide;
+    const topBound = (envelope.top - frame.y) * scale;
+    const bottomBound = (envelope.bottom - frame.y) * scale + labelBottom;
+    const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
+
+    let offsetX = imageWidth < safe.viewportWidth
+      ? clamp((safe.left + safe.right - imageWidth) / 2, 0, safe.viewportWidth - imageWidth)
+      : Math.max(0, safe.left - leftBound);
+    let offsetY = imageHeight < safe.viewportHeight
+      ? clamp(safe.top + (safe.height - imageHeight) / 2, 0, safe.viewportHeight - imageHeight)
+      : Math.max(0, safe.top - topBound);
+    const surfaceWidth = Math.max(safe.viewportWidth, offsetX + imageWidth);
+    const surfaceHeight = Math.max(safe.viewportHeight, offsetY + imageHeight);
+    const maxLeft = Math.max(0, surfaceWidth - safe.viewportWidth);
+    const maxTop = Math.max(0, surfaceHeight - safe.viewportHeight);
+    const legalLeftMin = Math.max(0, offsetX + rightBound - safe.right);
+    const legalLeftMax = Math.min(maxLeft, offsetX + leftBound - safe.left);
+    const preferredLeft = offsetX + (leftBound + rightBound) / 2 - (safe.left + safe.right) / 2;
+    const left = legalLeftMin <= legalLeftMax
+      ? clamp(preferredLeft, legalLeftMin, legalLeftMax)
+      : clamp(preferredLeft, 0, maxLeft);
+    const legalTopMin = Math.max(0, offsetY + bottomBound - safe.bottom);
+    const legalTopMax = Math.min(maxTop, offsetY + topBound - safe.top);
+    // Use the smallest legal downward camera travel. This preserves the gate
+    // and cliff edge, placing any unavoidable initial crop at the bottom.
+    const preferredTop = legalTopMin;
+    const top = legalTopMin <= legalTopMax
+      ? clamp(preferredTop, legalTopMin, legalTopMax)
+      : clamp(preferredTop, 0, maxTop);
+    return Object.freeze({ left, top, offsetX, offsetY, surfaceWidth, surfaceHeight });
   }
   function townUsableArea() {
     const width = viewport.clientWidth, height = viewport.clientHeight;
@@ -922,6 +1026,10 @@
     const drawerTrigger = sidebarOpen && sidebar?.contains(trigger);
     closeSidebar(false);
     previewMode = mode;
+    // Apply mode visibility before measuring the protected start area. When
+    // entering Dev, the newly visible Dev button must be part of that camera
+    // calculation; Gameplay likewise measures after the button is hidden.
+    syncModeControls();
     if (mode === "gameplay") {
       devHallLevelOverride = null;
       renderMarkers();
@@ -934,7 +1042,6 @@
     cancelConfirmation = false;
     clearConfirmation = null;
     buildChoice = null;
-    syncModeControls();
     const focusTarget = drawerTrigger ? sidebarToggle : actionsMenu.contains(trigger) ? actionsTrigger() : trigger;
     if (panel.open) { returnFocus = focusTarget; panel.close(); }
     if (actionsMenu.open) actionsMenu.close();
@@ -1251,7 +1358,10 @@
 
   function currentMapFocus() {
     if (!mapMetrics) return mapFocus;
-    return { x: mapMetrics.x + (viewport.scrollLeft + mapMetrics.viewportWidth / 2) / mapMetrics.scale, y: mapMetrics.y + (viewport.scrollTop + mapMetrics.viewportHeight / 2) / mapMetrics.scale };
+    return {
+      x: mapMetrics.x + (viewport.scrollLeft + mapMetrics.viewportWidth / 2 - mapMetrics.offsetX) / mapMetrics.scale,
+      y: mapMetrics.y + (viewport.scrollTop + mapMetrics.viewportHeight / 2 - mapMetrics.offsetY) / mapMetrics.scale
+    };
   }
 
   function releaseFitForManualPan() {
@@ -1435,8 +1545,11 @@
     townMap.dataset.wallInset = String(desktop ? desktopWallInset : 0);
     townMap.dataset.wallClearance = desktop && desktopWallClearanceLimited ? "limited" : "clear";
     const minimumZoom = fit.scale / coverScale;
+    const safe = startViewSafeArea();
+    const startScale = protectedStartScale(frame, coverScale, safe);
     if (closeMap && !fitMap) mapZoom = closeZoom();
-    mapZoom = fitMap ? minimumZoom : Math.max(minimumZoom, Math.min(MAX_MAP_ZOOM, mapZoom));
+    const fitZoom = startScale / coverScale;
+    mapZoom = fitMap ? fitZoom : Math.max(minimumZoom, Math.min(MAX_MAP_ZOOM, mapZoom));
     const scale = coverScale * mapZoom;
     const target = fitMap ? landPictureCenter(desktop) : focus;
     // At gentle desktop zoom the whole settlement still fits the viewport.
@@ -1459,8 +1572,15 @@
     }
     const width = worldWidth * scale;
     const height = worldHeight * scale;
-    mapSurface.style.width = `${width}px`;
-    mapSurface.style.height = `${height}px`;
+    const startCamera = fitMap ? protectedStartCamera(frame, scale, safe) : null;
+    const offsetX = startCamera?.offsetX ?? Math.max(0, (viewportWidth - width) / 2);
+    const offsetY = startCamera?.offsetY ?? Math.max(0, (viewportHeight - height) / 2);
+    const surfaceWidth = startCamera?.surfaceWidth ?? Math.max(viewportWidth, offsetX + width);
+    const surfaceHeight = startCamera?.surfaceHeight ?? Math.max(viewportHeight, offsetY + height);
+    mapSurface.style.width = `${surfaceWidth}px`;
+    mapSurface.style.height = `${surfaceHeight}px`;
+    townMap.style.left = `${offsetX}px`;
+    townMap.style.top = `${offsetY}px`;
     townMap.style.width = `${width}px`;
     townMap.style.height = `${height}px`;
     townCore.style.left = `${(core.x - bounds.x) * scale}px`;
@@ -1474,6 +1594,8 @@
       marker.style.setProperty("--x", `${(position.x - core.x) / core.width * 100}%`);
       marker.style.setProperty("--y", `${(position.y - core.y) / core.height * 100}%`);
     });
+    townCore.style.setProperty("--plot-art-width", `${PLOT_ART.width * scale}px`);
+    townCore.style.setProperty("--plot-art-height", `${PLOT_ART.height * scale}px`);
     townCore.style.setProperty("--plot-width", `${Math.max(44, PLOT_ART.width * scale)}px`);
     townCore.style.setProperty("--plot-height", `${Math.max(44, PLOT_ART.height * scale)}px`);
     townCore.style.setProperty("--hall-width", `${Math.max(44, HALL_ART.width * scale)}px`);
@@ -1492,9 +1614,12 @@
     updateMapLabels();
     syncWallCanvas(bounds, width, height, core, scale);
     renderLandscape(bounds);
-    const left = Math.max(0, Math.min(width - viewportWidth, (target.x - bounds.x) * scale - fit.centerX));
-    const top = Math.max(0, Math.min(height - viewportHeight, (target.y - bounds.y) * scale - (fitMap ? fit.centerY : viewportHeight / 2)));
-    mapMetrics = { ...bounds, core, desktop, width, height, scale, viewportWidth, viewportHeight, minimumZoom, fitLeft: left, fitTop: top };
+    const maxLeft = Math.max(0, surfaceWidth - viewportWidth);
+    const maxTop = Math.max(0, surfaceHeight - viewportHeight);
+    const left = startCamera?.left ?? Math.max(0, Math.min(maxLeft, offsetX + (target.x - bounds.x) * scale - fit.centerX));
+    const top = startCamera?.top ?? Math.max(0, Math.min(maxTop, offsetY + (target.y - bounds.y) * scale - viewportHeight / 2));
+    mapMetrics = { ...bounds, core, desktop, width, height, surfaceWidth, surfaceHeight,
+      offsetX, offsetY, scale, viewportWidth, viewportHeight, minimumZoom, fitLeft: left, fitTop: top };
     viewport.scrollTo({ left, top, behavior: "instant" });
     syncWallPixelRegistration();
     mapFocus = currentMapFocus();
@@ -1563,9 +1688,15 @@
   function changeMapZoom(direction) {
     if (!mapMetrics || mapInteractionBlocked()) return;
     // Accumulate rapid clicks against the pending target, not a half-drawn frame.
-    const nextZoom = (cameraAnimation?.toZoom ?? mapZoom) * (direction > 0 ? MAP_ZOOM_FACTOR : 1 / MAP_ZOOM_FACTOR);
+    const activeZoom = cameraAnimation?.toZoom ?? mapZoom;
+    const nextZoom = activeZoom * (direction > 0 ? MAP_ZOOM_FACTOR : 1 / MAP_ZOOM_FACTOR);
     const focus = currentMapFocus();
-    animateCamera(Math.max(mapMetrics.minimumZoom, Math.min(MAX_MAP_ZOOM, nextZoom)), focus, nextZoom <= mapMetrics.minimumZoom + 0.001);
+    const next = Math.max(mapMetrics.minimumZoom, Math.min(MAX_MAP_ZOOM, nextZoom));
+    // Player zoom owns the ordinary cover floor. Reaching it must not turn Fit
+    // back on and restore the larger protected phone start. A no-op at the
+    // bound keeps the existing Fit state; explicit Fit/Town restores framing.
+    const zoomChanged = Math.abs(next - activeZoom) > 0.001;
+    animateCamera(next, focus, fitMap && !zoomChanged);
   }
 
   function centerMap(animate = true) {
@@ -1579,12 +1710,19 @@
     const fit = fitArea();
     const hall = plotPosition(byId[HALL_ID]);
     const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    viewport.scrollTo({ left: (hall.x - mapMetrics.x) * mapMetrics.scale - viewport.clientWidth / 2, top: (hall.y - mapMetrics.y) * mapMetrics.scale - (fitMap ? fit.centerY : viewport.clientHeight / 2), behavior: animate && !reducedMotion ? "smooth" : "instant" });
+    viewport.scrollTo({
+      left: mapMetrics.offsetX + (hall.x - mapMetrics.x) * mapMetrics.scale - viewport.clientWidth / 2,
+      top: mapMetrics.offsetY + (hall.y - mapMetrics.y) * mapMetrics.scale - (fitMap ? fit.centerY : viewport.clientHeight / 2),
+      behavior: animate && !reducedMotion ? "smooth" : "instant"
+    });
   }
 
   function useMapView(close) {
     if (!mapMetrics || mapInteractionBlocked()) return;
-    animateCamera(close ? closeZoom() : mapMetrics.minimumZoom,
+    const frame = landFrame();
+    const coverScale = Math.max(viewport.clientWidth / frame.width, viewport.clientHeight / frame.height);
+    const fitZoom = protectedStartScale(frame, coverScale, startViewSafeArea()) / coverScale;
+    animateCamera(close ? closeZoom() : fitZoom,
       close ? plotPosition(byId[HALL_ID]) : landPictureCenter(), !close, close);
     announce(!close ? "Land fitted to the town view." : "Inspect town detail. Click and drag, wheel to zoom, swipe or use arrow keys to explore.");
   }
@@ -1900,15 +2038,40 @@
   }
   viewport.addEventListener("pointerdown", (event) => {
     suppressMapClickUntil = 0;
+    if (event.pointerType === "touch") {
+      activeTouchPointers.add(event.pointerId);
+      // A second finger belongs to native browser pinch zoom. Do not let the
+      // first finger's movement release the protected map Fit state.
+      if (activeTouchPointers.size > 1) {
+        if (mapDrag?.touch) mapDrag.multiTouch = true;
+        return;
+      }
+    }
     if (!event.isPrimary || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || mapInteractionBlocked()) return;
     stopCameraAnimation();
+    // A touch tap must not reframe the map before the browser dispatches its
+    // click. Wait for real finger movement before releasing Fit; touch then
+    // keeps native momentum scrolling without preventing the pointer event.
+    if (event.pointerType === "touch") {
+      mapDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, moved: false, touch: true };
+      return;
+    }
     releaseFitForManualPan();
-    // Touch keeps native momentum scrolling after the Fit state is released.
-    if (event.pointerType === "touch") return;
-    mapDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, moved: false };
+    mapDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, moved: false, touch: false };
   });
   viewport.addEventListener("pointermove", (event) => {
     if (!mapDrag || event.pointerId !== mapDrag.id) return;
+    if (mapDrag.touch) {
+      if (mapDrag.multiTouch || activeTouchPointers.size > 1) return;
+      if (!mapDrag.moved && Math.hypot(event.clientX - mapDrag.x, event.clientY - mapDrag.y) < 5) return;
+      if (!mapDrag.moved) {
+        mapDrag.moved = true;
+        releaseFitForManualPan();
+        suppressMapClickUntil = performance.now() + 350;
+        viewport.dataset.dragging = "true";
+      }
+      return;
+    }
     if (!(event.buttons & 1) || mapInteractionBlocked()) { endMapDrag(); return; }
     const dx = event.clientX - mapDrag.x;
     const dy = event.clientY - mapDrag.y;
@@ -1923,7 +2086,10 @@
     viewport.scrollTo({ left: mapDrag.left - dx, top: mapDrag.top - dy, behavior: "instant" });
   });
   for (const type of ["pointerup", "pointercancel", "lostpointercapture"]) {
-    viewport.addEventListener(type, (event) => { if (mapDrag?.id === event.pointerId) endMapDrag(); });
+    viewport.addEventListener(type, (event) => {
+      if (event.pointerType === "touch") activeTouchPointers.delete(event.pointerId);
+      if (mapDrag?.id === event.pointerId) endMapDrag();
+    });
   }
   viewport.addEventListener("dragstart", (event) => event.preventDefault());
   viewport.addEventListener("click", (event) => {
@@ -1945,11 +2111,13 @@
     const at = new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());
     const pixels = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientHeight : 1);
     const step = Math.log(MAP_ZOOM_FACTOR), factor = Math.exp(-Math.max(-step,Math.min(step,pixels * .002)));
-    const nextZoom = Math.max(mapMetrics.minimumZoom,Math.min(MAX_MAP_ZOOM,(cameraAnimation?.toZoom ?? mapZoom) * factor));
+    const activeZoom = cameraAnimation?.toZoom ?? mapZoom;
+    const nextZoom = Math.max(mapMetrics.minimumZoom,Math.min(MAX_MAP_ZOOM,activeZoom * factor));
     const core = activeCore(), scale = Math.max(viewport.clientWidth/core.width,viewport.clientHeight/core.height) * nextZoom;
     const focus = { x:at.x + (fitArea().centerX-(event.clientX-box.left))/scale,
       y:at.y + (viewport.clientHeight/2-(event.clientY-box.top))/scale };
-    animateCamera(nextZoom,focus,nextZoom <= mapMetrics.minimumZoom + .001);
+    const zoomChanged = Math.abs(nextZoom - activeZoom) > .001;
+    animateCamera(nextZoom,focus,fitMap && !zoomChanged);
   }, { passive: false });
   window.addEventListener("blur", endMapDrag);
   viewport.addEventListener("scroll", () => {

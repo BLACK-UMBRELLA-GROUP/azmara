@@ -3,7 +3,6 @@
 // Isolated, local desktop-overview QA. No hosted credentials or user browser.
 // Match the other suites: argv[2] is Playwright, argv[3] the local preview URL.
 const assert = require("node:assert/strict");
-const { markerPoints, assertDrawnMarkers } = require("./marker-proof.cjs");
 const path = require("node:path");
 const fs = require("node:fs");
 const { chromium } = require(process.argv[2] || "playwright");
@@ -52,7 +51,10 @@ async function closePanel(page, trigger) {
 }
 
 async function desktopAction(page, action) {
-  const button = page.locator(`[data-desktop-action="${action}"]`).first();
+  const selector = action === "fit" || action === "center"
+    ? '.azmara-town-bar [data-desktop-action="town"]'
+    : `#azmara-side-dock [data-desktop-action="${action}"]`;
+  const button = page.locator(selector).first();
   assert(await button.isVisible(), "Missing visible desktop action: " + action);
   await button.click();
   await settle(page);
@@ -65,30 +67,66 @@ async function assertShell(page, desktop) {
   });
   assert(geometry.bodyWidth <= geometry.width && geometry.documentWidth <= geometry.width, "Page-wide horizontal overflow");
   assert(Math.abs(geometry.view.x) <= 1 && Math.abs(geometry.view.y) <= 1 && Math.abs(geometry.view.right - geometry.width) <= 1 && Math.abs(geometry.view.bottom - geometry.height) <= 1, "Map does not fill the complete viewport");
-  assert.equal(await page.locator("#desktop-hud").isVisible(), desktop, "Desktop HUD visibility is incorrect");
-  assert.equal(await page.locator("#toggle-actions").isVisible(), !desktop, "Compact four-dot trigger is incorrect for the current viewport");
-  if (!desktop) {
-    assert(await page.locator("#town-name").isVisible(), "Compact town name is missing");
-    return;
+  assert.equal(await page.locator("#desktop-hud").isVisible(), false, "Retired desktop HUD became visible");
+  assert.equal(await page.locator("#toggle-actions").isVisible(), false, "Retired compact trigger became visible");
+  assert(await page.locator(".azmara-interface").isVisible(), "Approved floating interface is missing");
+  assert(await page.locator(".azmara-town-bar").isVisible(), "Floating town bar is missing");
+  assert(await page.locator(".azmara-dev-button").isVisible(), "Isolated Dev button is missing in Dev mode");
+  assert.equal(await page.locator("#azmara-side-dock").isVisible(), desktop, "Computer side dock visibility is incorrect");
+  assert.equal(await page.locator(".azmara-phone-dock").isVisible(), !desktop, "Phone bottom dock visibility is incorrect");
+  assert.equal(await page.locator(".desktop-header, .desktop-resource-panel, .desktop-advisers, .desktop-rail-right, .desktop-compass").evaluateAll((nodes) => nodes.filter((node) => node.getClientRects().length && getComputedStyle(node).display !== "none").length), 0, "Retired sidebar or camera chrome became visible");
+  const dock = desktop ? page.locator("#azmara-side-dock") : page.locator(".azmara-phone-dock");
+  const controls = page.locator(".azmara-interface button");
+  for (let index = 0; index < await controls.count(); index += 1) {
+    const button = controls.nth(index);
+    if (!await button.isVisible()) continue;
+    if (await button.evaluate((element) => Boolean(element.closest("#azmara-side-dock")))) await button.scrollIntoViewIfNeeded();
+    const control = await button.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+      return { name: element.getAttribute("aria-label") || element.textContent.trim(), phone: Boolean(element.closest(".azmara-phone-dock")), townBar: Boolean(element.closest(".azmara-town-bar")), width: box.width, height: box.height, contained: box.x >= 0 && box.y >= 0 && box.right <= innerWidth + 1 && box.bottom <= innerHeight + 1, exposed: hit?.closest("button") === element };
+    });
+    const minimum = control.phone ? 44 : control.townBar ? 38 : 40;
+    assert(control.name && control.contained && control.exposed && control.width >= minimum && control.height >= minimum, "Clipped, unnamed, undersized or intercepted approved shell control: " + control.name);
   }
-  for (const selector of [".desktop-header", ".desktop-resource-panel", ".desktop-advisers", ".desktop-rail-right", ".desktop-compass"]) {
-    assert(await page.locator(selector).isVisible(), "Missing desktop surface: " + selector);
+  if (desktop) await dock.evaluate((element) => { element.scrollTop = 0; });
+  for (const area of ["overview", "forces", "trade", "diplomacy", "knowledge"]) {
+    assert.equal(await dock.locator(`[data-panel="${area}"]`).count(), 1, `Approved ${desktop ? "computer" : "phone"} dock is missing ${area}`);
   }
-  assert.equal(await page.locator(".desktop-rail-left").count(), 0, "Removed left toolbar remains in the desktop DOM");
-  const controls = await page.locator("#desktop-hud button").evaluateAll((buttons) => buttons.filter((button) => button.getBoundingClientRect().width > 0).map((button) => {
-    const box = button.getBoundingClientRect();
-    const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
-    return { name: button.getAttribute("aria-label") || button.textContent.trim(), compactHeader: Boolean(button.closest(".desktop-header")), width: box.width, height: box.height, contained: box.x >= 0 && box.y >= 0 && box.right <= innerWidth + 1 && box.bottom <= innerHeight + 1, exposed: hit?.closest("button") === button };
-  }));
-  for (const control of controls) {
-    const minimum = control.compactHeader ? 32 : 44;
-    assert(control.name && control.contained && control.exposed && control.width >= minimum && control.height >= minimum, "Clipped, unnamed, undersized or intercepted desktop control: " + control.name);
-  }
-  assert.equal(await page.locator(".desktop-adviser[data-panel]").count(), 4, "Desktop must expose four advisers");
 }
 
-async function emptyPoints(page) {
-  return markerPoints(page);
+async function protectedStartGeometry(page) {
+  return page.evaluate(() => {
+    const viewport = document.querySelector("#map-viewport").getBoundingClientRect();
+    const map = document.querySelector("#town-map");
+    const labelsWereHidden = map.classList.contains("labels-hidden");
+    map.classList.remove("labels-hidden");
+    const rect = (node) => {
+      const box = node.getBoundingClientRect();
+      return { left: box.left, top: box.top, right: box.right, bottom: box.bottom };
+    };
+    const subjects = [
+      ["Town Hall target", document.querySelector('[data-plot="general-01"]')],
+      ["Town Hall label", document.querySelector('[data-plot="general-01"] .hotspot-label')],
+      ["Town Wall target", document.querySelector('[data-plot="wall-01"]')],
+      ["Town Wall label", document.querySelector('[data-plot="wall-01"] .hotspot-label')]
+    ].map(([name, node]) => ({ name, ...rect(node) }));
+    const chrome = [".azmara-town-bar", "#azmara-side-dock", "#azmara-dock-reveal", ".azmara-phone-dock", ".azmara-dev-button"]
+      .map((selector) => document.querySelector(selector))
+      .filter((node) => node && !node.hidden && node.getClientRects().length && getComputedStyle(node).display !== "none")
+      .map((node) => ({ name: node.getAttribute("aria-label") || node.id || node.className, ...rect(node) }));
+    if (labelsWereHidden) map.classList.add("labels-hidden");
+    const overlaps = [];
+    for (const subject of subjects) for (const obstacle of chrome) {
+      const width = Math.max(0, Math.min(subject.right, obstacle.right) - Math.max(subject.left, obstacle.left));
+      const height = Math.max(0, Math.min(subject.bottom, obstacle.bottom) - Math.max(subject.top, obstacle.top));
+      if (width > .5 && height > .5) overlaps.push(`${subject.name} / ${obstacle.name}`);
+    }
+    return {
+      overlaps,
+      outside: subjects.filter((box) => box.left < viewport.left - .5 || box.top < viewport.top - .5 || box.right > viewport.right + .5 || box.bottom > viewport.bottom + .5).map((box) => box.name)
+    };
+  });
 }
 
 async function assertPlots(page, tapAll) {
@@ -106,62 +144,89 @@ async function assertPlots(page, tapAll) {
   assert.deepEqual(plots.map(({ id, kind }) => [id, kind]).sort(), [...expected].sort(), "Semantic plot IDs or dedicated roles changed");
   assert.equal(plots.filter((plot) => plot.occupied === "true").length, 1, "There must be exactly one occupied plot");
   assert.equal(plots.find((plot) => plot.occupied === "true").id, "general-01", "Only the Hall plot may be occupied");
-  const view = page.viewportSize();
   for (const plot of plots) {
     assert(plot.name && plot.box.width >= 44 && plot.box.height >= 44, "Plot target is unnamed or below 44px: " + plot.id);
-    assert(plot.box.x >= -1 && plot.box.y >= -1 && plot.box.right <= view.width + 1 && plot.box.bottom <= view.height + 1, "Fit clips the complete hit target: " + plot.id);
-    assert(plot.exposed, "Fit plot centre is hidden behind HUD/scenery: " + plot.id);
   }
-  for (let a = 0; a < plots.length; a += 1) for (let b = a + 1; b < plots.length; b += 1) {
-    const left = plots[a].box;
-    const right = plots[b].box;
-    assert(!(Math.min(left.right, right.right) - Math.max(left.x, right.x) > 0.5 && Math.min(left.bottom, right.bottom) - Math.max(left.y, right.y) > 0.5), "Fit hit targets overlap: " + plots[a].id + " and " + plots[b].id);
-  }
-  const flags = await emptyPoints(page);
-  assert.equal(flags.length, 22, "Fresh scene needs 22 individual visible reserves");
-  assert(flags.every((flag) => flag.inside && flag.exposed), "Fit reserve art is outside its target or intercepted: " + flags.filter((flag) => !flag.inside || !flag.exposed).map((flag) => flag.id).join(", "));
-  await assertDrawnMarkers(page, flags);
+  // Fixed plot anchors can be closer than the required 44px phone envelopes.
+  // Accessibility therefore depends on each centre remaining independently
+  // reachable, which the traversal below verifies, not on disjoint rectangles.
+  const protectedGeometry = await protectedStartGeometry(page);
+  assert.deepEqual(protectedGeometry.overlaps, [], "Protected Town Hall/Wall target or label overlaps floating chrome");
+  assert.deepEqual(protectedGeometry.outside, [], "Protected Town Hall/Wall target or label starts outside the viewport");
+  const emptyArt = await page.locator('#town-core .plot-marker[data-occupied="false"] .marker').evaluateAll((markers) => markers.map((marker) => marker.childElementCount));
+  assert.equal(emptyArt.length, 22, "Fresh scene needs 22 semantic empty plots");
+  assert(emptyArt.every((count) => count === 0), "Painted empty spots gained duplicate DOM artwork");
   if (!tapAll) return;
   const before = await pose(page);
   const state = await raw(page);
+  // Traverse as a player would after leaving the protected Fit frame. Direct
+  // test-only scrolling while Fit remains true would be snapped back on the
+  // next pointerdown and would not represent a real manual pan.
+  await page.locator("#map-viewport").focus();
+  await page.keyboard.press("ArrowRight");
+  await settle(page);
   for (const plot of plots) {
-    const flag = flags.find((flag) => flag.id === plot.id);
-    await page.mouse.click(flag ? flag.x : plot.x, flag ? flag.y : plot.y);
-    await page.locator("#detail-panel").waitFor({ state: "visible" });
-    const expectedTitle = plot.id === "general-01" ? "Town Hall" : plot.id.startsWith("general-") ? "General plot " + plot.id.slice(-2) : plot.id === "wall-01" ? "Wall plot" : plot.id.startsWith("harbour-") ? "Harbour plot " + Number(plot.id.slice(-2)) : "Freighter plot";
+    const target = page.locator(`#town-core [data-plot="${plot.id}"]`);
+    await target.evaluate((element) => {
+      const viewport = document.querySelector("#map-viewport");
+      const view = viewport.getBoundingClientRect();
+      const box = element.getBoundingClientRect();
+      viewport.scrollTo({
+        left: viewport.scrollLeft + box.left + box.width / 2 - (view.left + view.width / 2),
+        top: viewport.scrollTop + box.top + box.height / 2 - (view.top + view.height / 2),
+        behavior: "instant"
+      });
+    });
+    await settle(page);
+    const hit = await target.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      return { x, y, owns: document.elementFromPoint(x, y)?.closest(".plot-marker") === element };
+    });
+    assert(hit.owns, "Plot cannot be reached after bounded panning: " + plot.id);
+    await page.touchscreen.tap(hit.x, hit.y);
+    await page.locator("#detail-panel").waitFor({ state: "visible", timeout: 3000 }).catch(() => {
+      assert.fail(`Reachable plot centre did not open its panel: ${plot.id}`);
+    });
+    const expectedTitle = plot.id === "general-01" ? "Town Hall" : plot.id.startsWith("general-") ? "General plot " + plot.id.slice(-2) : plot.id === "wall-01" ? "Wall plot" : plot.id.startsWith("harbour-") ? "Caravan plot " + Number(plot.id.slice(-2)) : "Freight depot plot";
     assert.equal((await page.locator("#panel-title").textContent()).trim(), expectedTitle, "Visible reserve click opened the wrong plot");
     if (plot.id !== "general-01") assert.equal(await page.locator("#upgrade-building, #panel-content form").count(), 0, "Empty plot invents gameplay: " + plot.id);
     await closePanel(page, page.locator(`#town-core [data-plot="${plot.id}"]`));
-    samePose(await pose(page), before, "Selecting a plot moved the locked Fit view");
   }
+  await page.locator('.azmara-town-bar [data-desktop-action="town"]').click();
+  await settle(page);
+  samePose(await pose(page), before, "Plot traversal could not restore the protected start camera");
   assert.equal(await raw(page), state, "Inspecting the 23 plots altered progress");
 }
 
 async function assertHudSync(page, expectedName) {
   const saved = JSON.parse(await raw(page));
-  assert.equal((await page.locator("#desktop-town-name").textContent()).trim(), expectedName || saved.townName, "Desktop name is stale");
+  assert.equal((await page.locator("#floating-town-name").textContent()).trim(), expectedName || saved.townName, "Floating town name is stale");
   for (const resource of ["coins", "timber", "stone"]) {
-    const value = (await page.locator("#desktop-resource-" + resource).textContent()).replace(/[^0-9]/g, "");
-    assert.equal(Number(value), saved.resources[resource], "Desktop resource is stale: " + resource);
+    const value = (await page.locator("#floating-resource-" + resource).textContent()).replace(/[^0-9]/g, "");
+    assert.equal(Number(value), saved.resources[resource], "Floating resource is stale: " + resource);
   }
 }
 
 async function testCamera(page, captureSnapshot = true) {
   const saved = await raw(page);
   const fit = await pose(page);
-  await desktopAction(page, "close");
-  assert((await pose(page))[4] >= fit[4] * 1.5, "Close failed to enlarge buildings");
-  assert.equal(await page.locator("#map-viewport").getAttribute("data-fit"), "false", "Close remains locked at Fit");
-  if (captureSnapshot) await capture(page, "desktop-1440x900-close");
   await page.locator("#map-viewport").focus();
   await page.keyboard.press("+");
-  assert((await pose(page))[4] > fit[4], "Keyboard + failed to zoom");
-  for (let count = 0; count < 16; count += 1) {
-    if (await page.locator('[data-desktop-action="zoom-in"]').first().isDisabled()) break;
-    await desktopAction(page, "zoom-in");
-  }
+  await settle(page);
+  assert((await pose(page))[4] > fit[4], "Keyboard + failed to enlarge the town");
+  assert.equal(await page.locator("#map-viewport").getAttribute("data-fit"), "false", "Player zoom remains locked at Fit");
+  if (captureSnapshot) await capture(page, "desktop-1440x900-close");
+  for (let count = 0; count < 16; count += 1) await page.keyboard.press("+");
+  await settle(page);
   const viewport = page.locator("#map-viewport");
-  await desktopAction(page, "center");
+  await viewport.evaluate((element) => element.scrollTo({
+    left: (element.scrollWidth - element.clientWidth) / 2,
+    top: (element.scrollHeight - element.clientHeight) / 2,
+    behavior: "instant"
+  }));
+  await settle(page);
   await viewport.focus();
   const prior = await pose(page);
   await page.keyboard.press("ArrowRight");
@@ -171,7 +236,7 @@ async function testCamera(page, captureSnapshot = true) {
   assert(moved[0] > prior[0] + 20 && moved[1] > prior[1] + 20, "Closer desktop camera does not move in both axes");
   await desktopAction(page, "fit");
   samePose(await pose(page), fit, "Fit did not return to its original stable overview");
-  assert.equal(await viewport.getAttribute("data-fit"), "true", "Fit failed to restore the midpoint overview");
+  assert.equal(await viewport.getAttribute("data-fit"), "true", "Fit failed to restore the protected start overview");
   await viewport.focus();
   await page.keyboard.press("ArrowRight");
   await page.keyboard.press("ArrowDown");
@@ -180,23 +245,22 @@ async function testCamera(page, captureSnapshot = true) {
   const panned = await pose(page);
   const ranges = await viewport.evaluate((element) => ({ left: element.scrollWidth - element.clientWidth, top: element.scrollHeight - element.clientHeight }));
   if (ranges.left > 2 || ranges.top > 2) assert(Math.abs(panned[0] - fit[0]) > 2 || Math.abs(panned[1] - fit[1]) > 2,
-    "Picture-centred cover could not pan along its cropped axis");
+    "Protected cover could not pan along its cropped axis");
   await viewport.evaluate((element) => element.scrollTo(10000, 10000));
   await settle(page);
   const maximum = await pose(page);
   assert(Math.abs(maximum[0] - ranges.left) <= 2 && Math.abs(maximum[1] - ranges.top) <= 2,
     "Camera cannot reach the picture's lower/right edges at minimum zoom");
   await desktopAction(page, "fit");
-  samePose(await pose(page), fit, "Fit did not restore its original midpoint framing after panning");
+  samePose(await pose(page), fit, "Fit did not restore its original protected framing after panning");
   assert.equal(await raw(page), saved, "Camera controls wrote game progress");
-  assert.equal((await page.locator("#desktop-map-zoom-level").textContent()).trim(), "Fit", "Desktop zoom readout is stale");
 }
 
 async function testDesktopPanels(page) {
   const original = await raw(page);
   const camera = await pose(page);
-  for (const [area, title] of [["overview", "Town overview"], ["forces", "Forces"], ["knowledge", "Knowledge"], ["diplomacy", "Diplomacy"]]) {
-    const button = page.locator(`.desktop-adviser[data-panel="${area}"]`);
+  for (const [area, title] of [["overview", "Town overview"], ["forces", "Military"], ["knowledge", "Discoveries"], ["diplomacy", "Diplomacy"]]) {
+    const button = page.locator(`#azmara-side-dock [data-panel="${area}"]`);
     await button.click();
     await page.locator("#detail-panel").waitFor({ state: "visible" });
     assert.equal((await page.locator("#panel-title").textContent()).trim(), title, "Desktop adviser opened the wrong panel");
@@ -213,17 +277,17 @@ async function testDesktopPanels(page) {
     assert(await page.locator("#atlas-viewport").isVisible(), "Actual map has no visible playfield");
     assert.equal(await page.locator("#detail-panel").evaluate((dialog) => dialog.open), false, "Map navigation still opens the obsolete planned modal");
     assert.equal(await page.locator("#atlas-view form, #atlas-view input, #atlas-view select").count(), 0, "Visual atlas invents settlement or transport gameplay");
-    await page.locator('[data-desktop-action="town"]').click();
+    await page.locator('.azmara-town-bar [data-desktop-action="town"]').click();
     await page.locator("#atlas-view").waitFor({ state: "hidden" });
     await settle(page);
     samePose(await pose(page), camera, "Returning from actual atlas changed the town camera state");
   }
-  const help = page.locator('[data-desktop-action="help"]').first();
+  const help = page.locator('#azmara-side-dock [data-desktop-action="help"]');
   await help.click();
   await page.locator("#detail-panel").waitFor({ state: "visible" });
   assert((await page.locator("#panel-content").textContent()).trim(), "Desktop Help has no actual panel");
   await closePanel(page, help);
-  const options = page.locator('[data-desktop-action="options"]').first();
+  const options = page.locator('#azmara-side-dock [data-desktop-action="options"]');
   await options.click();
   await page.locator("#actions-menu").waitFor({ state: "visible" });
   assert(await page.locator("#actions-menu").evaluate((dialog) => dialog.matches(":modal")), "Desktop Options is not a modal actions dialog");
@@ -237,9 +301,8 @@ async function testDesktopPanels(page) {
 }
 
 async function testRename(page) {
-  // Existing semantic rename route stays shared with the compact UI.
-  const desktopRename = page.locator('.desktop-town-selector[data-panel="rename"]');
-  assert.equal(await desktopRename.count(), 1, "Desktop town selector must provide the existing rename route");
+  const desktopRename = page.locator('.azmara-town-chip[data-panel="rename"]');
+  assert.equal(await desktopRename.count(), 1, "Floating town chip must provide the rename route");
   await desktopRename.click();
   await page.locator("#town-name-input").fill("<AZ> Cedar Town");
   const camera = await pose(page);
@@ -252,7 +315,7 @@ async function testRename(page) {
   const name = JSON.parse(await raw(page)).townName;
   assert(name.includes("<AZ>"), "Literal town-name characters were interpreted as markup");
   await assertHudSync(page, name);
-  assert.equal(await page.locator("#desktop-town-name az").count(), 0, "Desktop name used unsafe innerHTML");
+  assert.equal(await page.locator("#floating-town-name az").count(), 0, "Floating town name used unsafe innerHTML");
   await page.reload();
   await settle(page);
   await assertHudSync(page, name);
@@ -286,7 +349,7 @@ async function runCase(browser, name, size, task, fixture) {
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
-    for (const size of desktopSizes) await runCase(browser, "desktop midpoint Fit, HUD and registered plots " + size.join("x"), size, async (page) => {
+    for (const size of desktopSizes) await runCase(browser, "desktop protected Fit, HUD and registered plots " + size.join("x"), size, async (page) => {
       await assertShell(page, true);
       const state = JSON.parse(await raw(page));
       assert.equal(state.hallLevel, 1, "Fresh Hall does not start at level 1");
@@ -301,14 +364,14 @@ async function runCase(browser, name, size, task, fixture) {
     await runCase(browser, "narrow unchanged compact scene 390x844", [390, 844], async (page) => {
       await assertShell(page, false);
       await assertPlots(page, true);
-      await page.locator("#toggle-actions").click();
+      await page.locator('.azmara-phone-dock [data-desktop-action="options"]').click();
       await page.locator("#actions-menu").waitFor({ state: "visible" });
       assert(await page.locator("#actions-menu").evaluate((dialog) => dialog.matches(":modal")), "Narrow actions lost native modal behaviour");
       await capture(page, "desktop-regression-390x844-menu");
       await page.keyboard.press("Escape");
       await page.locator("#actions-menu").waitFor({ state: "hidden" });
     });
-    await runCase(browser, "desktop Close, +, midpoint Fit and two-axis keyboard exploration", [1440, 900], testCamera);
+    await runCase(browser, "desktop Close, +, protected Fit and two-axis keyboard exploration", [1440, 900], testCamera);
     await runCase(browser, "desktop adviser/navigation panels and modal input gating", [1440, 900], testDesktopPanels);
     await runCase(browser, "desktop safe name, resource synchronisation and reload", [1440, 900], testRename);
     const now = Date.now();

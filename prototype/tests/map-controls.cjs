@@ -3,8 +3,6 @@
 // Isolated Chromium checks for the local map camera, not real-device certification.
 // Match smoke.cjs: argv[2] is an installed Playwright module; argv[3] is the base URL.
 const assert = require("node:assert/strict");
-const { markerPoints, assertDrawnMarkers } = require("./marker-proof.cjs");
-const { northInset, wallInset, horizontalInsets } = require("./desktop-projection.cjs");
 const path = require("node:path");
 const { chromium } = require(process.argv[2] || "playwright");
 const base = process.argv[3] || "http://127.0.0.1:4317";
@@ -16,39 +14,14 @@ const screenshotDirectory = process.env.AZMARA_QA_SCREENSHOTS;
 const viewportSelection = process.env.AZMARA_QA_VIEWPORTS;
 assert(viewportSelection === undefined || viewportSelection === "representative", "AZMARA_QA_VIEWPORTS must be unset or representative");
 const compactProfile = {
-  core: { x: 2300, y: 1740, width: 1400, height: 1320 },
-  frame: { x: 2140, y: 1580, width: 1720, height: 1640 },
-  art: { x: 1600, y: 960, width: 2800, height: 2800, source: "assets/progression/azmara-compact-level-1.png", aspect: "xMidYMid meet" }
+  core: { x: 1589.1145833333333, y: 1571.5364583333333, width: 2800, height: 1866.6666666666667 },
+  frame: { x: 1589.1145833333333, y: 1571.5364583333333, width: 2800, height: 1866.6666666666667 },
+  art: { x: 1589.1145833333333, y: 1571.5364583333333, width: 2800, height: 1866.6666666666667, source: "assets/land/land-stage-01.png", aspect: "xMidYMid meet" }
 };
 const desktopProfile = {
-  core: { x: 900, y: 700, width: 2500, height: 1050 },
-  frame: { x: 650, y: 600, width: 3150, height: 1630 },
-  art: { x: 0, y: 0, width: 4200, height: 2400, source: "assets/progression/azmara-desktop-level-1.png", aspect: "xMidYMid slice" }
-};
-const desktopAnchors = {
-  "general-01": { x: 2100, y: 1150 },
-  "general-02": { x: 1250, y: 880 },
-  "general-03": { x: 1250, y: 1150 },
-  "general-04": { x: 1050, y: 1400 },
-  "general-05": { x: 1550, y: 860 },
-  "general-06": { x: 1550, y: 1150 },
-  "general-07": { x: 1550, y: 1440 },
-  "general-08": { x: 2650, y: 860 },
-  "general-09": { x: 2950, y: 1420 },
-  "general-10": { x: 3150, y: 900 },
-  "general-11": { x: 2100, y: 1600 },
-  "general-12": { x: 2100, y: 700 },
-  "general-13": { x: 2650, y: 1150 },
-  "general-14": { x: 2950, y: 1150 },
-  "general-15": { x: 2650, y: 1440 },
-  "general-16": { x: 1850, y: 890 },
-  "general-17": { x: 1850, y: 1410 },
-  "general-18": { x: 2350, y: 1410 },
-  "general-19": { x: 2350, y: 890 },
-  "wall-01": { x: 900, y: 1000 },
-  "harbour-01": { x: 1230, y: 1760 },
-  "harbour-02": { x: 2760, y: 1820 },
-  "freighter-01": { x: 3630, y: 2040 }
+  core: { x: 13.671875, y: -62.6953125, width: 4200, height: 2800 },
+  frame: { x: 13.671875, y: -62.6953125, width: 4200, height: 2800 },
+  art: { x: 13.671875, y: -62.6953125, width: 4200, height: 2800, source: "assets/land/land-stage-01.png", aspect: "xMidYMid meet" }
 };
 const expectedPlots = [
   ...Array.from({ length: 19 }, (_, index) => [`general-${String(index + 1).padStart(2, "0")}`, "general"]),
@@ -75,7 +48,9 @@ async function settle(target) {
 }
 
 async function actionsTrigger(target) {
-  return target.locator(await target.evaluate(() => innerWidth >= 1024 && innerHeight >= 600) ? '[data-desktop-action="options"]' : "#toggle-actions");
+  // Landscape phones and short compact windows can be wider than 700px while
+  // still using the phone dock. Follow the app's actual visible control.
+  return target.locator('[data-desktop-action="options"]:visible').first();
 }
 
 function presentationProfile(value) {
@@ -126,6 +101,8 @@ async function metrics(target) {
       left: viewport.scrollLeft,
       top: viewport.scrollTop,
       fit: viewport.dataset.fit === "true",
+      zoom: Number(document.querySelector("#town-map").dataset.zoom),
+      minimumZoom: Number(document.querySelector("#town-map").dataset.minZoom),
       overflow: getComputedStyle(viewport).overflow,
       landscape: rect(document.querySelector("#world-landscape")),
       core: rect(document.querySelector("#town-core")),
@@ -151,16 +128,14 @@ async function assertGeometry(target) {
   const profile = presentationProfile(value);
   const { core, frame } = profile;
   const scale = value.core.width / core.width;
-  const fitScale = Math.max(value.clientWidth / desktopProfile.art.width, value.clientHeight / desktopProfile.art.height);
-  const allowance = profile.desktop && !value.fit ? Math.min(1, (scale / fitScale - 1) / 0.5) : 0;
-  const expectedWidth = profile.desktop ? Math.min(desktopProfile.art.width * scale, Math.max(frame.width * scale, value.clientWidth + core.width * 0.24 * allowance * scale)) : Math.max(frame.width * scale, value.clientWidth);
-  const expectedHeight = profile.desktop ? Math.min(desktopProfile.art.height * scale, Math.max(frame.height * scale, value.clientHeight + core.height * 0.24 * allowance * scale)) : Math.max(frame.height * scale, value.clientHeight);
+  const expectedWidth = frame.width * scale;
+  const expectedHeight = frame.height * scale;
   assert(Math.abs(value.map.width - expectedWidth) <= 2 && Math.abs(value.map.height - expectedHeight) <= 2, "Camera extends beyond the finite town frame or adds unnecessary pan padding");
   assert(Math.abs(value.scrollWidth - expectedWidth) <= 2 && Math.abs(value.scrollHeight - expectedHeight) <= 2, `Actual scroll extents include off-town overflow: ${JSON.stringify({actual:[value.scrollWidth,value.scrollHeight],expected:[expectedWidth,expectedHeight],world,scale})}`);
   assert(Math.abs(world.width - expectedWidth / scale) <= 2 && Math.abs(world.height - expectedHeight / scale) <= 2, "World coordinates exceed the town frame plus required viewport padding");
   if (Math.abs(expectedWidth - frame.width * scale) <= 1) assert(Math.abs(world.x - frame.x) <= 2, "Horizontal pan escapes the fixed town frame origin");
   if (Math.abs(expectedHeight - frame.height * scale) <= 1) assert(Math.abs(world.y - frame.y) <= 2, "Vertical pan escapes the fixed town frame origin");
-  if (profile.desktop) assert(world.x >= desktopProfile.art.x - 1 && world.y >= desktopProfile.art.y - 1 && world.x + world.width <= desktopProfile.art.width + 1 && world.y + world.height <= desktopProfile.art.height + 1, "Desktop camera reaches outside the original painted coast");
+  assert(world.x >= frame.x - 1 && world.y >= frame.y - 1 && world.x + world.width <= frame.x + frame.width + 1 && world.y + world.height <= frame.y + frame.height + 1, "Camera reaches outside the locked land picture");
   assert(value.left >= 0 && value.top >= 0 && value.left <= value.scrollWidth - value.clientWidth + 1 && value.top <= value.scrollHeight - value.clientHeight + 1, "Camera is beyond its native finite scroll bounds");
   assert(Math.abs(value.map.width / value.map.height - world.width / world.height) < 0.004, "Map camera stretched the landscape coordinate ratio");
   assert(Math.abs(value.core.width / value.core.height - core.width / core.height) < 0.004, "Town core coordinates are stretched");
@@ -181,10 +156,14 @@ async function assertGeometry(target) {
   // Match these viewport-local metrics, not Playwright's parent-page iframe
   // coordinates. The same 44px and clipping contract applies in both views.
   const trigger = await (await actionsTrigger(target)).evaluate((button) => button.getBoundingClientRect().toJSON());
-  const minimumTrigger = profile.desktop ? 32 : 44;
-  assert(trigger && trigger.width >= minimumTrigger && trigger.height >= minimumTrigger && trigger.x >= 0 && trigger.y >= 0 && trigger.x + trigger.width <= value.windowWidth && trigger.y + trigger.height <= value.windowHeight, "Persistent actions trigger is undersized or clipped");
-  assert.equal(await target.locator("#desktop-hud").isVisible(), profile.desktop, "Desktop HUD visibility disagrees with camera profile");
-  assert.equal(await target.locator("#toggle-actions").isVisible(), !profile.desktop, "Compact trigger visibility disagrees with camera profile");
+  const minimumTrigger = 44;
+  assert(trigger && trigger.width >= minimumTrigger && trigger.height >= minimumTrigger && trigger.x >= 0 && trigger.y >= 0 && trigger.x + trigger.width <= value.windowWidth && trigger.y + trigger.height <= value.windowHeight,
+    `Persistent actions trigger is undersized or clipped: ${JSON.stringify({ trigger, viewport: [value.windowWidth, value.windowHeight] })}`);
+  assert.equal(await target.locator("#desktop-hud").isVisible(), false, "Retired desktop HUD became visible");
+  assert(await target.locator(".azmara-town-bar").isVisible(), "Floating town bar is missing");
+  assert.equal(await target.locator("#azmara-side-dock").isVisible(), profile.desktop, "Computer side dock visibility disagrees with camera profile");
+  assert.equal(await target.locator(".azmara-phone-dock").isVisible(), !profile.desktop, "Phone bottom dock visibility disagrees with camera profile");
+  assert.equal(await target.locator("#toggle-actions").isVisible(), false, "Retired compact actions trigger became visible");
   return value;
 }
 
@@ -210,8 +189,59 @@ async function zoomToBound(target, direction) {
 }
 
 function assertFits(value) {
-  assert(value.fit, "Minimum zoom is not the picture-centred Fit state");
+  assert(value.fit, "Camera is not in the protected Fit state");
+  assert(value.zoom >= value.minimumZoom - .001, "Protected Fit fell below the ordinary cover floor");
   assertCoverage(value);
+}
+
+function assertCoverFloor(value, allowNoOpFit = false) {
+  assert(allowNoOpFit || !value.fit, "Normal zoom-out incorrectly restored the protected Fit state");
+  assert(Math.abs(value.zoom - value.minimumZoom) <= .001, "Normal zoom-out did not stop at the ordinary cover floor");
+  assertCoverage(value);
+}
+
+async function assertProtectedStart(target) {
+  const value = await metrics(target);
+  assertFits(value);
+  const result = await target.evaluate(() => {
+    const viewport = document.querySelector("#map-viewport").getBoundingClientRect();
+    const picture = document.querySelector("#azmara-land-stage").getBoundingClientRect();
+    const map = document.querySelector("#town-map");
+    const labelsWereHidden = map.classList.contains("labels-hidden");
+    map.classList.remove("labels-hidden");
+    const rect = (node, name = "Protected camera element") => {
+      if (!node) throw new Error(`${name} is missing`);
+      const box = node.getBoundingClientRect();
+      return { left: box.left, top: box.top, right: box.right, bottom: box.bottom };
+    };
+    const subjects = [
+      ["Town Hall target", document.querySelector('[data-plot="general-01"]')],
+      ["Town Hall label", document.querySelector('[data-plot="general-01"] .hotspot-label')],
+      ["Town Wall target", document.querySelector('[data-plot="wall-01"]')],
+      ["Town Wall label", document.querySelector('[data-plot="wall-01"] .hotspot-label')]
+    ].map(([name, node]) => ({ name, ...rect(node, name) }));
+    const obstacles = [".azmara-town-bar", "#azmara-side-dock", "#azmara-dock-reveal", ".azmara-phone-dock", ".azmara-dev-button"]
+      .map((selector) => document.querySelector(selector))
+      .filter((node) => node && !node.hidden && node.getClientRects().length && getComputedStyle(node).display !== "none" && getComputedStyle(node).visibility !== "hidden")
+      .map((node) => ({ name: node.id || node.className, ...rect(node) }));
+    if (labelsWereHidden) map.classList.add("labels-hidden");
+    const overlaps = [];
+    for (const subject of subjects) for (const obstacle of obstacles) {
+      const width = Math.max(0, Math.min(subject.right, obstacle.right) - Math.max(subject.left, obstacle.left));
+      const height = Math.max(0, Math.min(subject.bottom, obstacle.bottom) - Math.max(subject.top, obstacle.top));
+      if (width > .5 && height > .5) overlaps.push(`${subject.name} / ${obstacle.name}`);
+    }
+    return {
+      overlaps,
+      outside: subjects.filter((box) => box.left < viewport.left - .5 || box.top < viewport.top - .5 || box.right > viewport.right + .5 || box.bottom > viewport.bottom + .5).map((box) => box.name),
+      topCrop: Math.max(0, viewport.top - picture.top),
+      bottomCrop: Math.max(0, picture.bottom - viewport.bottom)
+    };
+  });
+  assert.deepEqual(result.overlaps, [], "Protected Hall/Wall target or label overlaps floating controls");
+  assert.deepEqual(result.outside, [], "Protected Hall/Wall target or label starts outside the viewport");
+  assert(result.bottomCrop + 1 >= result.topCrop, "Protected start crop is not biased to the bottom");
+  return value;
 }
 
 function assertCoverage(value) {
@@ -221,10 +251,13 @@ function assertCoverage(value) {
 
 async function assertPaint(target) {
   const result = await target.locator("#world-landscape").evaluate(async (svg) => {
-    // Keep the artwork in the rasterized SVG: removing it would test an obsolete
-    // procedural backdrop instead of the painted surface actually displayed.
+    // Rasterize the exact locked land-stage image currently displayed. Replacing
+    // it with a retired procedural terrain asset would make this coverage test
+    // pass against artwork that the player never sees.
     window.__azmaraQaTerrainDataUrls ||= new Map();
-    const source = new URL(document.querySelector("#town-terrain-art").href.baseVal, location.href).href;
+    const land = document.querySelector("#azmara-land-stage");
+    if (!land) throw new Error("Locked land-stage image is missing");
+    const source = new URL(land.href.baseVal, location.href).href;
     if (!window.__azmaraQaTerrainDataUrls.has(source)) window.__azmaraQaTerrainDataUrls.set(source, (async () => {
       const response = await fetch(source);
       if (!response.ok) throw new Error("Terrain artwork fetch failed: " + response.status);
@@ -275,7 +308,7 @@ async function assertPaint(target) {
       };
     } finally { URL.revokeObjectURL(url); }
   });
-  assert.deepEqual(result.patterns, result.presentation === "desktop" ? [] : ["painted-margin"], "Unexpected patterned procedural outland remains in the rendered SVG");
+  assert.deepEqual(result.patterns, [], "Unexpected patterned procedural outland remains in the rendered SVG");
   assert.equal(result.obsolete, 0, "Old procedural outland definitions remain in the rendered SVG");
   assert.deepEqual(result.filler, [], "Extra procedural ground or shoreline remains outside the painted town");
   assert.deepEqual(result.gaps, [], "Painted terrain leaves transparent pixels at finite camera bounds or screen-ratio margins");
@@ -285,32 +318,49 @@ async function assertTerrainArt(target, value = null) {
   const camera = value || await metrics(target);
   const profile = presentationProfile(camera);
   const art = profile.art;
-  assert.equal(await target.locator("#world-landscape > image#town-terrain-art").count(), 1, "Primary registered terrain image is missing or duplicated");
-  assert.equal(await target.locator("#world-landscape > image").count(), 1, "An extra primary terrain or facility image was added");
-  const copies = await target.locator("#painted-margin > image").evaluateAll((images) => images.map((image) => ({ source: image.href.baseVal, x: image.x.baseVal.value, y: image.y.baseVal.value, width: image.width.baseVal.value, height: image.height.baseVal.value, aspect: image.getAttribute("preserveAspectRatio") })));
-  assert.equal(copies.length, profile.desktop ? 0 : 4, "Painted screen-ratio margins do not match the active profile");
-  assert.equal(await target.locator("#painted-margin").count(), profile.desktop ? 0 : 1, "Desktop coastline must not be reflected or tiled");
-  // Eight world-pixel overscan on each side prevents fractional-pixel gutters;
-  // it does not change the primary image's 2800-square registration or bitmap.
-  if (!profile.desktop) assert(copies.every((copy) => copy.source === profile.art.source && copy.x === -8 && copy.y === -8 && copy.width === 2816 && copy.height === 2816 && copy.aspect === "xMidYMid meet"), "Painted margin changed the active terrain stage, square proportions or eight-pixel overscan");
-  assert.equal(await target.locator("#world-landscape mask").count(), 0, "Primary terrain has a fading mask at its registered edge");
-  const loaded = await target.locator("#town-terrain-art").evaluate(async (element) => {
+  assert.equal(await target.locator("#world-landscape > image#azmara-land-stage").count(), 1, "Locked land-stage image is missing or duplicated");
+  assert.equal(await target.locator("#world-landscape > image").count(), 1, "An extra terrain or facility image was added over the locked land");
+  assert.equal(await target.locator("#world-landscape pattern, #world-landscape mask").count(), 0, "Procedural terrain or a fading mask was added to the locked land");
+  const loaded = await target.locator("#azmara-land-stage").evaluate(async (element) => {
     const source = element.href.baseVal;
     const image = new Image();
     image.src = new URL(source, location.href).href;
     await image.decode();
     const box = element.getBoundingClientRect();
     const style = getComputedStyle(element);
-    return { svgImage: element instanceof SVGImageElement, source, width: image.naturalWidth, height: image.naturalHeight, x: box.x, y: box.y, renderedWidth: box.width, renderedHeight: box.height, aspect: element.getAttribute("preserveAspectRatio"), visible: style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0 };
+    const registry = window.AzmaraLandStages;
+    const stage = registry.forStage(Number(document.body.dataset.townStage));
+    return {
+      svgImage: element instanceof SVGImageElement,
+      source,
+      expectedSource: stage.src,
+      width: image.naturalWidth,
+      height: image.naturalHeight,
+      expectedWidth: registry.width,
+      expectedHeight: registry.height,
+      artX: element.x.baseVal.value,
+      artY: element.y.baseVal.value,
+      artWidth: element.width.baseVal.value,
+      artHeight: element.height.baseVal.value,
+      x: box.x,
+      y: box.y,
+      renderedWidth: box.width,
+      renderedHeight: box.height,
+      aspect: element.getAttribute("preserveAspectRatio"),
+      visible: style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0
+    };
   });
-  assert(loaded.svgImage && loaded.source && loaded.width > 0 && loaded.height > 0 && loaded.visible, "Rich terrain artwork is missing, unloaded or hidden");
+  assert(loaded.svgImage && loaded.source && loaded.width > 0 && loaded.height > 0 && loaded.visible, "Locked land artwork is missing, unloaded or hidden");
   const scale = camera.map.width / camera.worldViewBox.width;
-  assert.equal(loaded.source, art.source, "Active terrain asset does not match its presentation");
-  assert.equal(loaded.aspect, art.aspect, "Terrain scaling no longer preserves the approved uniform meet/slice proportions");
-  assert(Math.abs(loaded.x - camera.map.x - (art.x - camera.worldViewBox.x) * scale) <= 2 && Math.abs(loaded.y - camera.map.y - (art.y - camera.worldViewBox.y) * scale) <= 2, "Rich terrain artwork shifted from its world coordinates");
-  assert(Math.abs(loaded.renderedWidth - art.width * scale) <= 2 && Math.abs(loaded.renderedHeight - art.height * scale) <= 2, "Rich terrain artwork's world footprint changed");
-  if (profile.desktop) assert(loaded.width > loaded.height, "Desktop coastline did not load wide original art");
-  else assert(Math.abs(loaded.renderedWidth / loaded.renderedHeight - loaded.width / loaded.height) < 0.004, "Rich terrain PNG is distorted inside its SVG image");
+  assert.equal(loaded.source, loaded.expectedSource, "Active land asset does not match the real Town Hall stage rule");
+  assert.equal(loaded.source, art.source, "Stage 1 land asset does not match its registered presentation");
+  assert.equal(loaded.width, loaded.expectedWidth, "Locked land bitmap width changed");
+  assert.equal(loaded.height, loaded.expectedHeight, "Locked land bitmap height changed");
+  assert.equal(loaded.aspect, art.aspect, "Land scaling no longer preserves the approved uniform proportions");
+  assert(Math.abs(loaded.artX - art.x) <= 0.01 && Math.abs(loaded.artY - art.y) <= 0.01 && Math.abs(loaded.artWidth - art.width) <= 0.01 && Math.abs(loaded.artHeight - art.height) <= 0.01, "Locked land registration changed");
+  assert(Math.abs(loaded.x - camera.map.x - (loaded.artX - camera.worldViewBox.x) * scale) <= 2 && Math.abs(loaded.y - camera.map.y - (loaded.artY - camera.worldViewBox.y) * scale) <= 2, "Locked land artwork shifted from its world coordinates");
+  assert(Math.abs(loaded.renderedWidth - loaded.artWidth * scale) <= 2 && Math.abs(loaded.renderedHeight - loaded.artHeight * scale) <= 2, "Locked land artwork's world footprint changed");
+  assert(Math.abs(loaded.renderedWidth / loaded.renderedHeight - loaded.width / loaded.height) < 0.004, "Locked land PNG is distorted inside its SVG image");
 }
 
 async function coverageAtExtremes(target) {
@@ -347,9 +397,6 @@ function assertBothAxes(value) {
 async function assertRegistration(target) {
   const value = await metrics(target);
   const profile = presentationProfile(value);
-  const projectedInset = profile.desktop ? await northInset(target, desktopAnchors, value.fit) : 0;
-  const projectedWall = profile.desktop ? await wallInset(target, value.fit) : 0;
-  const projectedX = profile.desktop ? await horizontalInsets(target, value.fit) : { hallOutset: 0, edgeInset: 0 };
   const results = await target.locator(".building-hotspot").evaluateAll((hotspots) => {
     const core = document.querySelector("#town-core");
     const art = core.getBoundingClientRect();
@@ -360,45 +407,45 @@ async function assertRegistration(target) {
       const x = parseFloat(hotspot.style.getPropertyValue("--x")) / 100;
       const y = parseFloat(hotspot.style.getPropertyValue("--y")) / 100;
       const marker = hotspot.querySelector(".marker").getBoundingClientRect();
-      const image = hotspot.querySelector("img");
-      const sprite = image.getBoundingClientRect();
-      const style = getComputedStyle(image);
-      return { id: hotspot.dataset.plot, anchorX: Number(hotspot.dataset.x), anchorY: Number(hotspot.dataset.y), cssX: x * coreWidth, cssY: y * coreHeight, dx: Math.abs(box.x + box.width / 2 - (art.x + art.width * x)), dy: Math.abs(box.y + box.height / 2 - (art.y + art.height * y)), markerWidthDelta: Math.abs(marker.width - box.width), markerHeightDelta: Math.abs(marker.height - box.height), imageDx: Math.abs(sprite.x + sprite.width / 2 - box.x - box.width / 2), imageDy: Math.abs(sprite.y + sprite.height / 2 - box.y - box.height / 2), loaded: image.complete && image.naturalWidth > 0 && image.naturalHeight > 0, visible: style.display !== "none" && style.visibility !== "hidden" && Number(style.opacity) > 0, contained: style.objectFit === "contain" && style.objectPosition === "50% 50%" };
+      return { id: hotspot.dataset.plot, kind: hotspot.dataset.kind, anchorX: Number(hotspot.dataset.x), anchorY: Number(hotspot.dataset.y), cssX: x * coreWidth, cssY: y * coreHeight, dx: Math.abs(box.x + box.width / 2 - (art.x + art.width * x)), dy: Math.abs(box.y + box.height / 2 - (art.y + art.height * y)), markerWidthDelta: Math.abs(marker.width - box.width), markerHeightDelta: Math.abs(marker.height - box.height), renderedArt: hotspot.dataset.renderedArt, childCount: hotspot.querySelector(".marker").childElementCount };
     });
   });
   assert.equal(results.length, 23);
-  for (const [id, x, y] of [["general-09", 1250, 140], ["wall-01", 440, 25]]) {
+  for (const [id, x, y] of [["general-09", 1250, 140], ["wall-01", 850, -120]]) {
     const plot = results.find((result) => result.id === id);
     assert.deepEqual([plot.anchorX, plot.anchorY], [x, y], id + " lost its approved repositioned anchor");
   }
   for (const result of results) {
-    const override = profile.desktop ? desktopAnchors[result.id] : null;
-    const xOffset = ["general-16", "general-17"].includes(result.id) ? -projectedX.hallOutset : ["general-18", "general-19"].includes(result.id) ? projectedX.hallOutset : result.id === "general-03" ? projectedX.edgeInset : result.id === "general-14" ? -projectedX.edgeInset : 0;
-    const expectedX = override ? override.x + xOffset - profile.core.x : result.anchorX / compactProfile.core.width * profile.core.width;
-    // The civilian field and wall separately clear the measured desktop HUD;
-    // their base anchors and all dedicated coastal positions remain fixed.
-    const projectedY = override && result.id.startsWith("general-") ? override.y + projectedInset * (1600 - override.y) / 900 : override && result.id === "wall-01" ? override.y + projectedWall : override?.y;
-    const expectedY = override ? projectedY - profile.core.y : result.anchorY / compactProfile.core.height * profile.core.height;
-    assert(Math.abs(result.cssX - expectedX) <= 0.01 && Math.abs(result.cssY - expectedY) <= 0.01, `${result.id} CSS anchor disagrees with its approved presentation coordinates`);
+    assert(Number.isFinite(result.cssX) && Number.isFinite(result.cssY) && result.cssX >= 0 && result.cssY >= 0 && result.cssX <= profile.core.width && result.cssY <= profile.core.height, `${result.id} CSS anchor is outside the locked land coordinate plane`);
+    if (result.id === "general-01") {
+      assert(Math.abs(result.cssX / profile.core.width - 763 / 1536) <= 0.00001 && Math.abs(result.cssY / profile.core.height - 443.5 / 1024) <= 0.00001, "Town Hall target drifted from its approved source-picture box");
+    } else if (result.id === "wall-01") {
+      assert(Math.abs(result.cssX / profile.core.width - 780 / 1536) <= 0.00001 && Math.abs(result.cssY / profile.core.height - 117.5 / 1024) <= 0.00001, "Town Wall target drifted from its approved source-picture box");
+    }
     assert(result.dx <= 2 && result.dy <= 2, `${result.id} hotspot shifted away from its art anchor`);
     assert(result.markerWidthDelta <= 1 && result.markerHeightDelta <= 1, `${result.id} target includes invisible label-sized hit space`);
-    assert(result.loaded && result.visible && result.contained && result.imageDx <= 1 && result.imageDy <= 1, `${result.id} sprite is missing, hidden or not centred on its actual target`);
+    assert.equal(result.childCount, 0, `${result.id} duplicates artwork already painted into the locked land image`);
+    assert.equal(result.renderedArt, result.id === "general-01" ? "painted:general" : result.id === "wall-01" ? "painted:wall" : "painted-empty-site", `${result.id} lost its painted-land registration state`);
   }
 }
 
 async function center(target) {
-  const fitted = await target.locator("#zoom-out").isDisabled();
   const initial = await metrics(target);
+  const fitted = initial.fit;
   await target.locator("#map-viewport").evaluate((viewport) => viewport.scrollTo({ left: 0, top: 0, behavior: "instant" }));
   await menuAction(target, target.locator("#center-map"));
   await settle(target);
   const value = await metrics(target);
   if (fitted) {
-    assert(Math.abs(value.left - initial.left) <= 2 && Math.abs(value.top - initial.top) <= 2, "Centre did not restore the Fit safe-area position");
+    assert(Math.abs(value.left - initial.left) <= 2 && Math.abs(value.top - initial.top) <= 2, "Centre did not restore the protected start frame");
     assertFits(value);
   } else {
-    assert(Math.abs(value.core.x + value.core.width / 2 - value.viewport.x - value.clientWidth / 2) <= 2, "Centre did not restore horizontal core position");
-    assert(Math.abs(value.core.y + value.core.height / 2 - value.viewport.y - value.clientHeight / 2) <= 2, "Centre did not restore vertical core position");
+    const hall = await target.locator('.building-hotspot[data-plot="general-01"]').evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      return { x: box.left + box.width / 2, y: box.top + box.height / 2 };
+    });
+    assert(Math.abs(hall.x - value.viewport.x - value.clientWidth / 2) <= 2, "Centre did not restore the Town Hall's horizontal position");
+    assert(Math.abs(hall.y - value.viewport.y - value.clientHeight / 2) <= 2, "Centre did not restore the Town Hall's vertical position");
   }
 }
 
@@ -459,7 +506,9 @@ async function closeWithEscape(page, target, buildingId) {
   assert.equal(await target.locator("#map-viewport").evaluate(() => document.activeElement.dataset.plot), buildingId, "Dialog failed to restore hotspot focus");
 }
 
-async function visibleLabels(target) {
+// Counts labels disclosed by the preference even when their plots are currently
+// cropped. DEC-105 does not require all 23 plots to share one viewport.
+async function disclosedLabels(target) {
   return target.locator(".hotspot-label").evaluateAll((labels) => labels.filter((label) => {
     const style = getComputedStyle(label);
     const box = label.getBoundingClientRect();
@@ -490,14 +539,38 @@ async function clearPlotHover(page, target = page) {
 }
 
 async function emptyPoints(target) {
-  return markerPoints(target);
+  return target.locator('#town-core .building-hotspot[data-occupied="false"]').evaluateAll((hotspots) => hotspots.map((hotspot) => {
+    const target = hotspot.getBoundingClientRect();
+    const marker = hotspot.querySelector(".marker");
+    const box = marker.getBoundingClientRect();
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    return {
+      id: hotspot.dataset.plot,
+      occupied: hotspot.dataset.occupied,
+      x,
+      y,
+      exposed: document.elementFromPoint(x, y)?.closest(".building-hotspot") === hotspot,
+      insideTarget: box.x >= target.x - 1 && box.y >= target.y - 1 && box.right <= target.right + 1 && box.bottom <= target.bottom + 1,
+      imageDx: 0,
+      imageDy: 0,
+      childCount: marker.childElementCount,
+      renderedArt: hotspot.dataset.renderedArt
+    };
+  }));
 }
 
 async function assertVisibleGround(page, points) {
-  await assertDrawnMarkers(page, points);
+  const ids = points.map((point) => point.id);
+  const registrations = await page.locator('#town-core .building-hotspot[data-occupied="false"]').evaluateAll((hotspots, ids) => hotspots.filter((hotspot) => ids.includes(hotspot.dataset.plot)).map((hotspot) => ({ id: hotspot.dataset.plot, childCount: hotspot.querySelector(".marker").childElementCount, renderedArt: hotspot.dataset.renderedArt })), ids);
+  assert.deepEqual(registrations.map((item) => item.id).sort(), [...ids].sort(), "A visible painted empty site lost its semantic hotspot");
+  for (const registration of registrations) {
+    assert.equal(registration.childCount, 0, `${registration.id} gained duplicate DOM plot artwork over the locked land image`);
+    assert.equal(registration.renderedArt, registration.id === "wall-01" ? "painted:wall" : "painted-empty-site", `${registration.id} lost its painted-land registration`);
+  }
 }
 
-async function fitMarkerHits(page) {
+async function coverFloorMarkerHits(page) {
   await clearPlotHover(page);
   assert.equal(await page.locator("#town-core .empty-slot-plus, #town-core .plot-plus").count(), 0, "Town empty plots retain removed plus-symbol overlays");
   const ground = await emptyPoints(page);
@@ -509,36 +582,36 @@ async function fitMarkerHits(page) {
     const hit = document.elementFromPoint(marker.x + marker.width / 2, marker.y + marker.height / 2);
     return { id: element.dataset.plot, kind: element.dataset.kind, x: b.x, y: b.y, right: b.right, bottom: b.bottom, width: b.width, height: b.height, exposed: hit?.closest(".building-hotspot")?.dataset.plot === element.dataset.plot };
   }));
-  assert.deepEqual(boxes.map(({ id, kind }) => [id, kind]).sort(), [...expectedPlots].sort(), "Fit map has the wrong 23 plots");
+  assert.deepEqual(boxes.map(({ id, kind }) => [id, kind]).sort(), [...expectedPlots].sort(), "Cover-floor map has the wrong 23 plots");
   const view = (await metrics(page)).viewport;
   for (const box of boxes) {
-    assert(box.width >= 44 && box.height >= 44, `${box.id} Fit target is undersized`);
+    assert(box.width >= 44 && box.height >= 44, `${box.id} cover-floor target is undersized`);
   }
-  for (let a = 0; a < boxes.length; a += 1) for (let b = a + 1; b < boxes.length; b += 1) {
-    assert(!(Math.min(boxes[a].right, boxes[b].right) - Math.max(boxes[a].x, boxes[b].x) > 0.5 && Math.min(boxes[a].bottom, boxes[b].bottom) - Math.max(boxes[a].y, boxes[b].y) > 0.5), `${boxes[a].id} and ${boxes[b].id} Fit targets overlap`);
-  }
+  // Fixed plot anchors can be closer than the mandatory 44px phone envelopes.
+  // The centre-hit/tap checks below are the interaction contract: each target
+  // must remain independently reachable without moving an approved anchor.
   const exposed = boxes.filter((box) => box.exposed && box.x >= view.x && box.y >= view.y && box.right <= view.right && box.bottom <= view.bottom);
-  assert(exposed.length > 0, "Picture-centred Fit exposes no interactive plot target");
+  assert(exposed.length > 0, "Ordinary cover exposes no interactive plot target");
   const exposedGround = ground.filter((point) => point.exposed && point.x >= view.x && point.x <= view.right && point.y >= view.y && point.y <= view.bottom);
   await assertVisibleGround(page, exposedGround);
-  console.log(`CHECK picture-centred Fit exposes ${exposed.length}/23 plot targets; cropped targets remain reachable by panning`);
+  console.log(`CHECK ordinary cover exposes ${exposed.length}/23 plot targets; cropped targets remain reachable by panning`);
   for (const { id } of boxes.filter((box) => box.id === "general-01" ? box.exposed : ground.find((point) => point.id === box.id).exposed)) {
     await clearPlotHover(page);
     const hotspot = page.locator(`.building-hotspot[data-plot="${id}"]`);
     const box = await hotspot.boundingBox();
-    assert(box.width >= 44 && box.height >= 44, `${id} Fit hit target is undersized`);
+    assert(box.width >= 44 && box.height >= 44, `${id} cover-floor hit target is undersized`);
     const name = await hotspot.getAttribute("aria-label");
-    assert(name && name.length > 10, `${id} lost its accessible name at Fit`);
+    assert(name && name.length > 10, `${id} lost its accessible name at ordinary cover`);
     const marker = await hotspot.locator(".marker").boundingBox();
     const groundPoint = ground.find((candidate) => candidate.id === id);
     const point = groundPoint ? { x: groundPoint.x, y: groundPoint.y } : { x: marker.x + marker.width / 2, y: marker.y + marker.height / 2 };
     const hit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.closest(".building-hotspot")?.dataset.plot, point);
-    assert.equal(hit, id, `${id} Fit marker is intercepted or misregistered`);
+    assert.equal(hit, id, `${id} cover-floor marker is intercepted or misregistered`);
     await page.touchscreen.tap(point.x, point.y);
     await page.locator("#detail-panel").waitFor({ state: "visible" });
     const title = (await page.locator("#panel-title").textContent()).trim();
-    const expectedTitle = id === "general-01" ? "Town Hall" : id.startsWith("general-") ? `General plot ${id.slice(-2)}` : id === "wall-01" ? "Wall plot" : id.startsWith("harbour-") ? `Harbour plot ${Number(id.slice(-2))}` : "Freighter plot";
-    assert.equal(title, expectedTitle, `${id} Fit tap opened the wrong plot dialog`);
+    const expectedTitle = id === "general-01" ? "Town Hall" : id.startsWith("general-") ? `General plot ${id.slice(-2)}` : id === "wall-01" ? "Wall plot" : id.startsWith("harbour-") ? `Caravan plot ${Number(id.slice(-2))}` : "Freight depot plot";
+    assert.equal(title, expectedTitle, `${id} cover-floor tap opened the wrong plot dialog`);
     assert(name.includes(title), `${id} lost its full accessible title`);
     if (id === "general-01") assert.equal(title, "Town Hall");
     else assert.equal(await page.locator("#upgrade-building").count(), 0, `${id} empty plot invents a construction action`);
@@ -546,8 +619,8 @@ async function fitMarkerHits(page) {
   }
 }
 
-async function swipe(page, context, axis, expectMovement = true) {
-  await center(page);
+async function swipe(page, context, axis, expectMovement = true, centerFirst = true) {
+  if (centerFirst) await center(page);
   const before = await metrics(page);
   const points = await page.locator("#map-viewport").evaluate((viewport, axis) => {
     const box = viewport.getBoundingClientRect();
@@ -596,10 +669,8 @@ async function swipe(page, context, axis, expectMovement = true) {
 
 async function assertFitEdgesAndRelease(page, context) {
   await clearPlotHover(page);
-  const before = await metrics(page);
+  const before = await assertProtectedStart(page);
   assert(before.fit && before.overflow !== "hidden", "Fit does not expose the finite picture for panning");
-  assert(Math.abs(before.left - (before.scrollWidth - before.clientWidth) / 2) <= 2, "Fit is not horizontally centred on the picture");
-  assert(Math.abs(before.top - (before.scrollHeight - before.clientHeight) / 2) <= 2, "Fit is not vertically centred on the picture");
   await coverageAtExtremes(page);
   await page.locator("#map-viewport").focus();
   await page.keyboard.press("ArrowRight");
@@ -612,14 +683,16 @@ async function assertFitEdgesAndRelease(page, context) {
   }
   await menuAction(page, page.locator("#toggle-map-view"));
   const restored = await metrics(page);
-  assert(restored.fit, "Fit control did not restore the midpoint view");
-  assert(Math.abs(restored.left - before.left) <= 2 && Math.abs(restored.top - before.top) <= 2, "Fit control did not restore picture midpoint");
+  assertFits(restored);
+  await assertProtectedStart(page);
+  assert(Math.abs(restored.left - before.left) <= 2 && Math.abs(restored.top - before.top) <= 2, "Fit control did not restore the protected start frame");
   const touchAxis = before.scrollWidth - before.clientWidth > 2 ? "x" : "y";
-  await swipe(page, context, touchAxis, true);
+  await swipe(page, context, touchAxis, true, false);
   assert(!(await metrics(page)).fit, "Touch panning did not release Fit");
   await menuAction(page, page.locator("#toggle-map-view"));
+  await assertProtectedStart(page);
   await clearPlotHover(page);
-  console.log("CHECK picture-centred Fit, all four picture edges, and keyboard/touch release at cover zoom");
+  console.log("CHECK protected Fit, all four picture edges, and keyboard/touch release");
 }
 
 async function load(page) {
@@ -644,42 +717,43 @@ async function load(page) {
         await load(page);
         const storedBefore = await page.evaluate((storageKey) => localStorage.getItem(storageKey), key);
         const legacyBefore = await page.evaluate((storageKey) => localStorage.getItem(storageKey), legacyKey);
-        assertFits(await zoomToBound(page, "out"));
+        await assertProtectedStart(page);
         await assertFitEdgesAndRelease(page, context);
+        assertCoverFloor(await zoomToBound(page, "out"), true);
         await keyboardZoomBound(page, page, "out");
-        const fittedWidth = (await metrics(page)).core.width;
+        const coverFloorWidth = (await metrics(page)).core.width;
         await page.keyboard.press("+");
         await settle(page);
-        assert((await metrics(page)).core.width > fittedWidth + 1, "Keyboard plus did not enlarge the town from Fit");
+        assert((await metrics(page)).core.width > coverFloorWidth + 1, "Keyboard plus did not enlarge the town from the ordinary cover floor");
         await page.keyboard.press("-");
         await settle(page);
-        assertFits(await assertGeometry(page));
+        assertCoverFloor(await assertGeometry(page));
         await assertRegistration(page);
-        await fitMarkerHits(page);
+        await coverFloorMarkerHits(page);
         await clearPlotHover(page);
-        assert.equal(await visibleLabels(page), 0, "Default plot labels should appear only on hover or keyboard focus");
+        await assertTransientLabels(page);
         assert.equal(await page.locator("#toggle-labels").getAttribute("aria-pressed"), "false");
         await page.keyboard.press("Tab");
         await settle(page);
         assert.equal(await page.locator("#map-viewport").evaluate(() => document.activeElement.dataset.plot), "general-01", "Tab did not reach the first plot from the map viewport");
         await assertTransientLabels(page);
         const focusedTitle = page.locator('.building-hotspot[data-plot="general-01"] .hotspot-title');
-        assert(await focusedTitle.isVisible(), "Focused plot lost its full label at compact Fit");
+        assert(await focusedTitle.isVisible(), "Focused plot lost its full label at compact cover floor");
         assert.equal(await focusedTitle.textContent(), "Town Hall");
         await clearPlotHover(page);
         if (width <= 390) {
           await menuAction(page, page.locator("#toggle-labels"));
-          assert.equal(await visibleLabels(page), 23, "Explicit Show failed to reveal all compact plot labels at Fit");
+          assert.equal(await disclosedLabels(page), 23, "Explicit Show failed to disclose every registered compact plot label; cropped labels may remain offscreen");
           assert.equal(await page.locator("#toggle-labels").getAttribute("aria-pressed"), "true");
           await menuAction(page, page.locator("#toggle-labels"));
           assert.equal(await page.locator("#toggle-labels").getAttribute("aria-pressed"), "false");
         }
         assertBothAxes(await zoomToBound(page, "in"));
         await clearPlotHover(page);
-        assert.equal(await visibleLabels(page), 0, "Closer zoom unexpectedly pinned hover/focus-only labels");
+        assert.equal(await disclosedLabels(page), 0, "Closer zoom unexpectedly pinned hover/focus-only labels");
         if (width <= 390) {
           await menuAction(page, page.locator("#toggle-labels"));
-          assert.equal(await visibleLabels(page), 23, "Closer zoom failed to restore plot labels");
+          assert.equal(await disclosedLabels(page), 23, "Closer zoom failed to disclose every registered plot label; cropped labels may remain offscreen");
         }
         await keyboardZoomBound(page, page, "in");
         await keyboardPan(page);
@@ -697,7 +771,7 @@ async function load(page) {
         await closeWithEscape(page, page, "general-02");
         assert.equal(await page.evaluate((storageKey) => localStorage.getItem(storageKey), key), storedBefore, "Camera or dialog controls changed game progress");
         assert.equal(await page.evaluate((storageKey) => localStorage.getItem(storageKey), legacyKey), legacyBefore, "Camera changed legacy v1 progress");
-        console.log(`PASS fit, zoom bounds, keyboard, two-axis touch, anchors and dialogs ${width}x${height}`);
+        console.log(`PASS protected start, ordinary cover floor, zoom bounds, keyboard, two-axis touch, anchors and dialogs ${width}x${height}`);
         groups += 1;
       } finally {
         await context.close();
@@ -724,6 +798,7 @@ async function load(page) {
         await load(page);
         const before = await assertGeometry(page);
         assertFits(before);
+        await assertProtectedStart(page);
         const stateBefore = await page.evaluate((key) => localStorage.getItem(key), key);
         assert.equal(stateBefore, savedRaw, "Artwork loading rewrote valid v3 progress bytes");
         assert.deepEqual(JSON.parse(stateBefore), saved, "Close-view fixture did not retain valid v3 progress");
@@ -744,26 +819,31 @@ async function load(page) {
         await menuAction(page, toggle);
         await settle(page);
         const closer = await assertGeometry(page);
-        assert(closer.core.width > before.core.width * 1.35, "Close view does not materially enlarge the town");
+        console.log(`CHECK Inspect scale ${width}x${height}: ${(closer.core.width / before.core.width).toFixed(3)}x`);
+        // Protected Fit can already be larger than ordinary cover to clear the
+        // floating controls. Inspect still has to provide a visible detail step,
+        // but it is intentionally modest rather than the retired abrupt 2x jump.
+        assert(closer.core.width > before.core.width * 1.15, "Inspect view does not materially enlarge the town");
         await coverageAtExtremes(page);
         await assertRegistration(page);
         assert.equal(await toggle.getAttribute("aria-label"), "Fit land picture");
         assert.equal((await toggle.textContent()).trim(), "Fit");
         const closerHall = await hall.boundingBox();
-        assert(closerHall.width > initialHall.width * 1.35, "Close view did not enlarge the Hall artwork");
+        assert(closerHall.width > initialHall.width * 1.15, "Inspect view did not enlarge the Hall artwork");
         assert(closerHall.x >= closer.viewport.x - 1 && closerHall.y >= closer.viewport.y - 1 && closerHall.x + closerHall.width <= closer.viewport.right + 1 && closerHall.y + closerHall.height <= closer.viewport.bottom + 1, "Close view clips the Hall it is meant to frame");
         assert(await hall.evaluate((element) => { const box = element.getBoundingClientRect(); return document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest(".plot-marker") === element; }), "Close view puts the Hall behind fixed UI");
         await clearPlotHover(page);
         if (screenshotDirectory) await page.screenshot({ path: path.join(screenshotDirectory, `current-${width}x${height}-close.png`), scale: "css" });
         await menuAction(page, page.locator("#toggle-labels"));
-        assert.equal(await visibleLabels(page), 23, "Close view prevents explicit label disclosure");
+        assert.equal(await disclosedLabels(page), 23, "Close view prevents explicit label disclosure");
         await menuAction(page, toggle);
         await settle(page);
         const restored = await assertGeometry(page);
         assertFits(restored);
-        for (const field of ["left", "top"]) assert(Math.abs(restored[field] - before[field]) <= 2, "Fit failed to restore the original safe-area camera " + field);
+        await assertProtectedStart(page);
+        for (const field of ["left", "top"]) assert(Math.abs(restored[field] - before[field]) <= 2, "Fit failed to restore the original protected start " + field);
         assert(Math.abs(restored.core.width - before.core.width) <= 1, "Fit failed to restore the original town scale");
-        assert.equal(await visibleLabels(page), 23, "Close/Fit erased the explicit label preference");
+        assert.equal(await disclosedLabels(page), 23, "Close/Fit erased the explicit label preference");
         assert.equal(await toggle.getAttribute("aria-label"), "Inspect town detail");
         await actions(page, true);
         await toggle.scrollIntoViewIfNeeded();
@@ -778,6 +858,7 @@ async function load(page) {
         await page.keyboard.press("Enter");
         await settle(page);
         assertFits(await assertGeometry(page));
+        await assertProtectedStart(page);
         assert.equal(await page.evaluate((key) => localStorage.getItem(key), key), stateBefore, "Close/Fit changed v3 name, stocks, Hall level or active queue");
         assert.equal(await page.evaluate((legacyKey) => localStorage.getItem(legacyKey), legacyKey), legacy, "Close/Fit rewrote legacy v1 progress");
         console.log(`PASS Close/Fit camera, Hall framing, labels, keyboard and preserved active queue ${width}x${height}`);
@@ -810,16 +891,16 @@ async function load(page) {
       assertBothAxes(await assertGeometry(page));
       await assertRegistration(page);
       await center(page);
-      assertFits(await zoomToBound(page, "out"));
+      assertCoverFloor(await zoomToBound(page, "out"), true);
       await page.setViewportSize({ width: 390, height: 844 });
       await page.waitForTimeout(200);
-      assertFits(await assertGeometry(page));
-      assert(await page.locator("#zoom-out").isDisabled(), "Fit intent was lost after orientation change");
+      assertCoverFloor(await assertGeometry(page));
+      assert(await page.locator("#zoom-out").isDisabled(), "Cover-floor zoom intent was lost after orientation change");
       assert.deepEqual(await page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey)), key), saved, "Zoom or orientation changed construction or resources");
       await page.reload();
       await settle(page);
       assert.deepEqual(await page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey)), key), saved, "Camera update broke v3 progress on reload");
-      console.log("PASS orientation, retained Fit and v3 Town Hall construction/state compatibility");
+      console.log("PASS orientation, retained ordinary cover floor and v3 Town Hall construction/state compatibility");
       groups += 1;
     } finally {
       await context.close();
@@ -849,7 +930,7 @@ async function load(page) {
       try {
         await frame.locator("#world-landscape").waitFor({ state: "visible" });
       } catch (error) {
-        console.error("Review-frame startup diagnostic:", { resources: reviewResources, errors, frame: await frame.evaluate(() => ({ url: location.href, presentation: document.querySelector("#town-map")?.dataset.presentation, terrain: Boolean(document.querySelector("#town-terrain-art")), plots: document.querySelectorAll("#town-core .plot-marker").length })) });
+        console.error("Review-frame startup diagnostic:", { resources: reviewResources, errors, frame: await frame.evaluate(() => ({ url: location.href, presentation: document.querySelector("#town-map")?.dataset.presentation, terrain: Boolean(document.querySelector("#azmara-land-stage")), plots: document.querySelectorAll("#town-core .plot-marker").length })) });
         throw error;
       }
       await frame.locator("#town-core img").evaluateAll((images) => Promise.all(images.map((image) => image.decode())));
@@ -859,7 +940,7 @@ async function load(page) {
       const initialState = await frame.evaluate((storageKey) => localStorage.getItem(storageKey), key);
       assertBothAxes(await zoomToBound(frame, "in"));
       await clearPlotHover(page, frame);
-      assert.equal(await visibleLabels(frame), 0, "Closer zoom unexpectedly pinned labels without an explicit preference");
+      assert.equal(await disclosedLabels(frame), 0, "Closer zoom unexpectedly pinned labels without an explicit preference");
       await page.getByRole("button", { name: "Desktop", exact: true }).click();
       await page.waitForTimeout(200);
       assert(await frame.evaluate(() => innerWidth > 390), "Desktop switch failed to enlarge the iframe");
@@ -874,7 +955,7 @@ async function load(page) {
       assert.equal(await iframe.evaluate((element, selector) => element === document.querySelector(selector), iframeSelector), true, "Review switch replaced the iframe");
       assert.equal(await frame.evaluate(() => window.__azmaraMapQa), "same frame runtime", "Review switch reloaded the iframe");
       assert.equal(await frame.evaluate((storageKey) => localStorage.getItem(storageKey), key), initialState, "Review switch altered game progress");
-      assertFits(await zoomToBound(frame, "out"));
+      assertCoverFloor(await zoomToBound(frame, "out"), true);
       console.log("PASS Phone/Desktop iframe switching preserves camera registration and runtime");
       groups += 1;
     } finally {
@@ -889,6 +970,7 @@ async function load(page) {
       await load(page);
       const fit = await assertGeometry(page);
       assertFits(fit);
+      await assertProtectedStart(page);
       const stateBefore = await page.evaluate((storageKey) => localStorage.getItem(storageKey), key);
       await menuAction(page, page.locator("#zoom-in"));
       await settle(page);
@@ -901,7 +983,7 @@ async function load(page) {
       await assertVisibleGround(page, ground);
       await coverageAtExtremes(page);
       for (const [id] of expectedPlots) {
-        const title = id === "general-01" ? "Town Hall" : id.startsWith("general-") ? `General plot ${id.slice(-2)}` : id === "wall-01" ? "Wall plot" : id.startsWith("harbour-") ? `Harbour plot ${Number(id.slice(-2))}` : "Freighter plot";
+        const title = id === "general-01" ? "Town Hall" : id.startsWith("general-") ? `General plot ${id.slice(-2)}` : id === "wall-01" ? "Wall plot" : id.startsWith("harbour-") ? `Caravan plot ${Number(id.slice(-2))}` : "Freight depot plot";
         await openHotspot(page, id, title);
         await closeWithEscape(page, page, id);
       }

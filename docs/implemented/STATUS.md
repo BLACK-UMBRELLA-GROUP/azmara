@@ -1,10 +1,41 @@
 # What actually exists
 
-As of: 18 October 2026. Phase: **private web31 live; native build 3 unchanged**.
-Current authority: `DEC-011` through `DEC-104`. Foundation records below
+As of: 19 October 2026. Phase: **DEC-107 implemented locally; private web32 and native build 3 unchanged**.
+Current authority: `DEC-011` through `DEC-107`. Foundation records below
 describe earlier delivery stages.
 
-## Current delivery — simplified Dev workbench and midpoint land camera
+## Current locked local work — return to ordinary 100% presentation
+
+DEC-107 removes the temporary `View zoom (test)` control, its transient state,
+styles and alternate map-scaling path. Dev and Gameplay now share only the
+ordinary 100% town presentation. The Land stage and Building dropdowns, Test
+supplies, Reset plots, protected start framing, normal zoom/panning, approved
+55% building-art scale, art, saves, queues, plots, layouts and gameplay remain
+unchanged. V3 of the land specification is byte-preserved as
+`docs/approved/LAND_STAGES_2026-10-19_V3.md`; V4 is current.
+
+JavaScript syntax, DEC-107 source-absence checks, protected framing, camera
+geometry and diff checks pass without a browser. DEC-084 still requires fresh
+Owner permission before a screenshot/headless run. This change is local only;
+private web32 still contains the temporary slider until a later explicit
+publication instruction.
+
+## Current private delivery — protected start frame and Dev view-size test web32
+
+DEC-105 protects the painted gate/Town Wall label and Town Hall/label from the
+floating town bar, computer/phone docks and Dev button in the initial 100% view.
+Ordinary land remains full-screen; unavoidable initial cropping is biased to
+the bottom so the gate stays visible. It also authorises a transient Dev-only
+50–100% whole-map view slider, in 5% steps, with normal-size labels and 44px
+phone targets. Below 100%, temporary sand margins are allowed for this test.
+The value is unsaved, independent of normal zoom and the approved 55% building
+scale, and resets to 100% for Gameplay. Owner-authorised headless release QA
+also verified touch taps, native pinch, orientation, active queues and compact
+landscape presentation. The exact 76-file runtime is live as private web32;
+one owner remains the only audience and no automation or auto-deploy exists.
+See [web32 delivery](WEB_PUBLICATION_32.md).
+
+## Previous delivery — simplified Dev workbench and midpoint land camera
 
 DEC-103 replaces Town Hall-centred Fit with the exact midpoint of the approved
 land picture. The start view now uses the true cover/minimum scale, so a wide
@@ -16,7 +47,9 @@ without revealing a margin. Frame width comes from registered artwork metadata
 while current scene height/scale stays fixed, ready for a later wider master.
 
 The V1 land specification is byte-preserved as
-`docs/approved/LAND_STAGES_2026-10-18_V1.md`; V2 is current. Runtime changes are
+`docs/approved/LAND_STAGES_2026-10-18_V1.md`; V3 is current, with the
+byte-preserved V2 archived as `docs/approved/LAND_STAGES_2026-10-18_V2.md`.
+The DEC-103 runtime changes were
 limited to `prototype/app.js` and `prototype/styles.css`. Static land, Dev-shell,
 JavaScript and pure camera-geometry checks pass. After fresh Owner permission,
 one isolated 3420 × 2069 capture passed and was visually checked against the
@@ -28,9 +61,9 @@ loopback server closed successfully. Evidence:
 and its adjacent JSON receipt. DEC-102/103 are now live in private web31; the
 native app remains unchanged.
 
-## Current private web31 and native build 3
+## Previous private web31 and current native build 3
 
-DEC-100's exact eleven land masters remain live in private web31. The completed
+DEC-100's exact eleven land masters were retained in private web31. The completed
 Town Hall look selects the land at levels 1, 5, 8, 12, 17, 22, 28, 34, 41, 45
 and 50. DEC-102 removes the saved Academy, starts each temporary Dev session at
 Stage 1, replaces the old Dev surface with separate dropdowns and bounded test
@@ -47,12 +80,11 @@ See [web31 delivery](WEB_PUBLICATION_31.md).
 The independent iPhone wrapper is prepared and signed as AZMARA `0.1.0 (3)`.
 Its exact 77-file embedded runtime and updated save/startup bridge pass 14 Node
 tests, 53 Flutter tests, clean analysis, signature/profile/identity checks and
-target-device membership. The paired phone is currently unavailable, so the
-artifact is ready but not installed; existing phone data was not touched. See
-[native build 3](NATIVE_BUILD_3.md). A quiet 15-minute heartbeat will install
-that exact artifact in place once the paired phone is available and unlocked;
-it is forbidden from uninstalling, clearing data, rebuilding or substituting a
-different install path.
+target-device membership. The paired phone was unavailable during preparation,
+so the artifact remains ready without altering existing phone data. See
+[native build 3](NATIVE_BUILD_3.md). No installation heartbeat remains active;
+a future install requires a fresh explicit action and must not uninstall or
+clear data.
 
 ## Previous delivery — full-screen private web30
 
@@ -115,7 +147,7 @@ registration, clicks and maximum zoom remain pending the Owner's manual Chrome
 review; hosting success is not visual acceptance. See
 [delivery](WEB_PUBLICATION_27.md).
 
-## Current delivery — Appearance dialog repair private web26
+## Previous delivery — Appearance dialog repair private web26
 
 DEC-094 restores Appearance to a bounded1120×880 maximum dialog inside the
 game area. The town remains visible around it and a dimmed clickable surround,
@@ -178,7 +210,7 @@ is `9f90424daa4a5dcac8ded430ae6e7eef5db80cf0`; web22 remains the rollback.
 See [implementation](BAKED_STREETS.md), [delivery](WEB_PUBLICATION_23.md) and
 `evidence/2026-10-13-street-build/`.
 
-## Current delivery private web22
+## Previous delivery private web22
 
 DEC-088 requests publication of implemented DEC-087 Parts1/2. Version22 is
 confirmed live at azmara.app, still one owner/no groups/external visitors.

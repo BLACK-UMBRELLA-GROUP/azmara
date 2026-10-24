@@ -1,5 +1,9 @@
 # AZMARA mobile strategy game project
 
+<!-- CORE-RULES v1 (short) — full rules: BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_GOVERNANCE/AGENT_CORE_RULES_CURRENT_VERSION_V1.md -->
+**Core rules:** Only Shakeel approves. No AI runs git — ever. Never touch `PRIVATE — API KEYS — DO NOT SYNC`. Never delete — move to `_to_delete`. Fable = Lead Architect; Codex = design and implementation only. These win on any conflict.
+<!-- /CORE-RULES -->
+
 Read `README.md`, `docs/CONCEPT.md`, `docs/WORKFLOW.md`,
 `docs/approved/DECISIONS.md` and `docs/implemented/STATUS.md` before substantive
 project work. Read other documents only as relevant to the task.

@@ -36,7 +36,7 @@ function cameraGeometry(picture, viewport, zoom = 1) {
     minimumZoom: 1,
     drawn,
     maximum,
-    start: { x: maximum.x / 2, y: maximum.y / 2 }
+    midpoint: { x: maximum.x / 2, y: maximum.y / 2 }
   };
 }
 
@@ -47,7 +47,7 @@ const fixtures = [
     viewport: { width: 1920, height: 900 },
     cover: 1.25,
     drawn: { width: 1920, height: 1280 },
-    start: { x: 0, y: 190 },
+    midpoint: { x: 0, y: 190 },
     maximum: { x: 0, y: 380 }
   },
   {
@@ -56,7 +56,7 @@ const fixtures = [
     viewport: { width: 390, height: 844 },
     cover: 0.82421875,
     drawn: { width: 1266, height: 844 },
-    start: { x: 438, y: 0 },
+    midpoint: { x: 438, y: 0 },
     maximum: { x: 876, y: 0 }
   },
   {
@@ -65,7 +65,7 @@ const fixtures = [
     viewport: { width: 1920, height: 900 },
     cover: 0.9375,
     drawn: { width: 1920, height: 960 },
-    start: { x: 0, y: 30 },
+    midpoint: { x: 0, y: 30 },
     maximum: { x: 0, y: 60 }
   },
   {
@@ -74,7 +74,7 @@ const fixtures = [
     viewport: { width: 390, height: 844 },
     cover: 0.82421875,
     drawn: { width: 1688, height: 844 },
-    start: { x: 649, y: 0 },
+    midpoint: { x: 649, y: 0 },
     maximum: { x: 1298, y: 0 }
   }
 ];
@@ -89,9 +89,9 @@ for (const fixture of fixtures) {
       `${fixture.name} must cover viewport ${axis}`);
   }
   for (const axis of ["x", "y"]) {
-    near(geometry.start[axis], fixture.start[axis], `${fixture.name} midpoint scroll ${axis}`);
+    near(geometry.midpoint[axis], fixture.midpoint[axis], `${fixture.name} midpoint scroll ${axis}`);
     near(geometry.maximum[axis], fixture.maximum[axis], `${fixture.name} maximum scroll ${axis}`);
-    near(geometry.start[axis] * 2, geometry.maximum[axis],
+    near(geometry.midpoint[axis] * 2, geometry.maximum[axis],
       `${fixture.name} crop must split equally on ${axis}`);
   }
 
@@ -120,8 +120,10 @@ assert.deepEqual({ x: 1024 / 2048, y: 512 / 1024 }, { x: 0.5, y: 0.5 });
 const mockedOffCentreHall = { x: 0.21, y: 0.34 };
 assert.notDeepEqual(mockedOffCentreHall, { x: 0.5, y: 0.5 });
 
-// Runtime source contract: true cover, picture-centred Fit, exact image bounds,
+// Runtime source contract: true-cover floor, exact image bounds,
 // metadata-driven future width and a one-way release from Fit before panning.
+// DEC-105 supersedes midpoint/equal-crop only for initial framing; its own
+// suite verifies the protected start camera separately.
 const frame = section(app, "function landFrame(", "function landPictureCenter(");
 assert.match(frame, /height = LAND_BASE_WIDTHS\[profile\] \/ LAND_BASE_ASPECT/);
 assert.match(frame, /width = height \* window\.AzmaraLandStages\.aspectRatio/);
@@ -131,7 +133,7 @@ assert.match(midpoint, /frame\.y \+ frame\.height \/ 2/);
 
 const initialFit = section(app, "function initialFitArea(", "function fitArea(");
 assert.match(initialFit, /coverScale = Math\.max\(lockedWidth \/ lockedFrame\.width, lockedHeight \/ lockedFrame\.height\)/);
-assert.match(initialFit, /scale: coverScale/);
+assert.match(initialFit, /scale:\s*coverScale/);
 for (const retired of ["paintedControl(\"hall\")", "horizontalReach", "verticalReach", "hallCentredScale"]) {
   assert(!initialFit.includes(retired), `Retired Hall-centred Fit remains: ${retired}`);
 }
@@ -139,14 +141,15 @@ for (const retired of ["paintedControl(\"hall\")", "horizontalReach", "verticalR
 const completeFrame = section(app, "function completeTownFrame(", "function closeZoom(");
 assert.match(completeFrame, /return landFrame\(desktop\)/);
 const layout = section(app, "function layoutMap(", "function stopCameraAnimation(");
-assert.match(layout, /const target = fitMap \? landPictureCenter\(desktop\) : focus/);
 assert.match(layout, /const worldWidth = frame\.width/);
 assert.match(layout, /const worldHeight = frame\.height/);
 assert.match(layout, /x: frame\.x/);
 assert.match(layout, /y: frame\.y/);
+assert.match(layout, /startCamera\?\.left/);
+assert.match(layout, /startCamera\?\.top/);
 
 const mapViews = section(app, "function useMapView(", "function toggleMapLabels(");
-assert.match(mapViews, /close \? plotPosition\(byId\[HALL_ID\]\) : landPictureCenter\(\)/);
+assert.match(mapViews, /!close, close/);
 const releaseFit = section(app, "function releaseFitForManualPan(", "function updateMapLabels(");
 assert.match(releaseFit, /fitMap = false/);
 assert.match(releaseFit, /closeMap = false/);
@@ -167,4 +170,4 @@ assert.match(styles, /touch-action: pan-x pan-y pinch-zoom/);
 assert(!/\.map-viewport\[data-fit="true"\][^{]*\{[^}]*overflow:\s*hidden/.test(styles),
   "Fit still hides the native pan overflow");
 
-console.log("PASS DEC-103 midpoint cover and all-edge camera invariants");
+console.log("PASS DEC-103 cover floor and all-edge camera invariants under DEC-105 framing");

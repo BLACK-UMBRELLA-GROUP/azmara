@@ -23,6 +23,7 @@ const { chromium } = loadPlaywright();
 const root = fs.realpathSync(path.resolve(__dirname, ".."));
 const storageKey = "azmara-town-layout-v3";
 const milestones = [1, 5, 8, 12, 17, 22, 28, 34, 41, 45, 50];
+const evidenceDir = path.join(root, "debug", "dec105-protected-view");
 const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".png": "image/png", ".svg": "image/svg+xml", ".ico": "image/x-icon" };
 const errors = [];
 let browser;
@@ -130,7 +131,7 @@ async function assertLockedLand(page, expectedLevel) {
   assert(actual.covers, "Locked land left a hard edge in the game viewport: " + JSON.stringify(actual));
   assert(Math.abs(actual.painted.width / actual.painted.height - 1.5) < .002, "Locked land was stretched");
   assert(Math.abs(actual.minimumZoom - 1) < .00001, "Minimum zoom is not the true cover scale");
-  assert(Math.abs(actual.zoom - actual.minimumZoom) < .00001, "Fit is not stopped at the cover size");
+  assert(actual.zoom >= actual.minimumZoom - .00001, "Protected Fit fell below the ordinary cover floor");
   assert.equal(actual.hallArt, 0, "Town Hall sprite was drawn over the painted Hall");
   assert.equal(actual.wallArt, 0, "Town Wall art was drawn over the painted gate");
   assert.equal(actual.emptyArt, 0, "Empty spots or flags were drawn over the locked land");
@@ -156,25 +157,51 @@ async function fitRegistration(page) {
   return page.evaluate(() => {
     const viewport = document.querySelector("#map-viewport").getBoundingClientRect();
     const picture = document.querySelector("#azmara-land-stage").getBoundingClientRect();
-    const hall = document.querySelector('[data-plot="general-01"]').getBoundingClientRect();
-    const wall = document.querySelector('[data-plot="wall-01"]').getBoundingClientRect();
+    const hallNode = document.querySelector('[data-plot="general-01"]');
+    const wallNode = document.querySelector('[data-plot="wall-01"]');
+    const hall = hallNode.getBoundingClientRect();
+    const wall = wallNode.getBoundingClientRect();
     const townBar = document.querySelector(".azmara-town-bar").getBoundingClientRect();
     const center = (box) => ({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
     const hallCenter = center(hall), wallCenter = center(wall), viewportCenter = center(viewport), pictureCenter = center(picture);
     const overlapWidth = Math.max(0, Math.min(wall.right, townBar.right) - Math.max(wall.left, townBar.left));
     const overlapHeight = Math.max(0, Math.min(wall.bottom, townBar.bottom) - Math.max(wall.top, townBar.top));
-    const owns = (x, y) => document.elementFromPoint(x, y)?.closest?.('[data-plot="wall-01"]') === document.querySelector('[data-plot="wall-01"]');
+    const owns = (x, y) => document.elementFromPoint(x, y)?.closest?.('[data-plot="wall-01"]') === wallNode;
     const candidates = [];
     for (let y = Math.max(viewport.top, wall.top) + 2; y <= Math.min(viewport.bottom, wall.bottom) - 2; y += 4) {
       for (let x = Math.max(viewport.left, wall.left) + 2; x <= Math.min(viewport.right, wall.right) - 2; x += 4) {
         if (owns(x, y)) candidates.push({ x, y });
       }
     }
+    const map = document.querySelector("#town-map");
+    const labelsWereHidden = map.classList.contains("labels-hidden");
+    map.classList.remove("labels-hidden");
+    const rect = (node) => {
+      const box = node.getBoundingClientRect();
+      return { left: box.left, top: box.top, right: box.right, bottom: box.bottom, width: box.width, height: box.height };
+    };
+    const protectedBoxes = [
+      ["Town Hall target", hallNode], ["Town Hall label", document.querySelector('[data-plot="general-01"] .hotspot-label')],
+      ["Town Wall target", wallNode], ["Town Wall label", document.querySelector('[data-plot="wall-01"] .hotspot-label')]
+    ].map(([name, node]) => ({ name, ...rect(node) }));
+    const chrome = [".azmara-town-bar", "#azmara-side-dock", "#azmara-dock-reveal", ".azmara-phone-dock", ".azmara-dev-button"]
+      .map((selector) => document.querySelector(selector)).filter((node) => node && !node.hidden && node.getClientRects().length && getComputedStyle(node).display !== "none")
+      .map((node) => ({ name: node.matches(".azmara-town-bar") ? "town bar" : node.getAttribute("aria-label") || node.id || node.className, ...rect(node) }));
+    if (labelsWereHidden) map.classList.add("labels-hidden");
+    const overlaps = [];
+    for (const subject of protectedBoxes) for (const obstacle of chrome) {
+      const width = Math.max(0, Math.min(subject.right, obstacle.right) - Math.max(subject.left, obstacle.left));
+      const height = Math.max(0, Math.min(subject.bottom, obstacle.bottom) - Math.max(subject.top, obstacle.top));
+      if (width > .5 && height > .5) overlaps.push({ subject: subject.name, obstacle: obstacle.name, width, height });
+    }
+    const outside = protectedBoxes.filter((box) => box.left < viewport.left - .5 || box.top < viewport.top - .5 || box.right > viewport.right + .5 || box.bottom > viewport.bottom + .5).map((box) => box.name);
+    const topCrop = Math.max(0, viewport.top - picture.top);
+    const bottomCrop = Math.max(0, picture.bottom - viewport.bottom);
     return {
       fit: document.querySelector("#town-map").dataset.fit,
       hallOffset: { x: hallCenter.x - viewportCenter.x, y: hallCenter.y - viewportCenter.y },
       pictureOffset: { x: pictureCenter.x - viewportCenter.x, y: pictureCenter.y - viewportCenter.y },
-      pictureCentered: Math.abs(pictureCenter.x - viewportCenter.x) <= 1 && Math.abs(pictureCenter.y - viewportCenter.y) <= 1,
+      protectedBoxes, chrome, overlaps, outside, topCrop, bottomCrop,
       wallCenter,
       wallCenterReachable: owns(wallCenter.x, wallCenter.y),
       wallReachable: candidates.length > 0,
@@ -188,7 +215,9 @@ async function fitRegistration(page) {
 
 async function assertGateReachable(page, geometry) {
   assert.equal(geometry.fit, "true", "Registration was not measured at Fit");
-  assert(geometry.pictureCentered, "Fit is not centred on the land picture: " + JSON.stringify(geometry.pictureOffset));
+  assert.deepEqual(geometry.overlaps, [], "Protected start target or label overlaps floating chrome: " + JSON.stringify(geometry.overlaps));
+  assert.deepEqual(geometry.outside, [], "Protected start target or label is cropped: " + JSON.stringify(geometry.outside));
+  assert(geometry.bottomCrop + 1 >= geometry.topCrop, "Protected start crop is not biased away from the gate/top: " + JSON.stringify({ top: geometry.topCrop, bottom: geometry.bottomCrop }));
   assert(geometry.wallReachable, "Painted Town Wall hotspot has no reachable point");
   const point = geometry.firstReachablePoint;
   await page.mouse.click(point.x, point.y);
@@ -198,16 +227,38 @@ async function assertGateReachable(page, geometry) {
   await page.locator("#detail-panel").waitFor({ state: "hidden" });
 }
 
-async function pickerChecks(page, actualLevel, savedRaw) {
+async function capture(page, viewportName, state) {
+  const file = path.join(evidenceDir, `${viewportName}-${state}.png`);
+  await page.screenshot({ path: file });
+  return file;
+}
+
+async function assertDevButtonAnchored(page) {
+  const geometry = await page.locator(".azmara-dev-button:visible").evaluate((node) => {
+    const box = node.getBoundingClientRect();
+    return { position: getComputedStyle(node).position, left: box.left, right: box.right, viewportWidth: innerWidth };
+  });
+  assert.equal(geometry.position, "fixed", "Focused Dev button stopped floating above the game");
+  assert(geometry.left >= 0 && geometry.viewportWidth - geometry.right <= 16,
+    "Focused Dev button moved away from the right edge: " + JSON.stringify(geometry));
+}
+
+async function pickerChecks(page, actualLevel, savedRaw, viewportName) {
   await openDev(page);
   const picker = page.locator("#dev-land-stage");
-  assert.deepEqual(await picker.locator("option").evaluateAll((options) => options.map((option) => Number(option.value))), milestones);
+  const optionValues = await picker.locator("option").evaluateAll((options) => options.map((option) => option.value));
+  assert.equal(optionValues[0], "actual", "Land picker is missing the real-level reset option");
+  assert.deepEqual(optionValues.slice(1).map(Number), milestones);
   for (const level of milestones) {
     await picker.selectOption(String(level));
     await settle(page);
     await assertLockedLand(page, level);
     assert.equal(await storage(page), savedRaw, `Dev stage ${level} changed saved progress`);
     assert.equal(await page.locator('[data-plot="general-01"]').getAttribute("data-building-level"), String(level));
+    await page.keyboard.press("Escape");
+    await settle(page);
+    await capture(page, viewportName, `stage-${String(level).padStart(2, "0")}`);
+    await openDev(page);
   }
 
   await page.locator("#reset-land-stage").click();
@@ -231,11 +282,13 @@ async function pickerChecks(page, actualLevel, savedRaw) {
 }
 
 (async () => {
+  fs.mkdirSync(evidenceDir, { recursive: true });
   await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
   const base = `http://127.0.0.1:${server.address().port}`;
   browser = await chromium.launch({ headless: true, timeout: 20000 });
   try {
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      const viewportName = `${viewport.width}x${viewport.height}`;
       const savedRaw = fixture(12);
       const context = await contextWith(viewport, savedRaw);
       try {
@@ -244,10 +297,10 @@ async function pickerChecks(page, actualLevel, savedRaw) {
         assert.equal((await landState(page)).occupied, 1, "Town Hall-only fixture created another building");
         const registration = await fitRegistration(page);
         await assertGateReachable(page, registration);
-        console.log(`INFO Fit picture offset at ${viewport.width}x${viewport.height}: x=${registration.pictureOffset.x.toFixed(2)}px, y=${registration.pictureOffset.y.toFixed(2)}px (${registration.pictureCentered ? "centred" : "not centred"}); Hall offset x=${registration.hallOffset.x.toFixed(2)}px, y=${registration.hallOffset.y.toFixed(2)}px`);
+        console.log(`INFO protected Fit picture offset at ${viewport.width}x${viewport.height}: x=${registration.pictureOffset.x.toFixed(2)}px, y=${registration.pictureOffset.y.toFixed(2)}px; Hall offset x=${registration.hallOffset.x.toFixed(2)}px, y=${registration.hallOffset.y.toFixed(2)}px`);
         console.log(`INFO gate at ${viewport.width}x${viewport.height}: reachable=${registration.wallReachable}, center-reachable=${registration.wallCenterReachable}, town-bar overlap=${registration.wallTownBarOverlap.width.toFixed(2)}x${registration.wallTownBarOverlap.height.toFixed(2)}px`);
-        await pickerChecks(page, 12, savedRaw);
-        console.log(`PASS locked land, full-bleed cover and transient Dev picker at ${viewport.width}x${viewport.height}`);
+        await pickerChecks(page, 12, savedRaw, viewportName);
+        console.log(`PASS locked land, protected full-bleed cover and Dev land picker at ${viewport.width}x${viewport.height}`);
       } finally { await context.close(); }
     }
 
@@ -263,9 +316,11 @@ async function pickerChecks(page, actualLevel, savedRaw) {
       await page.locator("#dev-land-stage").selectOption("12");
       await page.keyboard.press("Escape");
       await assertLockedLand(page, 12);
-      await page.locator('[data-plot="general-01"]').click({ force: true });
+      await page.locator('[data-plot="general-01"]').evaluate((button) => button.click());
       await page.locator("#skip-construction").click();
       await settle(page);
+      await page.keyboard.press("Escape");
+      await page.locator("#detail-panel").waitFor({ state: "hidden" });
       await openDev(page);
       await page.locator("#reset-land-stage").click();
       await settle(page);

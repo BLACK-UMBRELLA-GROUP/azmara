@@ -47,10 +47,10 @@ async function load(context) {
     return { id: button.dataset.plot, width: box.width, height: box.height, exposed, viewportCropped, loaded: !image || image.complete && image.naturalWidth > 0, name: button.getAttribute("aria-label") };
   }));
   assert.equal(fitTargets.length, 23);
-  const viewport = page.viewportSize();
   fitTargets.forEach((target) => {
-    const coverCroppedGate = target.id === "wall-01" && viewport.width / viewport.height > 2.5;
-    assert(target.width >= 43.9 && target.height >= 43.9 && (target.exposed || target.viewportCropped || coverCroppedGate) && target.loaded && target.name, "Flag-free ground/Hall target is undersized, obscured, missing or unnamed: " + JSON.stringify(target));
+    const protectedTarget = target.id === "wall-01" || target.id === "general-01";
+    assert(target.width >= 43.9 && target.height >= 43.9 && (target.exposed || !protectedTarget && target.viewportCropped) && target.loaded && target.name,
+      "Flag-free target is undersized, obscured, missing or unnamed (Hall and Wall must start exposed): " + JSON.stringify(target));
   });
   return page;
 }
@@ -310,10 +310,10 @@ async function savedBytes(page, expected) {
           "Fit released but the drag did not move along its cropped axis");
         bounded(pannedFit);
         await action(page, "fit");
-        unchangedPose(await pose(page), stableFit, "Fit did not restore the picture-centred overview after manual panning");
+        unchangedPose(await pose(page), stableFit, "Fit did not restore the protected start overview after manual panning");
         unchangedPose(stableFit, fit, "Fit did not restore its original framing after drag extremes");
         await savedBytes(page, bytes);
-        console.log(`PASS reduced motion, gentle Close, x/y mouse drag, Fit release, both finite boundaries and midpoint restore ${width}x${height}`);
+        console.log(`PASS reduced motion, gentle Close, x/y mouse drag, Fit release, both finite boundaries and protected-start restore ${width}x${height}`);
         groups += 1;
       } finally { await context.close(); }
     }
@@ -365,7 +365,11 @@ async function savedBytes(page, expected) {
         await action(page, "zoom-out");
         await assertEnclosedFrame();
       }
-      assert((await pose(page)).fit, "Full zoom-out range did not restore locked Fit");
+      const floor = await pose(page);
+      assert(Math.abs(floor.zoom - floor.minZoom) < .001, "Full zoom-out range did not reach the ordinary cover floor");
+      assert(!floor.fit, "Player zoom-out incorrectly restored the larger protected Fit start");
+      await action(page, "fit");
+      assert((await pose(page)).fit, "Explicit Fit did not restore the protected start");
       await savedBytes(page, bytes);
       console.log(`PASS all ${samples} fine zoom samples keep all 23 targets and settlement frame inside finite painted map with no scroll overflow`);
       groups += 1;

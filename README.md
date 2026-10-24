@@ -4,14 +4,15 @@ Provisional game name: **AZMARA** (`DEC-009`). Final branding remains undecided.
 Current phase: **locked land-stage delivery alongside rule definition**
 (`DEC-028`, narrowly updating the visual pause in `DEC-015`).
 The first local town-screen prototype remains available (`DEC-012`, `DEC-013`).
-The current private web and prepared native package are tracked under
-`DEC-100`/`DEC-101`; physical app installation remains in-place only.
+The current local build, private web and prepared native package are tracked
+under `DEC-100` through `DEC-107`; physical app installation remains in-place only.
 
 Target platforms: **iOS, Android and web browsers** (`DEC-010`). Engine,
 architecture, cross-platform account behaviour and launch order remain open.
 
-`APP GAME PROJECT - IKARIAM` is an internal working-folder name, not approved
-branding. Ikariam is an inspiration and research reference only.
+The project folder is `SUB BUSINESS/AZMARA`. It was previously the top-level
+folder `APP GAME PROJECT - IKARIAM`; that was an internal working-folder name,
+not approved branding. Ikariam is an inspiration and research reference only.
 
 The intended direction is an original, mobile-first, persistent online
 multiplayer strategy game inspired primarily by the Abbasid era, Baghdad at
@@ -47,12 +48,19 @@ app; build, installation and device verification are tracked in the status.
 
 ## Try the prototype
 
-**Current delivery, private web31 (DEC-102–104):** all eleven locked land stages
-remain live. The simplified Dev workbench and midpoint-centred cover camera are
-now published; Town, Region and World remain edge-to-edge with no outer game
-border. The Site remains owner-only and is not connected to auto-deploy.
+**Current local locked change, DEC-107 — not published:** the temporary Dev
+`View zoom (test)` slider and scaling path are removed. Dev and Gameplay use
+the ordinary 100% town presentation, while the protected start frame and all
+art, saves, plots and gameplay remain unchanged. Private web32 is still the
+hosted version until the Owner explicitly approves another publication.
+
+**Current delivery, private web32 (DEC-105–106):** the protected 100% start view
+keeps the Town Wall gate and Town Hall clear of the floating controls. Dev → Dev
+workbench adds the unsaved `View zoom (test)` slider from 50% to 100% in 5%
+steps; Gameplay resets it to 100%. Town, Region and World remain edge-to-edge in
+normal play. The Site remains owner-only and has no automation or auto-deploy.
 Refresh manually at [azmara.app](https://azmara.app). See the
-[web delivery](docs/implemented/WEB_PUBLICATION_31.md).
+[web32 delivery](docs/implemented/WEB_PUBLICATION_32.md).
 
 **Prepared iPhone build, AZMARA 0.1.0 (3):** the signed app contains the same
 current runtime and supports the current save/construction schema. It is ready
@@ -60,8 +68,13 @@ for an in-place installation when the paired iPhone is available and unlocked;
 the phone was not modified while unavailable. See
 [native build 3](docs/implemented/NATIVE_BUILD_3.md).
 
+**Previous delivery, private web31 (DEC-102–104):** all eleven locked land
+stages, the simplified Dev workbench and midpoint-centred cover camera remain
+the immediate rollback for web32. See
+[web31 delivery](docs/implemented/WEB_PUBLICATION_31.md).
+
 **Previous delivery, private web30 (DEC-100/DEC-101):** the exact locked land
-stages and full-viewport shell remain the immediate web rollback. See
+stages and full-viewport shell remain the earlier web rollback. See
 [delivery](docs/implemented/WEB_PUBLICATION_30.md).
 
 **Previous delivery, private web28 (DEC-097):** the oasis foundation first
@@ -318,7 +331,8 @@ does not establish permission to reuse material or clearance for a name.
 
 ## Project boundaries
 
-The project home is this directory under `Developer/DEVELOPMENT`.
+The project home is `Developer/DEVELOPMENT/SUB BUSINESS/AZMARA`
+(relocated 2026-10-23 from the former top-level `APP GAME PROJECT - IKARIAM`).
 The empty checkout with the same working name under `Documents/ChatGPT` was
 not modified and is not a second source of truth for this foundation.
 

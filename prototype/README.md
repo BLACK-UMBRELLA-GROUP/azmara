@@ -1,14 +1,25 @@
 # AZMARA town screen design preview
 
+## Current local build — not published
+
+DEC-107 removes the temporary Dev `View zoom (test)` slider and its alternate
+map-scaling path. Dev and Gameplay now use only the ordinary 100% presentation.
+The protected start frame, Land stage and Building dropdowns, Test supplies,
+Reset plots, normal zoom/panning, art, saves, queues, plots and gameplay remain
+unchanged. Private web32 below still contains the temporary slider until the
+Owner explicitly approves a later publication.
+
 ## Current private delivery
 
-Private web31 is live at [azmara.app](https://azmara.app/). It uses the eleven
-locked land masters, the simplified Dev workbench and the midpoint-centred
-cover camera. Town, Region and World remain edge-to-edge on desktop and phone
-with no outer game border. See
-[`WEB_PUBLICATION_31.md`](../docs/implemented/WEB_PUBLICATION_31.md).
+Private web32 is live at [azmara.app](https://azmara.app/). It uses the eleven
+locked land masters and a protected 100% start frame that keeps the Town Wall
+gate and Town Hall clear of the floating controls. Dev → Dev workbench includes
+the unsaved `View zoom (test)` slider from 50% to 100% in 5% steps; Gameplay
+resets it to 100%. Normal Town, Region and World presentation remains
+edge-to-edge on desktop and phone with no outer game border. See
+[`WEB_PUBLICATION_32.md`](../docs/implemented/WEB_PUBLICATION_32.md).
 
-## Current local pilot — not published
+## Historical Oasis pilot — superseded
 
 DEC-072 tests the recommended Oasis Town ground direction on desktop/Staggered
 at Hall 0/1 and 50 only. The original PNG buildings remain; mature quarters
@@ -17,12 +28,12 @@ stays bare with low-key stake clearings. No rills or moving actors were added.
 Other levels/layouts and compact views use the previous renderer. Wall source/
 art/controls are unchanged; Step 5 fixes and native updates remain paused.
 
-Run the normal capture command below for the starting town, or `--level 50`
-for the mature synthetic fixture. In a desktop local session, Dev → Appearance
-→ Ideal review at level 50 shows the populated endpoint without changing the
-saved town. Exit review to restore actual artwork. This is a bounded art pilot,
-not a full five-layout progression redesign or approved final appearance.
-See [pilot report](../docs/ideas/OASIS_TOWN_PILOT.md).
+This section records the earlier bounded Oasis art pilot. Its former Dev →
+Appearance review surface no longer exists; DEC-102 replaced it with the
+simplified Dev workbench. Current land-stage behaviour is documented in
+[`LAND_STAGES_CURRENT_VERSION_V4.md`](../docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md),
+and the historical pilot remains in
+[`OASIS_TOWN_PILOT.md`](../docs/ideas/OASIS_TOWN_PILOT.md).
 
 ## Previous published artwork
 

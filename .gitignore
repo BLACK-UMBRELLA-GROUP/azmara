@@ -69,3 +69,11 @@ ios/.symlinks/
 
 # Disposable visual-check screenshots and receipts (source runner is tracked).
 prototype/debug/
+
+# Build bundles inside evidence stay on the Mac and the encrypted USB backup,
+# never in git — GitHub rejects files over 100 MB (Fable step 2, 2026-10-24).
+evidence/**/*.tar.gz
+
+# The private web preview is its own git repository — never nest it in this one
+# (same pattern as ZYRA/SITE). Fable step 2, 2026-10-24.
+sites/azmara-private-preview/

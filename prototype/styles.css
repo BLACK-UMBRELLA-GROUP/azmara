@@ -44,7 +44,7 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
   .map-viewport[data-dragging="true"], .map-viewport[data-dragging="true"] .plot-marker { cursor: grabbing; user-select: none; }
 }
 .map-surface { position: relative; min-width: 100%; min-height: 100%; }
-.town-map { position: relative; width: 100%; height: 100%; }
+.town-map { position: absolute; width: 100%; height: 100%; }
 .world-landscape { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: none; pointer-events: none; }
 .town-core { position: absolute; }
 .town-hall-art, .empty-plot-art, .building-art { width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; pointer-events: none; -webkit-user-drag: none; }
@@ -54,7 +54,9 @@ svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width:
 .building-hotspot { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); display: block; border: 0; color: var(--ink); padding: 0; background: transparent; width: var(--plot-width, 44px); height: var(--plot-height, 44px); min-width: 44px; min-height: 44px; }
 .occupied-hotspot { width: var(--hall-width, 60px); height: var(--hall-height, 44px); }
 .map-hotspots .plot-marker[data-kind="wall"] { width: var(--wall-width, 70px); height: var(--wall-height, 44px); z-index: 4; transform: translate(-50%, -50%) translate(var(--wall-snap-x, 0px), var(--wall-snap-y, 0px)); }
-.marker { position: relative; width: 100%; height: 100%; display: block; background: transparent; pointer-events: none; filter: drop-shadow(2px 3px 2px #66513214); transition: filter 150ms; }
+.marker { position: absolute; left: 50%; top: 50%; width: var(--plot-art-width, 100%); height: var(--plot-art-height, 100%); transform: translate(-50%, -50%); display: block; background: transparent; pointer-events: none; filter: drop-shadow(2px 3px 2px #66513214); transition: filter 150ms; }
+.occupied-hotspot .marker { width: var(--hall-width, 60px); height: var(--hall-height, 44px); }
+.map-hotspots .plot-marker[data-kind="wall"] .marker { width: var(--wall-width, 70px); height: var(--wall-height, 44px); }
 .occupied-hotspot .marker { filter: drop-shadow(3px 5px 3px #66513224); }
 /* Contact beds share the sprite anchor/scale. They never intercept input or
    become an extra plot; the soft earth edge joins sharp art to the painting. */
@@ -65,7 +67,7 @@ body[data-land-stages="on"] .plot-marker[data-occupied="true"] .marker::before {
 body[data-oasis-pilot="on"] .plot-marker[data-occupied="true"] .marker::before { display: none; }
 body[data-oasis-pilot="on"] .terrain-plot { display: none; }
 body[data-oasis-pilot="on"] .plot-marker:not(:hover):not(:focus-visible):not(.selected) .marker { filter: none; }
-.plot-marker[data-occupied="true"] .marker { filter: drop-shadow(calc(var(--plot-width, 44px) / 90) calc(var(--plot-width, 44px) / 55) calc(var(--plot-width, 44px) / 100) #68533440); }
+.plot-marker[data-occupied="true"] .marker { filter: drop-shadow(calc(var(--plot-art-width, var(--plot-width, 44px)) / 90) calc(var(--plot-art-width, var(--plot-width, 44px)) / 55) calc(var(--plot-art-width, var(--plot-width, 44px)) / 100) #68533440); }
 /* The built wall has registered background and foreground raster layers,
    not a second detached building. Keep the real gate target/label above both. */
 .plot-marker[data-kind="wall"][data-occupied="true"] .marker { visibility: hidden; }

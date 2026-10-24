@@ -199,16 +199,45 @@ async function assertMaximumZoomAndEdges(page, viewport, profile) {
   }
 }
 
-async function assertMinimumZoomMidpointAndEdges(page, viewport, profile) {
-  const start = await townCoverage(page, viewport, `${profile} midpoint Fit`);
-  const maxLeft = start.scroll.width - start.scroll.clientWidth;
-  const maxTop = start.scroll.height - start.scroll.clientHeight;
-  assert(closeEnough(start.scroll.left, maxLeft / 2, 2), `${profile} start is not horizontally centred on the picture`);
-  assert(closeEnough(start.scroll.top, maxTop / 2, 2), `${profile} start is not vertically centred on the picture`);
-  if (profile === "phone") {
-    assert(closeEnough(start.land.height, start.scroll.clientHeight, 2), "Phone cover does not fill the height");
-    assert(maxLeft > 1 && maxTop <= 2, "Phone Fit should pan sideways with the full picture height visible");
-  }
+async function assertProtectedStartAndEdges(page, viewport, profile) {
+  const start = await townCoverage(page, viewport, `${profile} protected Fit`);
+  const protection = await page.evaluate(() => {
+    const viewport = document.querySelector("#map-viewport").getBoundingClientRect();
+    const picture = document.querySelector("#azmara-land-stage").getBoundingClientRect();
+    const map = document.querySelector("#town-map");
+    const hidden = map.classList.contains("labels-hidden");
+    map.classList.remove("labels-hidden");
+    const rect = (node) => {
+      const box = node.getBoundingClientRect();
+      return { left: box.left, top: box.top, right: box.right, bottom: box.bottom };
+    };
+    const protectedBoxes = [
+      ["Town Hall target", document.querySelector('[data-plot="general-01"]')],
+      ["Town Hall label", document.querySelector('[data-plot="general-01"] .hotspot-label')],
+      ["Town Wall target", document.querySelector('[data-plot="wall-01"]')],
+      ["Town Wall label", document.querySelector('[data-plot="wall-01"] .hotspot-label')]
+    ].map(([name, node]) => ({ name, ...rect(node) }));
+    const chrome = [".azmara-town-bar", "#azmara-side-dock", "#azmara-dock-reveal", ".azmara-phone-dock", ".azmara-dev-button"]
+      .map((selector) => document.querySelector(selector)).filter((node) => node && !node.hidden && node.getClientRects().length && getComputedStyle(node).display !== "none")
+      .map((node) => ({ name: node.getAttribute("aria-label") || node.id || node.className, ...rect(node) }));
+    if (hidden) map.classList.add("labels-hidden");
+    const overlaps = [];
+    for (const subject of protectedBoxes) for (const obstacle of chrome) {
+      const width = Math.max(0, Math.min(subject.right, obstacle.right) - Math.max(subject.left, obstacle.left));
+      const height = Math.max(0, Math.min(subject.bottom, obstacle.bottom) - Math.max(subject.top, obstacle.top));
+      if (width > .5 && height > .5) overlaps.push(`${subject.name} / ${obstacle.name}`);
+    }
+    return {
+      overlaps,
+      outside: protectedBoxes.filter((box) => box.left < viewport.left - .5 || box.top < viewport.top - .5 || box.right > viewport.right + .5 || box.bottom > viewport.bottom + .5).map((box) => box.name),
+      topCrop: Math.max(0, viewport.top - picture.top),
+      bottomCrop: Math.max(0, picture.bottom - viewport.bottom)
+    };
+  });
+  assert.deepEqual(protection.overlaps, [], `${profile} protected target or label overlaps floating chrome`);
+  assert.deepEqual(protection.outside, [], `${profile} protected target or label starts cropped`);
+  assert(protection.bottomCrop + 1 >= protection.topCrop, `${profile} initial crop is not biased away from the gate/top`);
+  assert(start.zoom >= start.minimumZoom - .00001, `${profile} protected Fit fell below the ordinary cover floor`);
   for (const point of [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }]) {
     await page.locator("#map-viewport").evaluate((element, corner) => element.scrollTo({
       left: corner.x * (element.scrollWidth - element.clientWidth),
@@ -217,8 +246,8 @@ async function assertMinimumZoomMidpointAndEdges(page, viewport, profile) {
     }), point);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const edge = await townCoverage(page, viewport, `${profile} minimum zoom corner ${point.x},${point.y}`);
-    assert(closeEnough(edge.scroll.left, point.x * (edge.scroll.width - edge.scroll.clientWidth), 2), `${profile} minimum-zoom horizontal edge is unreachable`);
-    assert(closeEnough(edge.scroll.top, point.y * (edge.scroll.height - edge.scroll.clientHeight), 2), `${profile} minimum-zoom vertical edge is unreachable`);
+    assert(closeEnough(edge.scroll.left, point.x * (edge.scroll.width - edge.scroll.clientWidth), 2), `${profile} protected-Fit horizontal edge is unreachable`);
+    assert(closeEnough(edge.scroll.top, point.y * (edge.scroll.height - edge.scroll.clientHeight), 2), `${profile} protected-Fit vertical edge is unreachable`);
   }
   await page.locator("#map-viewport").evaluate((element, position) => element.scrollTo({ left: position.left, top: position.top, behavior: "instant" }), start.scroll);
   await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -246,9 +275,9 @@ async function assertMinimumZoomMidpointAndEdges(page, viewport, profile) {
         await assertBaseShell(page, viewport, `${profile.name} initial`);
         const fit = await townCoverage(page, viewport, `${profile.name} Fit`);
         assert.equal(fit.fit, "true", `${profile.name} does not start at Fit`);
-        assert(Math.abs(fit.zoom - fit.minimumZoom) < .00001, `${profile.name} Fit is below or above the cover floor`);
+        assert(fit.zoom >= fit.minimumZoom - .00001, `${profile.name} protected Fit is below the cover floor`);
         assert(Math.abs(fit.minimumZoom - 1) < .00001, `${profile.name} minimum zoom is not the true cover scale`);
-        await assertMinimumZoomMidpointAndEdges(page, viewport, profile.name);
+        await assertProtectedStartAndEdges(page, viewport, profile.name);
         await assertOverlayDoesNotResize(page, viewport, profile.name);
         await assertAtlasView(page, viewport, "island");
         await assertAtlasView(page, viewport, "world");

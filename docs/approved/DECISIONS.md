@@ -1962,8 +1962,10 @@ unselected.
   finest, for the swamp look to clear from Town Hall 22, and for the pool's
   stone edge and the avenue shrubs to be removed, then said "OK lets lock it
   all in".
-- Locked specification, updated by DEC-103: `docs/approved/LAND_STAGES_CURRENT_VERSION_V2.md`.
-  The byte-preserved original is `docs/approved/LAND_STAGES_2026-10-18_V1.md`,
+- Locked specification, updated by DEC-107: `docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md`.
+  Byte-preserved earlier versions are `docs/approved/LAND_STAGES_2026-10-18_V1.md`
+  and `docs/approved/LAND_STAGES_2026-10-18_V2.md`, plus
+  `docs/approved/LAND_STAGES_2026-10-19_V3.md`,
   with stage 1 = `docs/approved/art/TOWN_MASTER_CURRENT_VERSION_V3.png` and
   stages 2–11 in `docs/approved/art/land/`.
 - Rule: land stage k shows while the Town Hall's completed look is k. The
@@ -2051,4 +2053,76 @@ unselected.
   IDs, layouts, native app or native build. Preserve private web30 as the
   immediate rollback version and do not open visible or headless Chrome.
 
-Next unused decision identifier: `DEC-105`.
+## DEC-105 — Protect the start view and add transient Dev view zoom
+
+- Date: 18 October 2026 (Europe/London).
+- Source: the Owner reports that the midpoint-centred start view places the
+  floating town bar over the Town Wall gate target and label, supplies the
+  exact two-part scope, then explicitly replies `LOCK`.
+- At the ordinary 100% start view, frame the Town Wall gate, Town Hall and both
+  labels inside the currently uncovered play area: below the town bar, right of
+  the computer dock, above the phone dock and clear of the Dev button. Measure
+  the actual visible control rectangles; do not reserve a permanent sidebar or
+  shrink the game surface.
+- The land still covers the full viewport behind all controls, preserves its
+  aspect ratio and never stretches. If the initial cover crop cannot retain the
+  whole picture, preserve the gate/top and place the unavoidable crop at the
+  bottom. This supersedes DEC-103's midpoint/split-crop rule only for initial
+  framing; metadata-driven sizing, full-screen coverage at 100%, all-edge
+  panning and unchanged artwork remain in force.
+- Add a Dev-only `View zoom (test)` slider from 50% through 100% in 5% steps,
+  with a visible percentage readout. 100% is the current ordinary view; lower
+  values scale the complete map presentation together, including land,
+  buildings and spots. Plain sand around the picture below 100% is an approved
+  temporary test exception to the normal cover rule.
+- Labels retain their normal screen size and phone interaction envelopes remain
+  at least 44×44 CSS pixels. The test scale is independent of normal player
+  zoom, does not change the approved 55% building-art setting, is hidden and
+  reset on Gameplay, defaults/resets to 100%, and is never saved.
+- Preserve pictures, saves, queues, spots, plot IDs, layouts and gameplay. Build
+  locally only, add no library, do not update the native app or publish, and
+  obtain fresh Owner permission before any screenshot run.
+
+## DEC-106 — Publish the protected start view and Dev view zoom privately
+
+- Date: 18 October 2026 (Europe/London).
+- Source: after locking DEC-105 and authorising its isolated headless screenshot
+  pass, the Owner explicitly instructs Codex to finish the work and publish it,
+  with the next result shown to the Owner being the verified published version.
+- Publish the exact verified DEC-105 browser runtime to the existing owner-private
+  AZMARA Site at `azmara.app`. This includes the protected 100% start frame, the
+  transient 50–100% Dev view-zoom control and the narrow focus-position,
+  touch-tap, native-pinch and short-landscape compact-shell repairs found during
+  release QA. It does not authorise any design, gameplay, save, artwork or
+  native-app change.
+- Preserve the custom audience of one owner, no viewers, groups or external
+  visitors. Keep deployment manual with no Site automation or auto-deploy, and
+  preserve private web31 as the immediate rollback version.
+- Visible Chrome remains closed. The already-authorised isolated headless QA is
+  the publication evidence; the Owner will refresh the live page manually.
+
+## DEC-107 — Remove the temporary Dev view-zoom test
+
+- Date: 19 October 2026 (Europe/London).
+- Source: after confirming that DEC-105's slider works, the Owner replies
+  `LOCK` to the exact scope that removes the control and temporary scaling path
+  while retaining the protected start frame and ordinary 100% presentation.
+- Remove `View zoom (test)` from the Dev workbench, including its 50–100%
+  slider, percentage output, reset control, transient state, scaling path,
+  supporting styles and test-only assertions.
+- Restore the ordinary 100% town presentation as the only Dev and Gameplay
+  presentation. Keep DEC-105's protected start framing: the Town Wall gate,
+  Town Hall and both labels remain clear of the town bar, computer/phone dock
+  and Dev button, while the land covers the viewport without stretching.
+- Preserve the Land stage dropdown, Building dropdown, Test supplies and Reset
+  plots exactly as approved. Preserve the locked land pictures, approved 55%
+  building-art scale, normal player zoom and panning, artwork, saves, queues,
+  spots, plot IDs, layouts, buildings and gameplay.
+- Build locally only. Add no library, do not update the native app and do not
+  publish. DEC-084 remains in force: obtain fresh Owner permission before any
+  screenshot or headless-browser run.
+- Current land specification:
+  `docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md`. V3 is byte-preserved as
+  `docs/approved/LAND_STAGES_2026-10-19_V3.md`.
+
+Next unused decision identifier: `DEC-108`.
