@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0036
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Oasis Town — local endpoint pilot
+links: []
+owner: AZMARA chat
+---
+
 # Oasis Town — local endpoint pilot
 
 11 October 2026 · DEC-072/073 · Ground direction accepted · Not published

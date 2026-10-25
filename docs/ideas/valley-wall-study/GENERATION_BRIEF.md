@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0041
+type: RESEARCH
+status: CURRENT
+feature: IDEAS AND PROPOSALS
+purpose: Valley wall mock-up generation
+links: []
+owner: AZMARA chat
+---
+
 # Valley wall mock-up generation
 
 DEC-082,12 October2026. Proposal-only original AZMARA paint-overs.

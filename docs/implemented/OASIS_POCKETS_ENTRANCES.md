@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0006
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Oasis shade pockets and entrances — local review
+links: []
+owner: AZMARA chat
+---
+
 # Oasis shade pockets and entrances — local review
 
 12 October 2026 (Europe/London), DEC-075. Implemented and screenshot-checked;

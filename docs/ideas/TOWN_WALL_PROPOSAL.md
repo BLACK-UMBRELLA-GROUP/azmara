@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0038
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Town wall — approved Step 4 proposal; Step 5 draft unfinished
+links: []
+owner: AZMARA chat
+---
+
 # Town wall — approved Step 4 proposal; Step 5 draft unfinished
 
 11 October 2026. Step 4 approved for build under DEC-069. DEC-070 permits

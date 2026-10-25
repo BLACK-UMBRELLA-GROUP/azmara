@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0001
+type: SPEC
+status: CURRENT
+feature: APPROVED
+purpose: AZMARA land stages
+links: []
+owner: AZMARA chat
+---
+
 # AZMARA land stages — CURRENT VERSION V4
 
 - V1 locked by Shakeel on 17 October 2026 ("OK lets lock it all in") and recorded as DEC-099 and DEC-100. The midpoint camera correction was approved on 18 October 2026 and recorded as DEC-103. The protected start framing was locked on 18 October 2026 and remains approved under DEC-105. DEC-107 removes DEC-105's temporary Dev view-zoom test and restores the ordinary 100% presentation as the only presentation.

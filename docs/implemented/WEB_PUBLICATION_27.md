@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0018
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Final visual shell v1 private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Final visual shell v1 private web delivery
 
 15 October 2026 (Europe/London). DEC-096. Version27 is confirmed live at

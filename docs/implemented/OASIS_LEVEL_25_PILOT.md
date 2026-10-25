@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0005
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Oasis Town — Level25 local pilot
+links: []
+owner: AZMARA chat
+---
+
 # Oasis Town — Level25 local pilot
 
 12 October 2026 (Europe/London) · DEC-078/079 · **Implemented locally; shown direction accepted**

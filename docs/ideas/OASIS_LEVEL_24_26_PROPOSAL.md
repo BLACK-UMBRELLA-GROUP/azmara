@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0033
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Oasis Town — neighbouring Levels24 and26
+links: []
+owner: AZMARA chat
+---
+
 # Oasis Town — neighbouring Levels24 and26
 
 12 October 2026 (Europe/London) · IDEA-013/DEC-080 · **Approved, implementation held**

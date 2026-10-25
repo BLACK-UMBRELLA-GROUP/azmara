@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0026
+type: SPEC
+status: CURRENT
+feature: CONCEPT
+purpose: AZMARA game concept and thematic direction
+links: []
+owner: AZMARA chat
+---
+
 # AZMARA game concept and thematic direction
 
 Updated: 11 October 2026. Phase: desktop/web visual iteration and rule definition.

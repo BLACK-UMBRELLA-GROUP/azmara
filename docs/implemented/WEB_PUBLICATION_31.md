@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0022
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Simplified Dev workbench and midpoint camera private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Simplified Dev workbench and midpoint camera private web delivery
 
 18 October 2026 (Europe/London). DEC-102–104. Private web version 31 is live at

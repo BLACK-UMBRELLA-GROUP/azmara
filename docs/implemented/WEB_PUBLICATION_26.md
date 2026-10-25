@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0017
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Appearance dialog repair private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Appearance dialog repair private web delivery
 
 14 October 2026 (Europe/London). DEC-094. Version26 is confirmed live at

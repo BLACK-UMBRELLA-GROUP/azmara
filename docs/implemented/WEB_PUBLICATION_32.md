@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0023
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Protected start view and Dev view zoom private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Protected start view and Dev view zoom private web delivery
 
 18 October 2026 (Europe/London). DEC-105–106. Private web version 32 is live at

@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0040
+type: RESEARCH
+status: CURRENT
+feature: IDEAS AND PROPOSALS
+purpose: AZMARA — visual direction study
+links: []
+owner: AZMARA chat
+---
+
 # AZMARA — visual direction study
 
 11 October 2026. **Proposal only; awaiting Owner OK. Step 5 is paused.**

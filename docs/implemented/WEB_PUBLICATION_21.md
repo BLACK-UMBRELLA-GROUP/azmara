@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0012
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Rear valley web21 — confirmed private delivery
+links: []
+owner: AZMARA chat
+---
+
 # Rear valley web21 — confirmed private delivery
 
 12 October2026. DEC-086. Version21 is live at [azmara.app](https://azmara.app).

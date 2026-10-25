@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0032
+type: RESEARCH
+status: CURRENT
+feature: IDEAS AND PROPOSALS
+purpose: Ikariam Okeanos research
+links: []
+owner: AZMARA chat
+---
+
 # Ikariam Okeanos research
 
 Initial tour: 6 October 2026. Follow-up help inspection and Founder screenshots:

@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0030
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Building Look Ladder Proposal
+links: []
+owner: AZMARA chat
+---
+
 > **12-look draft withdrawn by Claude; recommendation is to keep the existing 11-look system. Awaiting Shakeel's decision.**
 
 # Building Look Ladder Proposal

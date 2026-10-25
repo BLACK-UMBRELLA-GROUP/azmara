@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0028
+type: RULES
+status: CURRENT
+feature: HOW WE WORK
+purpose: Project workflow
+links: []
+owner: AZMARA chat
+---
+
 # Project workflow
 
 Established: 6 October 2026. Scope: this independent game project only.

@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0015
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: 55% town-scale private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # 55% town-scale private web delivery
 
 14 October 2026 (Europe/London). DEC-092. Version24 is confirmed live at

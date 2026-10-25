@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0010
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Sidebar cleanup and building size review
+links: []
+owner: AZMARA chat
+---
+
 # Sidebar cleanup and building size review
 
 13 October 2026. Parts 1 and 2 were implemented locally under DEC-087 and later

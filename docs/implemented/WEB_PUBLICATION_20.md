@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0011
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Web update20 — confirmed delivery, manual review pending
+links: []
+owner: AZMARA chat
+---
+
 # Web update20 — confirmed delivery, manual review pending
 
 12 October2026 (Europe/London). DEC-085 explicitly requests publication of

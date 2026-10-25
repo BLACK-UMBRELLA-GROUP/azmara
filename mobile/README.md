@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0024
+type: GUIDE
+status: CURRENT
+feature: CODE AND RUNNING
+purpose: AZMARA local iPhone prototype
+links: []
+owner: AZMARA chat
+---
+
 # AZMARA local iPhone prototype
 
 Authority: `DEC-039`. This independent Flutter/WKWebView shell packages the

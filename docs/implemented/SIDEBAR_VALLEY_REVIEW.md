@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0008
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Left sidebar and valley concepts — local review
+links: []
+owner: AZMARA chat
+---
+
 # Left sidebar and valley concepts — local review
 
 12 October 2026. DEC-080–084. **Sidebar built locally; final manual verification pending. Valley is proposal-only. Nothing published or copied to the native app.**

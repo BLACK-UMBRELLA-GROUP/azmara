@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0002
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Revised B2 valley defence implementation
+links: []
+owner: AZMARA chat
+---
+
 # Revised B2 valley defence implementation
 
 Implemented 14 October 2026 under DEC-093.

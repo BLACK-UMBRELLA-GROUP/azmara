@@ -1,0 +1,4 @@
+# Left out of MAP.md on purpose (generate_map.py). Say why on each line.
+mobile/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md   # Flutter template file
+evidence   # screenshots and run records, not documents
+sites   # private preview checkout, its own repo

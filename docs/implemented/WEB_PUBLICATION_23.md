@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0014
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Baked-streets private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Baked-streets private web delivery
 
 14 October2026 (Europe/London). DEC-091. Version23 is confirmed live at

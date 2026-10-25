@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0021
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Full-screen private web delivery 30
+links: []
+owner: AZMARA chat
+---
+
 # Full-screen private web delivery 30
 
 17 October 2026 (Europe/London). DEC-101. Private web version 30 is live at

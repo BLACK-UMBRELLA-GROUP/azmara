@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0003
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Baked streets and 80% town scale
+links: []
+owner: AZMARA chat
+---
+
 # Baked streets and 80% town scale
 
 Completed locally on14 October2026 under DEC-091. Publication is recorded in a

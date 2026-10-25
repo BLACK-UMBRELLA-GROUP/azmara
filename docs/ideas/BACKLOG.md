@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0029
+type: PLAN
+status: CURRENT
+feature: IDEAS AND PROPOSALS
+purpose: Exploratory ideas
+links: []
+owner: AZMARA chat
+---
+
 # Exploratory ideas
 
 Status: **IDEAS ONLY**. These possibilities come from the initial Founder brief

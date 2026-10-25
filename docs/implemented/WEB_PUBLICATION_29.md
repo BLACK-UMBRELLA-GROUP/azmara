@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0020
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Locked land stages private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Locked land stages private web delivery
 
 17 October 2026 (Europe/London). DEC-100 and DEC-101. Private web version 29

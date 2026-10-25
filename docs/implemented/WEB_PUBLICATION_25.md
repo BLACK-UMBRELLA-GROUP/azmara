@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0016
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Revised B2 valley defence private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Revised B2 valley defence private web delivery
 
 14 October 2026 (Europe/London). DEC-093. Version25 is confirmed live at

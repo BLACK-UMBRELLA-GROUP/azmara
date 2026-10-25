@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0013
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: UI cleanup web22 private delivery
+links: []
+owner: AZMARA chat
+---
+
 # UI cleanup web22 private delivery
 
 13 October 2026. DEC-088. Version22 is confirmed live at

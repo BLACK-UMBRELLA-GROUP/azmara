@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0009
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: What actually exists
+links: []
+owner: AZMARA chat
+---
+
 # What actually exists
 
 As of: 19 October 2026. Phase: **DEC-107 implemented locally; private web32 and native build 3 unchanged**.

@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0004
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: AZMARA iPhone build 3
+links: []
+owner: AZMARA chat
+---
+
 # AZMARA iPhone build 3
 
 17 October 2026 (Europe/London). DEC-101.

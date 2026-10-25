@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0027
+type: REPORT
+status: CURRENT
+feature: FOUNDATION
+purpose: Foundation inspection and handover
+links: []
+owner: AZMARA chat
+---
+
 # Foundation inspection and handover
 
 Date: 6 October 2026, Europe/London. Owner: Codex in this independent game chat.

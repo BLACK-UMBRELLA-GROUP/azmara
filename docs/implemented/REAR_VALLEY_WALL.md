@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0007
+type: REPORT
+status: CURRENT
+feature: BUILT AND DELIVERED
+purpose: Rear valley wall — implemented draft
+links: []
+owner: AZMARA chat
+---
+
 # Rear valley wall — implemented draft
 
 12 October 2026. DEC-086 authorizes the preferred option A, including only

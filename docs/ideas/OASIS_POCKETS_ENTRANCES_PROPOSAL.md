@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0035
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Oasis Town — shaded pockets and entrances
+links: []
+owner: AZMARA chat
+---
+
 # Oasis Town — shaded pockets and entrances
 
 11 October 2026 · DEC-074 · Proposal only · Awaiting implementation approval

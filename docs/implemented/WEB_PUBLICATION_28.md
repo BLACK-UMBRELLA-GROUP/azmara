@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0019
+type: REPORT
+status: SUPERSEDED
+feature: BUILT AND DELIVERED
+purpose: Full-bleed oasis private web delivery
+links: []
+owner: AZMARA chat
+---
+
 # Full-bleed oasis private web delivery
 
 15 October 2026 (Europe/London). DEC-097. Version28 is confirmed live at

@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0034
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Oasis Town — Level25 middle-stage draft
+links: []
+owner: AZMARA chat
+---
+
 # Oasis Town — Level25 middle-stage draft
 
 12 October 2026 (Europe/London) · DEC-077 · **Proposal only, not implemented**

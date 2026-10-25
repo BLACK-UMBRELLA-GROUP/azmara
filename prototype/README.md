@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0025
+type: GUIDE
+status: CURRENT
+feature: CODE AND RUNNING
+purpose: AZMARA town screen design preview
+links: []
+owner: AZMARA chat
+---
+
 # AZMARA town screen design preview
 
 ## Current local build — not published

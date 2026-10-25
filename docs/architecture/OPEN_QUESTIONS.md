@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0042
+type: PLAN
+status: CURRENT
+feature: OPEN QUESTIONS
+purpose: Open questions — production architecture unresolved
+links: []
+owner: AZMARA chat
+---
+
 # Open questions — production architecture unresolved
 
 Status: **DEFERRED / EXPLORATORY**, except the bounded iPhone prototype

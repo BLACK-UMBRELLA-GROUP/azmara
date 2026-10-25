@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0031
+type: RESEARCH
+status: CURRENT
+feature: IDEAS AND PROPOSALS
+purpose: Canyon and wall defence proposal
+links: []
+owner: AZMARA chat
+---
+
 # Canyon and wall defence proposal
 
 13 October 2026. Proposal only under DEC-087; no new canyon or wall art is

@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0037
+type: RESEARCH
+status: CURRENT
+feature: IDEAS AND PROPOSALS
+purpose: Street direction study
+links: []
+owner: AZMARA chat
+---
+
 # Street direction study
 
 The road redesign now has one exact manually composed review target. The earlier

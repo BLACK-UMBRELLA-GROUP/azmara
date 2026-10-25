@@ -1,3 +1,13 @@
+---
+id: DOC-AZM-0039
+type: SPEC
+status: DRAFT
+feature: IDEAS AND PROPOSALS
+purpose: Valley wall composition — original proposal, A subsequently authorized
+links: []
+owner: AZMARA chat
+---
+
 # Valley wall composition — original proposal, A subsequently authorized
 
 Subsequent status: DEC-086 now authorizes implementing and publishing A,
