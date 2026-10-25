@@ -10,7 +10,7 @@ under `DEC-100` through `DEC-107`; physical app installation remains in-place on
 Target platforms: **iOS, Android and web browsers** (`DEC-010`). Engine,
 architecture, cross-platform account behaviour and launch order remain open.
 
-The project folder is `SUB BUSINESS/AZMARA`. It was previously the top-level
+The project folder is `AZMARA`. It was previously the top-level
 folder `APP GAME PROJECT - IKARIAM`; that was an internal working-folder name,
 not approved branding. Ikariam is an inspiration and research reference only.
 
@@ -331,7 +331,7 @@ does not establish permission to reuse material or clearance for a name.
 
 ## Project boundaries
 
-The project home is `Developer/DEVELOPMENT/SUB BUSINESS/AZMARA`
+The project home is `Developer/DEVELOPMENT/AZMARA`
 (relocated 2026-10-23 from the former top-level `APP GAME PROJECT - IKARIAM`).
 The empty checkout with the same working name under `Documents/ChatGPT` was
 not modified and is not a second source of truth for this foundation.

@@ -12,7 +12,7 @@ ordinary 100% town presentation. The Land stage and Building dropdowns, Test
 supplies, Reset plots, protected start framing, normal zoom/panning, approved
 55% building-art scale, art, saves, queues, plots, layouts and gameplay remain
 unchanged. V3 of the land specification is byte-preserved as
-`docs/approved/LAND_STAGES_2026-10-19_V3.md`; V4 is current.
+`docs/approved/ARCHIVE/LAND_STAGES_2026-10-19_V3.md`; V4 is current.
 
 JavaScript syntax, DEC-107 source-absence checks, protected framing, camera
 geometry and diff checks pass without a browser. DEC-084 still requires fresh
@@ -47,8 +47,8 @@ without revealing a margin. Frame width comes from registered artwork metadata
 while current scene height/scale stays fixed, ready for a later wider master.
 
 The V1 land specification is byte-preserved as
-`docs/approved/LAND_STAGES_2026-10-18_V1.md`; V3 is current, with the
-byte-preserved V2 archived as `docs/approved/LAND_STAGES_2026-10-18_V2.md`.
+`docs/approved/ARCHIVE/LAND_STAGES_2026-10-18_V1.md`; V3 is current, with the
+byte-preserved V2 archived as `docs/approved/ARCHIVE/LAND_STAGES_2026-10-18_V2.md`.
 The DEC-103 runtime changes were
 limited to `prototype/app.js` and `prototype/styles.css`. Static land, Dev-shell,
 JavaScript and pure camera-geometry checks pass. After fresh Owner permission,

@@ -1950,8 +1950,8 @@ unselected.
   crops are dead and four side palms are removed. V3 is V2 with the five
   background homes as wooden shacks; nothing else changed.
 - Archives, reference only and never overriding V3, version numbers kept:
-  `docs/approved/art/TOWN_MASTER_2026-10-17_V1.png` (locked 16 Oct) and
-  `docs/approved/art/TOWN_MASTER_2026-10-17_V2.png` (locked 17 Oct).
+  `docs/approved/art/ARCHIVE/TOWN_MASTER_2026-10-17_V1.png` (locked 16 Oct) and
+  `docs/approved/art/ARCHIVE/TOWN_MASTER_2026-10-17_V2.png` (locked 17 Oct).
 - This entry records the approved master. Build scope is set in DEC-100.
 
 ## DEC-100 — Land stages for every Town Hall look
@@ -1963,9 +1963,9 @@ unselected.
   stone edge and the avenue shrubs to be removed, then said "OK lets lock it
   all in".
 - Locked specification, updated by DEC-107: `docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md`.
-  Byte-preserved earlier versions are `docs/approved/LAND_STAGES_2026-10-18_V1.md`
-  and `docs/approved/LAND_STAGES_2026-10-18_V2.md`, plus
-  `docs/approved/LAND_STAGES_2026-10-19_V3.md`,
+  Byte-preserved earlier versions are `docs/approved/ARCHIVE/LAND_STAGES_2026-10-18_V1.md`
+  and `docs/approved/ARCHIVE/LAND_STAGES_2026-10-18_V2.md`, plus
+  `docs/approved/ARCHIVE/LAND_STAGES_2026-10-19_V3.md`,
   with stage 1 = `docs/approved/art/TOWN_MASTER_CURRENT_VERSION_V3.png` and
   stages 2–11 in `docs/approved/art/land/`.
 - Rule: land stage k shows while the Town Hall's completed look is k. The
@@ -2123,6 +2123,6 @@ unselected.
   screenshot or headless-browser run.
 - Current land specification:
   `docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md`. V3 is byte-preserved as
-  `docs/approved/LAND_STAGES_2026-10-19_V3.md`.
+  `docs/approved/ARCHIVE/LAND_STAGES_2026-10-19_V3.md`.
 
 Next unused decision identifier: `DEC-108`.
