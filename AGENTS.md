@@ -5,7 +5,7 @@
 <!-- /CORE-RULES -->
 
 Next read `MAP.md`: every live AZMARA document by ID, and the **task routes** saying which
-2–5 documents to open for your kind of task. Open only those. `docs/approved/DECISIONS.md`
+2–5 documents to open for your kind of task. Open only those. Read it only down to "Route paths" (the file paths); search the rest by ID. `docs/approved/DECISIONS.md`
 and `docs/implemented/STATUS.md` are never read whole — start from
 `docs/approved/DECISIONS_INDEX.md`, and search STATUS for what you need. After adding or
 renaming a document run `python3 "../BLACK UMBRELLA GROUP/SYSTEM/TOOLS/generate_map.py" .`
