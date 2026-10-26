@@ -74,3 +74,6 @@ prototype/debug/
 # Edit the canonical prototype assets, never this copy (Fable, 2026-10-24).
 mobile/assets/game/
 mobile/assets/game.sync.tmp/
+
+# Left-overs a mounted drive creates when an open file is deleted (lesson S12, 25 Oct 2026)
+.fuse_hidden*
