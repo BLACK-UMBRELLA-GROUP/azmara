@@ -1,7 +1,7 @@
 # AZMARA mobile strategy game project
 
-<!-- CORE-RULES v2 (short) — full rules: BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_GOVERNANCE/AGENT_CORE_RULES_CURRENT_VERSION_V2.md -->
-**Core rules:** Only Shakeel approves. No AI runs git — ever. Never touch `PRIVATE — API KEYS — DO NOT SYNC`. Never delete — move to `_to_delete`. Fable = Lead Architect and admin; Codex = design and implementation only. AGENTS.md = standing rules only (under 16 KB). End every session with a commit line for Shakeel. **BUILD FREEZE (24 Oct 2026): no feature building until Shakeel lifts it; review, docs and one-by-one approved fixes only (OA-AIOS-406).** These win on any conflict.
+<!-- CORE-RULES v2 (short) — full rules: BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_GOVERNANCE/AGENT_CORE_RULES_CURRENT_VERSION_V3.md -->
+**Core rules:** Only Shakeel approves. Only Codex runs git, within core rule 2 (AD-AIOS-114); Claude chats never do. Never touch `PRIVATE — API KEYS — DO NOT SYNC`. Never delete — move to `_to_delete`. Fable = Lead Architect and admin; Codex = design and implementation only. AGENTS.md = standing rules only (under 16 KB). End every session with a commit line for Shakeel. **BUILD FREEZE (24 Oct 2026): no feature building until Shakeel lifts it; review, docs and one-by-one approved fixes only (OA-AIOS-406).** These win on any conflict.
 <!-- /CORE-RULES -->
 
 Next read `MAP.md`: every live AZMARA document by ID, and the **task routes** saying which
@@ -131,7 +131,7 @@ The previous long version, with its round notes, is `docs/archive/AGENTS_2026-10
   supersession in `DECISIONS.md`, not silent rewrites.
 - Use Chrome for user-facing browser work; never the ChatGPT/Codex in-app browser (9 Oct 2026).
 - Version control: the repo's GitHub remote (`BLACK-UMBRELLA-GROUP/azmara`, moved from
-  `ZYRA-APP-LAB` on 25 Oct) was set up by Shakeel on 24 Oct 2026. No AI runs git. The private-preview checkout in `sites/azmara-private-preview/`
+  `ZYRA-APP-LAB` on 25 Oct) was set up by Shakeel on 24 Oct 2026. Only Codex runs git, within core rule 2 (AD-AIOS-114). The private-preview checkout in `sites/azmara-private-preview/`
   is separate and gitignored — never nest it, push it or attach it to this repo.
 - Generated folders (for example `mobile/assets/game/`, made by `mobile/tool/sync_game.dart`)
   and throwaway captures (`prototype/debug/`) stay out of git. Edit the canonical prototype assets,
