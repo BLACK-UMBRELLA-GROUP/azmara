@@ -42,7 +42,7 @@ re-run the tool.
 
 _Stop here unless you need to look up another ID._
 
-## Documents (31 live)
+## Documents (33 live)
 
 ### APPROVED
 
@@ -78,6 +78,12 @@ _Stop here unless you need to look up another ID._
 |---|---|---|---|---|
 | DOC-AZM-0026 | `docs/CONCEPT.md` | SPEC | AZMARA game concept and thematic direction | 35 |
 
+### DESIGN TOOLS
+
+| ID | File | Type | Purpose | Links | KB |
+|---|---|---|---|---|---|
+| DOC-AZM-0043 | `tools/README.md` | GUIDE | The AZMARA chat's picture-editing scripts and the working images they need to rebuild the land stages | DEC-099, DEC-100 | 3 |
+
 ### FOUNDATION
 
 | ID | File | Type | Purpose | KB |
@@ -86,9 +92,10 @@ _Stop here unless you need to look up another ID._
 
 ### GOVERNANCE
 
-| ID | File | Type | Purpose | KB |
-|---|---|---|---|---|
-| INDEX-DECISIONS | `docs/approved/DECISIONS_INDEX.md` | INDEX | Generated one-line index of DECISIONS.md; find the ID here, then search the register for it | 7 |
+| ID | File | Type | Purpose | Links | KB |
+|---|---|---|---|---|---|
+| DOC-AZM-0044 | `docs/approved/BUILD_QUEUE.md` | REGISTER | Build queue - every LOCKed brief waits here; Codex builds WAITING lines at 04:00 or on GO (charters rule 9) | AD-AIOS-115 | 1 |
+| INDEX-DECISIONS | `docs/approved/DECISIONS_INDEX.md` | INDEX | Generated one-line index of DECISIONS.md; find the ID here, then search the register for it |  | 7 |
 
 ### HOW WE WORK
 

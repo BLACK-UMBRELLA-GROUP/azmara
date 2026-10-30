@@ -12,7 +12,7 @@ owner: Fable
 
 Generated from `DECISIONS.md` by `BLACK UMBRELLA GROUP/SYSTEM/TOOLS/generate_register_index.py`. Do not edit by hand; re-run after changing the register. The register is the authority.
 
-**107 decisions; 0 marked superseded/retired.**
+**109 decisions; 0 marked superseded/retired.**
 
 | ID | Date | Title | Status |
 |---|---|---|---|
@@ -123,3 +123,5 @@ Generated from `DECISIONS.md` by `BLACK UMBRELLA GROUP/SYSTEM/TOOLS/generate_reg
 | DEC-105 |  | Protect the start view and add transient Dev view zoom |  |
 | DEC-106 |  | Publish the protected start view and Dev view zoom privately |  |
 | DEC-107 |  | Remove the temporary Dev view-zoom test |  |
+| DEC-108 |  | Save the AZMARA chat's picture tools in AZMARA/tools/ |  |
+| DEC-109 |  | Land redesign in Weave: the AZMARA chat may run it and spend credits |  |

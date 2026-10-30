@@ -1,7 +1,7 @@
 # AZMARA mobile strategy game project
 
 <!-- CORE-RULES v2 (short) — full rules: BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_GOVERNANCE/AGENT_CORE_RULES_CURRENT_VERSION_V4.md -->
-**Core rules:** Only Shakeel approves. Only Codex runs git, within core rule 2 (AD-AIOS-114); Claude chats never do. Never touch `PRIVATE — API KEYS — DO NOT SYNC`. Never delete — move to `_to_delete`. Fable = Lead Architect and admin; the AZMARA chat (Claude) is lead designer; Codex builds only from LOCKed files (core rule 11, AD-AIOS-115). AGENTS.md = standing rules only (under 16 KB). Every finished task ends in a commit by Codex (core rule 10). **BUILD FREEZE (24 Oct 2026): no feature building until Shakeel lifts it; review, docs and one-by-one approved fixes only (OA-AIOS-406).** These win on any conflict.
+**Core rules:** Only Shakeel approves. Only Codex runs git, within core rule 2 (AD-AIOS-114); Claude chats never do. Never touch `PRIVATE — API KEYS — DO NOT SYNC`. Never delete — move to `_to_delete`. Fable = Lead Architect and admin; the AZMARA chat (Claude) is lead designer; Codex builds only from LOCKed files (core rule 11, AD-AIOS-115). AGENTS.md = standing rules only (under 16 KB). Every finished task ends in a commit by Codex (core rule 10). **BUILD FREEZE (24 Oct 2026) still on for AZMARA: no feature building until Shakeel lifts it in writing; review, docs and one-by-one approved fixes only (OA-AIOS-406). Lifted for ZYRA only, 29 Oct.** These win on any conflict.
 <!-- /CORE-RULES -->
 
 Next read `MAP.md`: every live AZMARA document by ID, and the **task routes** saying which

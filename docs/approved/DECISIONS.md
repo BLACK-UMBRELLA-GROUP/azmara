@@ -2125,4 +2125,40 @@ unselected.
   `docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md`. V3 is byte-preserved as
   `docs/approved/ARCHIVE/LAND_STAGES_2026-10-19_V3.md`.
 
-Next unused decision identifier: `DEC-108`.
+## DEC-108 — Save the AZMARA chat's picture tools in AZMARA/tools/
+
+- Date: 29 October 2026 (Europe/London). Filed by Fable on 30 October from the
+  AZMARA chat note of 29 October (session 1).
+- Source: the Owner's words: "Yes to saving your tools: put them in
+  AZMARA/tools/ (scripts in tools/scripts/, working images in tools/images/, a
+  short tools/README.md - nothing loose beside the subfolders)". Approves G84.
+- Done the same day by the AZMARA chat: 15 scripts and 18 working images
+  (18 MB) in `tools/`, with `tools/README.md` (DOC-AZM-0043);
+  `land_ladder.py` rebuilds all 11 land stages byte-identical to the locked
+  pictures. Left out: the 205 MB LaMa model (over the 50 MB rule; its sha256 is
+  in the README), copies of locked art (scripts read
+  `docs/approved/art/ARCHIVE/`), one-off crops and abandoned scripts.
+  `tools/images/land/stages/` (generated output) is in `.gitignore`.
+- Not a build: the build freeze stays on for AZMARA ("Build freeze stays on for
+  AZMARA until I lift it in writing"). The AZMARA chat never talks to Codex:
+  "you never talk to him - he builds only from the LOCK records and build
+  briefs you write in AZMARA/docs/approved/".
+
+## DEC-109 — Land redesign in Weave: the AZMARA chat may run it and spend credits
+
+- Date: 29 October 2026 (Europe/London). Filed by Fable on 30 October from the
+  AZMARA chat note of 29 October (sessions 3-5).
+- Source: the Owner's words: "take over my pc and u do these steps"; "always
+  open in chrome"; "i approve for you to run credits"; later "i said you have
+  control to use credits".
+- The AZMARA chat may run the land redesign (G82) in Weave in the Owner's own
+  Chrome and spend Weave credits on this redesign without asking each time
+  (33 credits used on 29 October; 95 left). This is about browser work done for
+  him; DEC-084 (the prototype never opens Chrome by itself) is unchanged.
+- Direction so far, all drafts, nothing locked: run 1 "Good direction, shrink
+  oasis"; "Weave on bottom only"; "Put our canyon back". Redesign draft v1
+  (`tools/images/weave_out/AZMARA_redesign_draft_v1_2026-10-29.png`) waits for
+  the Owner's LOCK before the 11 land stages are rebuilt from it.
+- G68 (Town Hall look 9 at Level 41 or 39): "Decide later" - stays at 41.
+
+Next unused decision identifier: `DEC-110`.
