@@ -3,7 +3,7 @@ id: DOC-AZM-0044
 type: REGISTER
 status: CURRENT
 feature: GOVERNANCE
-purpose: Build queue - every LOCKed brief waits here; Codex builds WAITING lines at 04:00 or on GO (charters rule 9)
+purpose: Build queue - every LOCKed brief waits here; Codex builds WAITING lines at 01:00 or on GO (charters rule 9)
 links: [AD-AIOS-115]
 owner: AZMARA chat
 ---
@@ -11,9 +11,9 @@ owner: AZMARA chat
 # BUILD QUEUE - AZMARA
 
 Only the AZMARA chat (Claude) writes here, and only after Shakeel says LOCK. Codex builds every WAITING line in order:
-at his 04:00 job, or at once when Shakeel types GO in the AZMARA Codex chat. Codex changes only the Status column and
+at his 01:00 job, or at once when Shakeel types GO in the AZMARA Codex chat. Codex changes only the Status column and
 adds the task-note date; he never adds a line. A FAILED line stays until the AZMARA chat decides. Fable checks at 04:15
-that every BUILT line has a LOCK record. Newest line at the bottom.
+that every BUILT line has a LOCK record. Newest line at the bottom. QUESTION = Codex filed a question in `QUESTIONS.md` beside this file and moved on; the business chat answers and sets the line back to WAITING (rule 10).
 
-| # | Added | Brief path | Status (WAITING / BUILT / FAILED) | Built on | Note |
+| # | Added | Brief path | Status (WAITING / BUILT / FAILED / QUESTION) | Built on | Note |
 |---|---|---|---|---|---|

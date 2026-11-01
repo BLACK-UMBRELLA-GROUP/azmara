@@ -42,7 +42,7 @@ re-run the tool.
 
 _Stop here unless you need to look up another ID._
 
-## Documents (33 live)
+## Documents (34 live)
 
 ### APPROVED
 
@@ -94,7 +94,8 @@ _Stop here unless you need to look up another ID._
 
 | ID | File | Type | Purpose | Links | KB |
 |---|---|---|---|---|---|
-| DOC-AZM-0044 | `docs/approved/BUILD_QUEUE.md` | REGISTER | Build queue - every LOCKed brief waits here; Codex builds WAITING lines at 04:00 or on GO (charters rule 9) | AD-AIOS-115 | 1 |
+| DOC-AZM-0044 | `docs/approved/BUILD_QUEUE.md` | REGISTER | Build queue - every LOCKed brief waits here; Codex builds WAITING lines at 01:00 or on GO (charters rule 9) | AD-AIOS-115 | 1 |
+| DOC-AZM-0045 | `docs/approved/QUESTIONS.md` | REGISTER | Codex's questions for the AZMARA chat - Codex never asks Shakeel in chat; he files the question here, marks… | AD-AIOS-116 | 1 |
 | INDEX-DECISIONS | `docs/approved/DECISIONS_INDEX.md` | INDEX | Generated one-line index of DECISIONS.md; find the ID here, then search the register for it |  | 7 |
 
 ### HOW WE WORK

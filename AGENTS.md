@@ -43,6 +43,13 @@ The previous long version, with its round notes, is `docs/archive/AGENTS_2026-10
   check. This does not override DEC-084: obtain fresh explicit Owner permission
   before any automated/headless browser run, and never auto-open visible Chrome.
 
+- Same system as ZYRA (charters V6 rule 11, Founder 31 Oct 2026): after each LOCK the AZMARA chat writes a build brief
+  in `docs/approved/<FEATURE>/BUILD_BRIEF_<YYYY-MM-DD>.md` and one WAITING line in `docs/approved/BUILD_QUEUE.md`;
+  Codex builds the queue at 01:00 or at once on any message from Shakeel in the AZMARA Codex chat (rule 9) and never
+  asks Shakeel - a question goes in `docs/approved/QUESTIONS.md` and the line waits as QUESTION (rule 10). The AZMARA
+  chat keeps one interactive prototype page (Artifact) of the game's screens, updated with every LOCK; chosen option
+  only; a change in one place applied everywhere. Fable sets up the morning check task when the freeze is lifted.
+
 ## Standing holds — check before every task
 
 - Anything `DECISIONS.md` or `STATUS.md` marks HELD or PAUSED (for example native
