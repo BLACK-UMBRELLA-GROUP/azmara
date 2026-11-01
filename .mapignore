@@ -2,3 +2,4 @@
 mobile/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md   # Flutter template file
 evidence   # screenshots and run records, not documents
 sites   # private preview checkout, its own repo
+ROADMAP.md # Public overview kept as plain Markdown under the public-repository brief.

@@ -1,6 +1,5 @@
 # Machine-local secrets; .env.example may contain placeholders only.
-.env
-.env.*
+.env*
 !.env.example
 *.key
 *.pem
@@ -11,6 +10,8 @@
 *.jks
 *.keystore
 *.mobileprovision
+GoogleService-Info.plist
+google-services.json
 *.provisionprofile
 credentials/
 secrets/

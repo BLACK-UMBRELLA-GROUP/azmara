@@ -153,9 +153,9 @@ company registration or the deployment of recent local website changes.
 Subsequent confirmed state under `DEC-041`: the Founder purchased `azmara.app`.
 Cloudflare Registrar shows Active, expiry 9 October 2027, auto-renew enabled
 for 9 September 2027, and displayed renewal price $14.20/year. It is in the
-existing account named Zyra Connect, account ID
-`f2c1a6060e5ca076b42bb379db235bc9`, with its own AZMARA zone ID
-`227315e0f0ab385900af348b17331eae`. This verifies the current arrangement, not
+existing account named `<CLOUDFLARE_ACCOUNT_NAME>`, account ID
+`<CLOUDFLARE_ACCOUNT_ID>`, with its own AZMARA zone ID
+`<CLOUDFLARE_ZONE_ID>`. This verifies the current arrangement, not
 the recommended separate organisation account or a registered publisher.
 Only this new zone's four web-routing/validation records were added. The
 existing private Sites project now accepts `https://azmara.app/`, with active

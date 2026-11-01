@@ -18,7 +18,7 @@ a public store release, multiplayer backend or a ZYRA client.
 
 - Display name: AZMARA; provisional local bundle ID:
   `com.shakeelahmad.azmara.preview`; first version `0.1.0+1`, current `0.1.0+3`.
-- Existing authorised Apple development team: `9Y7Z8F36SJ`. Development
+- Apple development team (set locally): `<APPLE_TEAM_ID>`. Development
   provisioning is for AZMARA's separate identity, never a copied ZYRA profile.
 - `../prototype/` remains the canonical game source. Generated `assets/game/`
   contains only the allowlisted current runtime closure plus the native save
