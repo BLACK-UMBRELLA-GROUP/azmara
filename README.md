@@ -6,7 +6,7 @@ The intended direction is a mobile-first, persistent multiplayer game for iOS, A
 
 This repository currently contains a town-screen visual and interaction prototype, project documentation and a separate Flutter iPhone preview shell. The prototype demonstrates Town, Region and World navigation, a building catalogue, local town saves and development review controls. Its sample resources, costs and timers do not establish game balance. Live resource simulation, multiplayer, game accounts, server persistence, anti-cheat and store integration are not implemented.
 
-**AZMARA feature development is frozen.** Review, documentation and individually approved fixes may proceed. Feature implementation requires the Founder's written freeze lift and the relevant locked design. The repository stays private until the Founder explicitly authorises `PUBLISH`. The hosted preview remains owner-private; repository preparation does not authorise a public game or release.
+Feature development is paused while the Founder's first product (ZYRA) reaches launch; review, documentation and individually approved fixes continue, and new features start from locked designs when the pause is lifted.
 
 ## Run the browser prototype
 
@@ -22,7 +22,7 @@ The browser runtime uses vanilla JavaScript, HTML, CSS, SVG landscapes and pre-r
 
 ## Optional iPhone preview shell
 
-The separate Flutter shell bundles the browser prototype in a WKWebView. It is a local preview, not the selected production architecture. Its Dart constraint is `^3.12.2`; the mobile guide documents Flutter 3.44.2 as checked on 17 October 2026. This is a recorded toolchain check, not a claim about the reader's installation. Package versions remain defined by [mobile/pubspec.yaml](mobile/pubspec.yaml) and its lockfile.
+The separate Flutter shell bundles the browser prototype in a WKWebView. It is a local preview, not the selected production architecture. Its Dart constraint is `^3.12.2`; the mobile guide documents Flutter 3.44.2 as checked on 17 October 2026. Package versions remain defined by [mobile/pubspec.yaml](mobile/pubspec.yaml) and its lockfile.
 
 With the documented Dart and Flutter tools available on your `PATH`, refresh the allowlisted bundled runtime from the repository root:
 
