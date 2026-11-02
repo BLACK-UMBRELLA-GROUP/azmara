@@ -1,6 +1,8 @@
 # AZMARA roadmap
 
-AZMARA is in prototype and product-definition work. Feature development is paused until ZYRA launches. The hosted preview is owner-private. The repository stays private until the Founder explicitly authorises `PUBLISH`. The production engine, backend, accounts and release plan remain open.
+**Overall:** roughly **200 hours** of work to a playable multiplayer alpha (game rules, server and accounts, art, balancing, tests). The table below is the first slice: review and specification work.
+
+AZMARA is in prototype and product-definition work. Feature development is paused until ZYRA launches. The production engine, backend, accounts and release plan remain open.
 
 This is a proposed sequence of review and specification work drawn from existing project questions and ideas. It is not an approved build queue, a delivery commitment or permission to implement held work. Future building requires the Founder's written freeze lift, the relevant explicit `LOCK` and a recorded build brief.
 
