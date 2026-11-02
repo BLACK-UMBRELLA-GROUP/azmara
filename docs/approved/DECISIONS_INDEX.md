@@ -23,10 +23,10 @@ Generated from `DECISIONS.md` by `BLACK UMBRELLA GROUP/SYSTEM/TOOLS/generate_reg
 | DEC-005 |  | Incremental, explicit decisions |  |
 | DEC-006 |  | Live reference research |  |
 | DEC-007 |  | Exclude deities and miracles |  |
-| DEC-008 |  | Abbasid and Islamic Golden Age inspiration |  |
+| DEC-008 |  | Abbasid Baghdad and its golden age inspiration |  |
 | DEC-009 |  | Provisional game name AZMARA |  |
 | DEC-010 |  | iOS Android and browser targets |  |
-| DEC-011 |  | Fictional Islamic Golden Age-inspired world |  |
+| DEC-011 |  | Fictional world inspired by the golden age of Abbasid Baghdad |  |
 | DEC-012 |  | Town ownership and first visual design |  |
 | DEC-013 |  | Reference screen arrangement for the first draft |  |
 | DEC-014 |  | First draft feedback and core strategy reference |  |

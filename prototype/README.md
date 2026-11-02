@@ -674,7 +674,7 @@ remain historical originals, not the active starting-town scene.
 
 The earlier `assets/azmara-town-v1.png` and `assets/town-art-brief.txt` remain
 historical concept references, not the active starting-town scene. The artwork
-depicts a fictional civilisation inspired by the Islamic Golden Age, not an
+depicts a fictional civilisation inspired by the golden age of Abbasid Baghdad, not an
 authenticated historical reconstruction.
 
 No third-party game artwork, code, character portraits, icons or datasets are

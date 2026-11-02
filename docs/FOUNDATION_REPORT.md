@@ -123,7 +123,7 @@ implementation merely because the foundation is ready.
 ## Subsequent setting direction
 
 On 6 October 2026, the Founder approved the Abbasid era, Baghdad at its height
-and the Islamic Golden Age as the primary thematic and historical inspiration
+and the golden age of Abbasid Baghdad as the primary thematic and historical inspiration
 under `DEC-008`. The historical, fictional-inspired or alternative-history
 approach remains open. The initial deferred-setting wording above describes
 the original setup, not the current thematic direction.

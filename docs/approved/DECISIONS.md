@@ -93,14 +93,14 @@ unselected.
 - Implementation status: recorded as a design constraint only. No game code,
   screens or content have been created or changed.
 
-## DEC-008 — Abbasid and Islamic Golden Age inspiration
+## DEC-008 — Abbasid Baghdad and its golden age inspiration
 
 - Date: 6 October 2026.
 - Source: direct Founder setting and theme update, with an explicit instruction
   to update concept documentation and foundation only.
 - Approved direction: draw the game's main historical and visual inspiration
-  from the classical Islamic world during the Islamic Golden Age, particularly
-  the Abbasid era and Baghdad at its height. Do not reproduce the Ancient
+  from the Abbasid world during the golden age of Abbasid Baghdad, particularly
+  the city at its height. Do not reproduce the Ancient
   Greek or Mediterranean setting of the reference game.
 - Approved design philosophy: the setting should eventually inform gameplay
   and the game's own identity, not merely rename or reskin Ikariam.
@@ -109,7 +109,7 @@ unselected.
   not selected. Strict historical simulation is not assumed.
 - Ideas only: the Founder's settlement, trade, knowledge, economy,
   infrastructure, diplomacy and military examples are not approved systems.
-- Approved cultural care: treat Islamic historical sources respectfully;
+- Approved cultural care: treat the community's historical sources respectfully;
   do not trivialise religious concepts, sacred figures, sacred texts or acts
   of worship as cheap mechanics. Research real terminology, architecture,
   institutions, places and events before presenting details as historical fact.
@@ -150,12 +150,12 @@ unselected.
 - Implementation status: platform direction recorded in documentation only;
   no client exists for any platform.
 
-## DEC-011 — Fictional Islamic Golden Age-inspired world
+## DEC-011 — Fictional world inspired by the golden age of Abbasid Baghdad
 
 - Date: 6 October 2026.
 - Source: Founder selected option 1 in the setting question.
 - Approved: an original fictional world, geography, cities and characters
-  inspired by the Islamic Golden Age and Abbasid civilisation.
+  inspired by the golden age of Abbasid Baghdad and Abbasid civilisation.
 - Boundary: specific historical claims still need research. Fiction does not
   override cultural care or the exclusion of deities, polytheism and miracles.
 
@@ -590,7 +590,7 @@ unselected.
   isometric/2.5D terrain, material texture, banks, vegetation, coherent lighting
   and shadows. Empty sites use blue flags embedded in the landscape rather
   than numbered circular board tokens. Generate original project artwork as
-  needed; keep the fictional Islamic Golden Age-inspired direction.
+  needed; keep the fictional direction inspired by the golden age of Abbasid Baghdad.
 - Preserve: 23 plots, the same dedicated roles, only Town Hall occupied and
   level 1 on fresh/reset state. The current v3 name, stocks, Hall progress and
   active demo queue remain compatible; changing artwork is not a reset.

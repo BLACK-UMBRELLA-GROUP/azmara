@@ -14,7 +14,7 @@ Status: **DEFERRED / EXPLORATORY**, except the bounded iPhone prototype
 packaging choice under `DEC-039`. A question is not a requirement.
 
 The [current concept](../CONCEPT.md) records the approved Abbasid-era Baghdad
-and Islamic Golden Age inspiration. These questions concern unresolved choices
+and its golden age inspiration. These questions concern unresolved choices
 within that direction, not whether to return to the reference game's setting.
 
 ## Define the game before selecting the stack

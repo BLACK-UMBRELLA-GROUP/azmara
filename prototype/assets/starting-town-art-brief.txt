@@ -9,7 +9,7 @@ Both copied from Codex generated_images into prototype/assets; originals retaine
 Terrain-only background contains no buildings, marked plots or UI. The app places exactly 22 empty sprites and the separately retained Town Hall sprite.
 Native world placement is determined by source and verification, not by the prompt's approximate shoreline target. The delivered terrain's shoreline begins earlier than the requested80%; use the reviewed square placement rather than stretching the image.
 No image editing, pixel recolouring, cropping or file conversion was performed after generation.
-Fictional Islamic Golden Age-inspired AZMARA environment, not an authenticated historical reconstruction.
+Fictional AZMARA environment inspired by the golden age of Abbasid Baghdad, not an authenticated historical reconstruction.
 
 FINAL TERRAIN PROMPT
 Use case: stylized-concept.

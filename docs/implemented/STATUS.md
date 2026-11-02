@@ -2048,7 +2048,7 @@ design scope is recorded below.
 
 ## First local town design
 
-Under `DEC-011`, the world is fictional and inspired by the Islamic Golden Age.
+Under `DEC-011`, the world is fictional and inspired by the golden age of Abbasid Baghdad.
 Under `DEC-012`, the player owns a town and a first local interactive design is
 authorised. `DEC-013` selects the supplied reference screen's arrangement for
 this draft, using original AZMARA artwork, code, icons and wording.

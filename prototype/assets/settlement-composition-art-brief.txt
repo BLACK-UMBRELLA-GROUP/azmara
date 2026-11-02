@@ -1,6 +1,6 @@
 AZMARA — composed starting-settlement artwork, 8 October 2026
 
-Authority: DEC-034. Original fictional Islamic Golden Age-inspired game artwork.
+Authority: DEC-034. Original fictional game artwork inspired by the golden age of Abbasid Baghdad.
 Method: built-in image_gen tool; three new independently generated assets.
 No proprietary reference-game images supplied to generation.
 Copied without post-generation pixel editing; historical originals retained.

@@ -120,8 +120,8 @@ end-to-end outcomes.
 The next discussion concerns the Founder's first draft: what to keep at the
 level of player experience, what to reject and what original core loop should
 distinguish our game. The subsequent setting update is recorded in the
-[current concept](../CONCEPT.md): Abbasid-era Baghdad and the Islamic Golden
-Age are the primary inspiration. `DEC-011` subsequently selected a fictional
+[current concept](../CONCEPT.md): Abbasid-era Baghdad and its golden
+age are the primary inspiration. `DEC-011` subsequently selected a fictional
 world inspired by that period, not a strict historical recreation.
 The reference observations above do not approve importing its setting or
 mechanics. No code, screens, stack or copied game content should be produced
@@ -232,7 +232,7 @@ Outstanding questions are which scarcity makes trade useful, how absence
 affects growth and shortages, and what offline conflict risk is acceptable.
 Shop, premium items, piracy, daily incentives and religious systems are not
 automatically part of AZMARA merely because the reference has them. Do not
-replace excluded temples or miracles with sacred Islamic reward mechanics.
+replace excluded temples or miracles with sacred reward mechanics drawn from the community's religion.
 
 ## Founder screenshots of the three map views
 
@@ -351,7 +351,7 @@ additional approved mechanics.
 ### Exclusions and unresolved rules
 
 Deities, temples, shrines and miracles are excluded by `DEC-007`; they will not
-be renamed into sacred Islamic bonuses. AZMARA retains timber, clay, silver,
+be renamed into sacred bonuses drawn from the community's religion. AZMARA retains timber, clay, silver,
 grain and iron under `DEC-019`, rather than importing the reference's resources.
 
 The transcript does not approve expansion penalties, espionage, PvE targets,

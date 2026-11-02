@@ -127,8 +127,8 @@ The previous long version, with its round notes, is `docs/archive/AGENTS_2026-10
   Do not import another venture's roles, approval routing, registers or schedules.
 - AZMARA is the provisional name (DEC-009); final branding and name clearance are unresolved.
   Ikariam is a research reference, not branding or a product to clone.
-- Theme (DEC-011): a fictional world inspired by Abbasid-era Baghdad and the Islamic Golden
-  Age. Respect Islamic sources and sacred material, research historical claims, and keep the
+- Theme (DEC-011): a fictional world inspired by the golden age of Abbasid Baghdad.
+  Respect the community's religious sources and sacred material, research historical claims, and keep the
   exclusion of deities, polytheism, divine powers and miracles.
 - Originality: never copy proprietary code, art, text, datasets, balancing, maps or names.
   Keep research sources and proposals distinct; never claim legal or name clearance without evidence.

@@ -23,8 +23,8 @@ alone does not rename the existing project directory or authorise external
 registrations. The later purchased-domain connection is approved under `DEC-041`.
 
 The game is an original, mobile-first, persistent online multiplayer strategy
-game. Its primary historical and visual inspiration is the classical Islamic
-world during the Islamic Golden Age, particularly the Abbasid era and Baghdad
+game. Its primary historical and visual inspiration is the Abbasid world during
+the golden age of Abbasid Baghdad, particularly the city
 at its height. The Founder has selected a fictional inspired world and a
 player-owned town. Detailed geography, lore and gameplay systems remain open.
 
@@ -110,7 +110,7 @@ outside that scope.
 
 ## Primary inspiration
 
-The Founder has selected Abbasid-era Baghdad and the Islamic Golden Age as
+The Founder has selected Abbasid-era Baghdad and its golden age as
 the main sources of inspiration. Areas to explore include:
 
 - Great cities, settlements, different regions and peoples, architecture and
@@ -129,7 +129,7 @@ details require research before they are presented as fact.
 ## Fictional inspired world
 
 Under `DEC-011`, AZMARA uses original fictional geography, cities and characters
-inspired by Abbasid civilisation and the Islamic Golden Age. It is not a strict
+inspired by Abbasid civilisation and the golden age of Abbasid Baghdad. It is not a strict
 historical simulator or a claim to reproduce actual Baghdad. Real historical
 details still require research when presented as fact.
 
@@ -551,7 +551,7 @@ do not approve screens, art production, architecture or an implementation plan.
 
 ## Cultural and historical care
 
-Treat real Islamic history and its sources respectfully. The principal focus
+Treat the setting's real religious history and its sources respectfully. The principal focus
 is civilisation, cities, economics, scholarship, exploration, diplomacy,
 technology, trade and strategy.
 
