@@ -1,6 +1,6 @@
 # AZMARA
 
-AZMARA is an original strategy-game project about building a settlement, developing its economy, trading and navigating conflict in a fictional world inspired by Abbasid-era Baghdad and the Islamic Golden Age. AZMARA is a provisional name; final branding and name clearance remain open.
+AZMARA is an original strategy-game project about building a settlement, developing its economy, trading and navigating conflict in a fictional world inspired by Abbasid-era Baghdad and its golden age. AZMARA is a provisional name; final branding and name clearance remain open.
 
 The intended direction is a mobile-first, persistent multiplayer game for iOS, Android and web browsers. The precise audience, daily play pattern and production technology are still being defined.
 
