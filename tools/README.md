@@ -10,9 +10,9 @@ owner: AZMARA chat
 
 # AZMARA design tools
 
-These are the AZMARA design chat's picture tools, saved here on 29 Oct 2026 at Shakeel's request
+These are the AZMARA design chat's picture tools, saved here on 29 Oct 2026 at the Founder's request
 ("Yes to saving your tools"). They made the Level 1 master and the 11 land stages.
-**These tools are not build authority.** Anything they produce is a draft until Shakeel says LOCK
+**These tools are not build authority.** Anything they produce is a draft until the Founder says LOCK
 and the file is recorded in `docs/approved/`. Codex never builds from this folder.
 
 ## What is here
@@ -20,7 +20,7 @@ and the file is recorded in `docs/approved/`. Codex never builds from this folde
 | Folder | What it holds |
 |---|---|
 | `scripts/` | Python scripts (15). Each one reads pictures and writes new ones; none of them touch `docs/approved/` |
-| `images/` | Only the working images the scripts need: masks, sprite cut-outs, in-between bases and the picture for the Weave redesign |
+| `images/` | Only the working images the scripts need: masks, sprite cut-outs and in-between bases |
 
 | Script | What it does | Needs the LaMa model |
 |---|---|---|
@@ -50,10 +50,12 @@ The stages are written to `tools/images/land/stages/`. That folder is generated 
 | LaMa model `big-lama.pt` (205 MB, sha256 `344c77bbcb158f17dd143070d1e789f38a66c04202311ae3a258ef66667a9ea9`) | Too big for git (50 MB rule). It is the public LaMa "big-lama" TorchScript file; download it again when needed, check the sha256, keep it outside the repo and pass its path to the scripts |
 | Locked masters and stage pictures | Already in `docs/approved/`; the scripts read them there instead of keeping copies |
 | Review crops, test renders, captioned review copies and older explorations (canyon, UI, roads) | One-off checks shown in chat, or superseded by later locks |
-| `shrink_land.py` | Abandoned 19 Oct: the shrink-and-collage attempt looked cut-and-pasted. The land redesign is waiting on a Weave picture instead |
+| Land redesign drafts (Weave inputs and results) | Unlocked AI-made drafts stay out of the public repo. They are kept with the business files (`BLACK UMBRELLA GROUP/BUSINESS/AZMARA/DESIGN DRAFTS/`) until a LOCK puts the chosen picture in `docs/approved/` |
+| `shrink_land.py` | Abandoned 19 Oct: the shrink-and-collage attempt looked cut-and-pasted. The land redesign moved to Weave instead |
 
 ## Change log
 
 | Date | Change |
 |---|---|
+| 2026-11-02 | Weave drafts moved out of the repo (public repository rule) |
 | 2026-10-29 | Created. Scripts saved from the AZMARA chat's workspace; `land_ladder.py` now reads the masters from `docs/approved/art/ARCHIVE/` |
