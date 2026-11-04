@@ -2161,4 +2161,16 @@ unselected.
   the Owner's LOCK before the 11 land stages are rebuilt from it.
 - G68 (Town Hall look 9 at Level 41 or 39): "Decide later" - stays at 41.
 
-Next unused decision identifier: `DEC-110`.
+## DEC-110 — Unlocked design drafts live outside the public AZMARA repo
+
+- Date: 2 November 2026 (Europe/London). Filed by Fable on 3 November from the
+  AZMARA chat note of 2 November (session 2).
+- Source: the Owner's choice when asked where the unlocked Weave drafts should
+  live now that AZMARA is public: "Move out of repo".
+- Only locked art goes in the public AZMARA repo. Drafts (the seven Weave input
+  and output pictures, about 50 MB, including redesign draft v1) now live in
+  `BLACK UMBRELLA GROUP/BUSINESS/AZMARA/DESIGN DRAFTS/` (WEAVE INPUT, WEAVE
+  OUTPUT); `tools/README.md` says so. Redesign draft v1 still waits for the
+  Owner's LOCK (DEC-109). Build freeze unchanged.
+
+Next unused decision identifier: `DEC-111`.
