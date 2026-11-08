@@ -61,6 +61,7 @@ Recheck phone availability/lock. Use these commands with the verified actual
 device ID and absolute artifact path; save non-secret receipts separately:
 
 ```sh
+/opt/homebrew/bin/dart tool/verify_ios.dart /ABSOLUTE/AZMARA/mobile/build/ios/iphoneos/Runner.app DEVICE_ID
 xcrun devicectl device info lockState --device DEVICE_ID --timeout 30
 xcrun devicectl device install app --device DEVICE_ID /ABSOLUTE/AZMARA/mobile/build/ios/iphoneos/Runner.app --timeout 60
 xcrun devicectl device process launch --device DEVICE_ID --timeout 30 com.shakeelahmad.azmara.preview
