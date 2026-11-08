@@ -40,6 +40,13 @@ for package versions. Run from the canonical project root:
 /opt/homebrew/bin/dart mobile/tool/sync_game.dart
 ```
 
+The sync reads `prototype/runtime-manifest.txt` and stages the 76 listed game
+files plus the native save bootstrap. Continue only after it exits successfully
+and prints `Bundled 76 canonical game files plus native save bootstrap (... bytes; no extras).`
+If validation fails before replacement, `mobile/assets/game/` can still hold
+the previous bundle. Check the reported error and rerun sync successfully
+before building.
+
 Then from `mobile/`:
 
 ```sh
