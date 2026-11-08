@@ -49,6 +49,29 @@ assert.deepEqual(
   [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11]
 );
 
+// Review controls pass string values. Both selectors must return the existing
+// stage record, including at fractional, clamped and invalid input boundaries.
+for (const stage of registry.stages) {
+  for (const value of [stage.stage, String(stage.stage), stage.stage + 0.75]) {
+    assert.equal(registry.forStage(value), stage, `Stage selection for ${value}`);
+  }
+}
+for (const [value, expectedStage] of [
+  [-100, 1], [0, 1], [null, 1], [undefined, 1], ["", 1],
+  ["invalid", 1], [NaN, 1], [Infinity, 1], [-Infinity, 1],
+  [12, 11], [100, 11], ["100", 11]
+]) {
+  assert.equal(registry.forStage(value), registry.stages[expectedStage - 1], `Clamped stage selection for ${value}`);
+}
+for (const [value, expectedStage] of [
+  [-100, 1], [0, 1], [null, 1], [undefined, 1], ["", 1],
+  ["invalid", 1], [NaN, 1], [Infinity, 1], [-Infinity, 1],
+  [4.99, 1], ["5", 2], [7.99, 2], ["8", 3],
+  [49.99, 10], ["50", 11], [100, 11]
+]) {
+  assert.equal(registry.forHallLevel(value), registry.stages[expectedStage - 1], `Clamped hall-level selection for ${value}`);
+}
+
 const expectedBoxes = {
   townHall: { pixels: [668, 375, 858, 512], normalized: [668 / 1536, 375 / 1024, 858 / 1536, 512 / 1024] },
   townWall: { pixels: [740, 95, 820, 140], normalized: [740 / 1536, 95 / 1024, 820 / 1536, 140 / 1024] }
@@ -61,4 +84,4 @@ for (const [id, expected] of Object.entries(expectedBoxes)) {
   assert.equal(actual.normalized.height, (expected.pixels[3] - expected.pixels[1]) / 1024);
 }
 
-console.log("land-stages: 11 locked stages, thresholds, dimensions, boxes and byte identity passed");
+console.log("land-stages: 11 locked stages, selectors, thresholds, dimensions, boxes and byte identity passed");

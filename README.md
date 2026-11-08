@@ -20,6 +20,14 @@ Open `http://127.0.0.1:4317/` manually in your browser. The review switch is at 
 
 The browser runtime uses vanilla JavaScript, HTML, CSS, SVG landscapes and pre-rendered PNG sprites. It has no production game engine or backend dependency. See [prototype/README.md](prototype/README.md) for controls, local saves, review modes and known limits.
 
+With Node.js available, run the static land-stage check from the repository root:
+
+```sh
+node prototype/tests/land-stages.cjs
+```
+
+It checks stage selection, input boundaries and the checked-in land images without starting a browser or installing packages.
+
 ## Optional iPhone preview shell
 
 The separate Flutter shell bundles the browser prototype in a WKWebView. It is a local preview, not the selected production architecture. Its Dart constraint is `^3.12.2`; the mobile guide documents Flutter 3.44.2 as checked on 17 October 2026. Package versions remain defined by [mobile/pubspec.yaml](mobile/pubspec.yaml) and its lockfile.
