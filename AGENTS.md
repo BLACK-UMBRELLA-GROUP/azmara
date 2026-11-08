@@ -35,6 +35,10 @@ The previous long version, with its round notes, is `docs/archive/AGENTS_2026-10
 
 ## Locked design workflow
 
+| Step | Who | Where |
+|---|---|---|
+| Queue start and dispatch | Codex | GO and 01:00 receivers only dispatch each eligible WAITING line to one new normal owner chat; never reuse a conversation or build in the receiver. If native fresh-chat creation fails, file QUESTION and continue independent work. Each owner runs `python3 "../BLACK UMBRELLA GROUP/SYSTEM/TOOLS/start_pack.py" "AZMARA" "<DEVELOPMENT-relative brief path>"`, then reads only brief-named files. Task note: start_pack total bytes and named reads; `Conversation: new (started HH:MM)`; actual line tokens from read-only usage records. Verify its note and commit before archiving under standing authority (OA-AIOS-426). |
+
 - This workflow governs all future design implementation and supersedes any
   lower historical note that treats chat or a handover alone as build authority.
 - A design or decision is a draft until Shakeel explicitly says `LOCK` and its
