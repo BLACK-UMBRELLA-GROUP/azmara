@@ -162,6 +162,18 @@ capturing. `AGENTS.md` records the coordinate, draw-order and screenshot rules.
 red fake colliders. UI hit targets and decoration reserves are not collision
 shapes; future red collision outlines must come from real gameplay physics.
 
+Run the debug module's activation regression from the repository root with
+Node.js and its built-in modules:
+
+```sh
+node prototype/tests/debug-activation.cjs
+```
+
+This browser-free check uses in-memory fixtures to cover rejected hosts,
+explicit local opt-in, missing map elements, default-off initialization and
+duplicate execution. It does not open a browser, read saves or modify images;
+rendering and the app's script loader remain covered by the browser checks.
+
 ## Starting-town arrangement
 
 ### Current visual catalogue and atlas
