@@ -287,3 +287,57 @@ test("uncaught errors and rejected promises stop the bridge once and prevent lat
   assert.equal(f.messages.filter((m) => m.type === "failed").length, 1);
   assert.throws(() => f.localStorage.setItem(KEY, town("Blocked")), /not ready/);
 });
+
+test("app script load failure preserves the hydrated save and permanently blocks readiness", () => {
+  const raw = town("Preserved after script failure", 3);
+  const f = fixture();
+  f.window.AZMARA_NATIVE.hydrate({ town: raw, legacy: null });
+  f.scripts[0].onerror();
+  f.scripts[0].onerror();
+  f.window.AZMARA_NATIVE.resume();
+  assert.equal(f.localStorage.getItem(KEY), raw);
+  assert.equal(f.messages.some((m) => m.type === "loaded"), false);
+  assert.equal(f.messages.filter((m) => m.type === "failed").length, 1);
+  assert.deepEqual(f.dispatched, []);
+  assert.throws(() => f.localStorage.setItem(KEY, town("Blocked")), /not ready/);
+  assert.equal(f.localStorage.getItem(KEY), raw);
+});
+
+test("saved occupancy must match rendered plots before native readiness", async () => {
+  const withoutHall = JSON.parse(town("Unplaced hall"));
+  withoutHall.hallPlaced = false;
+  const withBuilding = JSON.parse(town("Missing rendered warehouse"));
+  withBuilding.buildings = { "general-02": { typeId: "warehouse", level: 4 } };
+  for (const [raw, occupied] of [
+    [town("Missing rendered hall"), 0],
+    [town("Unexpected occupied plot"), 2],
+    [JSON.stringify(withoutHall), 1],
+    [JSON.stringify(withBuilding), 1],
+  ]) {
+    const f = fixture({ occupied });
+    f.window.AZMARA_NATIVE.hydrate({ town: raw, legacy: null });
+    f.scripts[0].onload();
+    await settle();
+    f.window.AZMARA_NATIVE.resume();
+    assert.equal(f.messages.some((m) => m.type === "loaded"), false);
+    assert.deepEqual(f.messages.at(-1), { type: "failed" });
+    assert.deepEqual(f.dispatched, []);
+    assert.throws(() => f.localStorage.setItem(KEY, town("Blocked")), /not ready/);
+    assert.equal(f.localStorage.getItem(KEY), raw);
+  }
+});
+
+test("missing or malformed saved towns fail health without replacing native progress", async () => {
+  for (const raw of [null, "", "{not valid JSON"]) {
+    const f = fixture();
+    f.window.AZMARA_NATIVE.hydrate({ town: raw, legacy: null });
+    f.scripts[0].onload();
+    await settle();
+    f.window.AZMARA_NATIVE.resume();
+    assert.equal(f.messages.some((m) => m.type === "loaded"), false);
+    assert.deepEqual(f.messages.at(-1), { type: "failed" });
+    assert.deepEqual(f.dispatched, []);
+    assert.throws(() => f.localStorage.setItem(KEY, town("Default overwrite")), /not ready/);
+    assert.equal(f.localStorage.getItem(KEY), raw);
+  }
+});

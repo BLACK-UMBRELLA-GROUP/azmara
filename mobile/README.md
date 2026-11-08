@@ -75,6 +75,17 @@ the Founder's approval. A web Site update does not update this bundled app.
 
 ## Saves and verification
 
+With Node.js already available, run the native save-bootstrap checks from the
+repository root:
+
+```sh
+node --test mobile/test/native-bootstrap.test.cjs
+```
+
+The suite uses an in-memory browser/bridge fixture to check hydration, save
+acknowledgements and startup failure handling. It needs no browser or packages
+and does not read or modify device progress.
+
 Native progress is separate from Safari, localhost and the private Site.
 Only the v3 town-layout save is mirrored into the app's native preferences;
 hydrate it before starting unchanged `app.js`. Keep malformed native state
