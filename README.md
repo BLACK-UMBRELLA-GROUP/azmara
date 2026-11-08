@@ -28,6 +28,14 @@ node prototype/tests/land-stages.cjs
 
 It checks stage selection, input boundaries and the checked-in land images without starting a browser or installing packages.
 
+Check the screenshot tool's command-line preflight with the same Node.js runtime:
+
+```sh
+node prototype/tests/capture-cli.cjs
+```
+
+The 32 cases check help, missing or unknown arguments, numeric limits, fixture-selector conflicts and invalid layout/view combinations. Child-process guards stop browser-library loading and server creation; these tests use no disk fixtures and do not take screenshots.
+
 With Python 3, Pillow and NumPy already available, check the atlas crop inspector:
 
 ```sh
