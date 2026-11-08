@@ -36,6 +36,14 @@ python3 -B prototype/tests/test_land_atlas_inspection.py
 
 These tests use PNGs held in memory to check crop ordering, alpha and prop-size boundaries, edge padding and foreign-paint diagnostics. They do not read or modify game artwork.
 
+With the same Python dependencies, check the atlas edge cleaner's pixel-selection rules:
+
+```sh
+python3 -B prototype/tests/test_atlas_edge_cleanup.py
+```
+
+The in-memory fixtures check exact matte colors and alpha limits, exterior connectivity, enclosed-paint protection and repeat-cleaning stability. They do not run the file-writing cleaner or access game artwork.
+
 ## Optional iPhone preview shell
 
 The separate Flutter shell bundles the browser prototype in a WKWebView. It is a local preview, not the selected production architecture. Its Dart constraint is `^3.12.2`; the mobile guide documents Flutter 3.44.2 as checked on 17 October 2026. Package versions remain defined by [mobile/pubspec.yaml](mobile/pubspec.yaml) and its lockfile.
