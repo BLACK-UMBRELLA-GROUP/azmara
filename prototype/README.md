@@ -114,6 +114,10 @@ tunnel without separate approval.
 
 ### One-command screenshot check
 
+Get fresh, explicit permission from the Founder before running an automated
+capture. Open visible Chrome manually. See
+[DEC-084 in the project rules](../AGENTS.md#browser-and-screenshots).
+
 From the project root:
 
 ```sh
@@ -138,9 +142,9 @@ Options include `--level 1..50`, `--layout grid` (or any existing layout),
 options. Optional `AZMARA_NODE` and `AZMARA_PLAYWRIGHT` select existing local
 runtime/module paths. Generated captures are ignored by Git.
 
-After every visual change, run the relevant capture, open and inspect its
-PNG, and correct visual defects before reporting completion. A successful
-command proves capture/readiness, not aesthetic quality or user acceptance.
+Once the Founder has approved a capture run, capture the visual change, open
+and inspect its PNG, and correct visual defects before reporting completion.
+A successful command proves capture/readiness, not aesthetic quality or user acceptance.
 
 ### Local debug grid (G)
 
@@ -151,6 +155,8 @@ and hosted origins never load its module. The grid follows the actual camera
 and labels world cells/plot anchors without snapping or moving anything.
 Cells are 100×100 world units, origin upper-left, X right and Y down. This is
 a diagnostic convention, not a tilemap engine or an approved wall layout.
+
+The [capture permission](#one-command-screenshot-check) also applies to grid screenshots.
 
 ```sh
 ./prototype/tools/capture-game.sh --level 50 --debug
@@ -473,6 +479,10 @@ over the playfield. Current exposure is measured separately from historical
 versions below; extremely small viewports still need practical device review.
 
 ## Verification
+
+Get fresh, explicit permission from the Founder before running any automated
+or headless browser suite described here. See
+[DEC-084](../AGENTS.md#browser-and-screenshots).
 
 `tests/construction.cjs` verifies reset/build recovery, exact 60-second refund
 boundaries, completion priority, persisted receipts, legacy ten-second queues
