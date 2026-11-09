@@ -35,8 +35,8 @@ re-run the tool.
 | DOC-AZM-0001 | `docs/approved/LAND_STAGES_CURRENT_VERSION_V4.md` | 11 |
 | DOC-AZM-0029 | `docs/ideas/BACKLOG.md` | 7 |
 | DOC-AZM-0042 | `docs/architecture/OPEN_QUESTIONS.md` | 14 |
-| DOC-AZM-0025 (large - search it) | `prototype/README.md` | 41 |
-| DOC-AZM-0024 | `mobile/README.md` | 4 |
+| DOC-AZM-0025 (large - search it) | `prototype/README.md` | 42 |
+| DOC-AZM-0024 | `mobile/README.md` | 5 |
 | DOC-AZM-0032 (large - search it) | `docs/ideas/IKARIAM_RESEARCH.md` | 31 |
 | DOC-AZM-0040 (large - search it) | `docs/ideas/VISUAL_DIRECTION_STUDY.md` | 31 |
 
@@ -69,8 +69,8 @@ _Stop here unless you need to look up another ID._
 
 | ID | File | Type | Purpose | KB |
 |---|---|---|---|---|
-| DOC-AZM-0024 | `mobile/README.md` | GUIDE | AZMARA local iPhone prototype | 4 |
-| DOC-AZM-0025 | `prototype/README.md` | GUIDE | AZMARA town screen design preview | 41 |
+| DOC-AZM-0024 | `mobile/README.md` | GUIDE | AZMARA local iPhone prototype | 5 |
+| DOC-AZM-0025 | `prototype/README.md` | GUIDE | AZMARA town screen design preview | 42 |
 
 ### CONCEPT
 

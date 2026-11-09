@@ -1610,7 +1610,7 @@ game build, backend, native update or public audience was created. Version 8
 and its verified source are unchanged. The earlier preview address is retained.
 
 Cloudflare Registrar confirms Active registration, expiry 9 October 2027 and
-enabled auto-renew for 9 September 2027; displayed renewal price is $14.20/year.
+enabled auto-renew for 9 September 2027; displayed renewal price (in the private group record).
 The domain is in the existing account named Zyra Connect, ID
 `f2c1a6060e5ca076b42bb379db235bc9`, its own zone
 `227315e0f0ab385900af348b17331eae`. The empty AZMARA zone received exactly

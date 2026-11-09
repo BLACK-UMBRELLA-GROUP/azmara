@@ -152,7 +152,7 @@ company registration or the deployment of recent local website changes.
 
 Subsequent confirmed state under `DEC-041`: the Founder purchased `azmara.app`.
 Cloudflare Registrar shows Active, expiry 9 October 2027, auto-renew enabled
-for 9 September 2027, and displayed renewal price $14.20/year. It is in the
+for 9 September 2027, and displayed renewal price (in the private group record). It is in the
 existing account named `<CLOUDFLARE_ACCOUNT_NAME>`, account ID
 `<CLOUDFLARE_ACCOUNT_ID>`, with its own AZMARA zone ID
 `<CLOUDFLARE_ZONE_ID>`. This verifies the current arrangement, not
