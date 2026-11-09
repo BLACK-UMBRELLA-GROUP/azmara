@@ -37,9 +37,9 @@ and the file is recorded in `docs/approved/`. Codex never builds from this folde
 ## How to run
 
 Python 3 with `opencv-python`, `numpy`, `pillow` and `scipy`; `torch` only for the LaMa scripts.
-Rebuild the land stages (reads the locked masters V1 and V2 from `docs/approved/art/ARCHIVE/`):
+Rebuild the land stages from the repository root (reads the locked masters V1 and V2 from `docs/approved/art/ARCHIVE/`):
 
-`cd "/Users/shakeelahmad/Developer/DEVELOPMENT/AZMARA" && python3 -I tools/scripts/land_ladder.py tools/images`
+`python3 -I tools/scripts/land_ladder.py tools/images`
 
 The stages are written to `tools/images/land/stages/`. That folder is generated and gitignored.
 
