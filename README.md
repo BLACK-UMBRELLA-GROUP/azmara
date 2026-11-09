@@ -60,6 +60,19 @@ python3 -B prototype/tests/test_atlas_edge_cleanup.py
 
 The in-memory fixtures check exact matte colors and alpha limits, exterior connectivity, enclosed-paint protection and repeat-cleaning stability. They do not run the file-writing cleaner or access game artwork.
 
+### Check the town camera offline
+
+Run the three camera regression suites from the repository root with Node.js.
+
+```sh
+node --test \
+  prototype/tests/dec103-camera-static.cjs \
+  prototype/tests/dec105-protected-start-static.cjs \
+  prototype/tests/dec107-no-view-zoom-static.cjs
+```
+
+The suites check the minimum zoom needed to fill the viewport and the ability to pan to each picture edge, the protected initial framing of the Town Hall and Town Wall, and the removal of the temporary Dev zoom slider while retaining the normal Fit behavior. Node reports each suite by filename, so a failure points to the corresponding check. The suites use Node's built-in modules, source files and geometry fixtures. Verify rendered framing and gestures separately in a manual browser session.
+
 ## Optional iPhone preview shell
 
 The separate Flutter shell bundles the browser prototype in a WKWebView. It is a local preview, not the selected production architecture. Its Dart constraint is `^3.12.2`; the mobile guide documents Flutter 3.44.2 as checked on 17 October 2026. Package versions remain defined by [mobile/pubspec.yaml](mobile/pubspec.yaml) and its lockfile.
