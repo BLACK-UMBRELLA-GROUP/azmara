@@ -20,6 +20,14 @@ Open `http://127.0.0.1:4317/` manually in your browser. The review switch is at 
 
 The browser runtime uses vanilla JavaScript, HTML, CSS, SVG landscapes and pre-rendered PNG sprites. It has no production game engine or backend dependency. See [prototype/README.md](prototype/README.md) for controls, local saves, review modes and known limits.
 
+To check the local scripts, stylesheets and frame URLs in `index.html` and `preview.html`, run this from the repository root:
+
+```sh
+python3 -B prototype/tests/test_entry_point_resources.py
+```
+
+The check uses Python's standard library and catches missing files and filename case mismatches without starting the server or opening a browser.
+
 With Node.js available, run the static land-stage check from the repository root:
 
 ```sh
