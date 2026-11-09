@@ -26,7 +26,7 @@ To check the local scripts, stylesheets and frame URLs in `index.html` and `prev
 python3 -B prototype/tests/test_entry_point_resources.py
 ```
 
-The check uses Python's standard library and catches missing files and filename case mismatches without starting the server or opening a browser.
+The check uses Python's standard library and catches missing files and filename case mismatches without starting the server or opening a browser. It also checks that the native runtime manifest includes `index.html` and the local resources it references directly.
 
 With Node.js available, run the static land-stage check from the repository root:
 
