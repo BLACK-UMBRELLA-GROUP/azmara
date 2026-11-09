@@ -60,6 +60,16 @@ python3 -B prototype/tests/test_atlas_edge_cleanup.py
 
 The in-memory fixtures check exact matte colors and alpha limits, exterior connectivity, enclosed-paint protection and repeat-cleaning stability. They do not run the file-writing cleaner or access game artwork.
 
+### Check recovery from a browser save failure
+
+Run this from the repository root with Node.js:
+
+```sh
+node --test prototype/tests/save-write-recovery.cjs
+```
+
+The tests simulate a temporary storage write failure. They check that the previous save survives, that the next save can recover, and that unchanged saves stop writing once storage works again. All test data stays in memory.
+
 ### Check the town camera offline
 
 Run the three camera regression suites from the repository root with Node.js.
