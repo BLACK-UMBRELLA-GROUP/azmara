@@ -4,6 +4,10 @@
 **Core rules:** Only Shakeel approves. Only Codex runs git, within core rule 2 (AD-AIOS-114); Claude chats never do. Never touch `PRIVATE — API KEYS — DO NOT SYNC`. Never delete. Move unwanted files only to `~/_to_delete/<WHAT>_<date>/` on the Mac (core rule 4). Fable = Lead Architect and admin; the AZMARA chat (Claude) is lead designer; Codex builds only from LOCKed files (core rule 11, AD-AIOS-115). AGENTS.md = standing rules only (under 16 KB). Every finished task ends in a commit by Codex (core rule 10). **BUILD FREEZE (24 Oct 2026) still on for AZMARA: no feature building until Shakeel lifts it in writing; review, docs and one-by-one approved fixes only (OA-AIOS-406). Lifted for ZYRA only, 29 Oct.** These win on any conflict.
 <!-- /CORE-RULES -->
 
+## Backend readiness (AD-AIOS-142)
+
+Read `BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_STANDARDS/BACKEND_READINESS_STANDARD_CURRENT_VERSION_V1.md` (DOC-BUG-0057) when your trigger in its §2 may be met. No server while frozen. Its trigger: the Founder lifts the freeze in writing and multiplayer or game accounts are LOCKed. One server per business, never shared. AIs write plans only; every account, cost, key and live connection waits for the Founder's own yes.
+
 ## Public repository (AD-AIOS-121, Founder 2 Nov 2026)
 
 This repository is public on GitHub under Apache 2.0. Every push is visible to anyone. Before and after each push:
