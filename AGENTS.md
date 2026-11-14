@@ -189,3 +189,5 @@ to claude so they can continue working ... rather than showing at end of the run
 3. When the Claude chat's answer lands (row ANSWERED, brief updated), pick the blocked part back up in the same run.
 4. Unattended runs (01:00, nobody watching): put every paste message in the first lines of the report, under
    "Paste to Claude", before anything else.
+
+**Disk and trip (AD-AIOS-149, Founder 13 Nov):** start no new queue line when the Mac has under 15 GB free - report and stop. 21 Nov - 14 Dec is quiet mode: only work that needs no approvals and no downloads.
