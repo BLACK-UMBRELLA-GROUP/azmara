@@ -6,7 +6,7 @@
 
 ## Backend readiness (AD-AIOS-142)
 
-Read `BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_STANDARDS/BACKEND_READINESS_STANDARD_CURRENT_VERSION_V1.md` (DOC-BUG-0057) when your trigger in its §2 may be met. No server while frozen. Its trigger: the Founder lifts the freeze in writing and multiplayer or game accounts are LOCKed. One server per business, never shared. AIs write plans only; every account, cost, key and live connection waits for the Founder's own yes.
+Read `BLACK UMBRELLA GROUP/SYSTEM/DOCUMENTS/MASTER_STANDARDS/BACKEND_READINESS_STANDARD_CURRENT_VERSION_V2.md` (DOC-BUG-0057) when your trigger in its §2 may be met. No server while frozen. Its trigger: the Founder lifts the freeze in writing and multiplayer or game accounts are LOCKed. One server per business, never shared. AIs write plans only; every account, cost, key and live connection waits for the Founder's own yes.
 
 ## Public repository (AD-AIOS-121, Founder 2 Nov 2026)
 
@@ -190,4 +190,4 @@ to claude so they can continue working ... rather than showing at end of the run
 4. Unattended runs (01:00, nobody watching): put every paste message in the first lines of the report, under
    "Paste to Claude", before anything else.
 
-**Disk and trip (AD-AIOS-149, Founder 13 Nov):** start no new queue line when the Mac has under 15 GB free - report and stop. Trip 21 Nov - 14 Dec (Founder 18 Nov, "Work as normal"): normal work - the Mac mini travels with the Founder, so night runs happen only while it is online; no upgrades or installs (Mac updates stay off).
+**Disk and trip (AD-AIOS-149, Founder 13 Nov):** start no new queue line when the Mac has under 15 GB free - report and stop. Trip 21 Nov - 14 Dec (Founder 18 Nov, "Work as normal"): normal work - the Mac mini travels with the Founder, so night runs happen only while it is online; no upgrades or installs (Mac updates stay off), except a package named in a ZYRA launch-roadmap brief, one at a time, on the Founder's yes while he is at the Mac (AD-AIOS-157, 22 Nov).
